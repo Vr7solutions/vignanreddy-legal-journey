@@ -212,7 +212,7 @@ export default function ResourceHub(props: ResourceHubProps) {
                 </div>
               </div>
 
-              {item.downloadUrl ? (
+              {"downloadUrl" in item && item.downloadUrl ? (
                 <a
                   href={item.downloadUrl}
                   className="resource-arrow download-button"
