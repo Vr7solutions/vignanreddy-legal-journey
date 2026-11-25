@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { GraduationCap, BookOpen } from "lucide-react";
 import ResourceHub from "@/components/resource-hub";
+import DailyQuiz from "@/components/daily-quiz";
 import { academicYears, semesterData } from "@/lib/academic";
 
 export default function AcademicDashboard() {
@@ -77,6 +78,10 @@ export default function AcademicDashboard() {
         selectedSemester={selectedSemester}
         selectedSubjects={selectedSubjects}
       />
+
+      <section id="daily-quiz" className="scroll-mt-24">
+        <DailyQuiz selectedSemester={selectedSemester} />
+      </section>
     </>
   );
 }
