@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 
 import AcademicDashboard from "@/components/academic-dashboard";
-import PracticeTest from "@/components/practice-test";
 import { legalWord } from "@/lib/content";
 
 export default function Home() {
@@ -195,10 +194,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
-
-      <section id="practice-test" className="scroll-mt-24">
-        <PracticeTest />
       </section>
 
       <section id="about" className="about-section scroll-mt-24">
