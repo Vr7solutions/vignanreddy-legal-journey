@@ -1,199 +1,189 @@
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Terms & Conditions | Vignan Reddy Legal Journey",
   description:
-    "Terms and conditions for using Vignan Reddy Legal Journey, an independent student-led educational initiative.",
+    "Read the terms and conditions governing the use of Vignan Reddy Legal Journey.",
 };
 
-export default function TermsAndConditions() {
+export default function TermsAndConditionsPage() {
   return (
-    <main className="min-h-screen bg-[#f8f7f2] px-5 py-12">
-      <article className="mx-auto max-w-4xl rounded-2xl bg-white p-6 shadow-sm sm:p-10">
-        <h1 className="mb-3 text-3xl font-bold text-[#142b4a]">
+    <main className="mx-auto max-w-4xl px-5 py-12 text-gray-800">
+      <div className="mb-10">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-amber-600">
+          Legal Information
+        </p>
+        <h1 className="mb-3 text-3xl font-bold text-slate-900">
           Terms & Conditions
         </h1>
-
-        <p className="mb-8 text-sm text-gray-500">
-          Last Updated: 25 November 2026
+        <p className="text-sm text-gray-500">
+          Last updated: 25 November 2026
         </p>
+      </div>
 
-        <div className="space-y-7 leading-7 text-gray-700">
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              1. About This Website
-            </h2>
-            <p>
-              Vignan Reddy Legal Journey is an independent, student-led
-              educational initiative run by <strong>Vignan Reddy</strong>,
-              a student pursuing the 3-Year LL.B programme at a college
-              affiliated with Osmania University.
-            </p>
-            <p className="mt-2">
-              The website was created with the intention of helping fellow
-              law students learn, prepare for examinations, access study
-              materials and improve their understanding of law.
-            </p>
-            <p className="mt-2">
-              This is a personal educational initiative and is not an
-              official website of Osmania University, any affiliated
-              college or any government authority.
-            </p>
-          </section>
+      <p className="mb-8 leading-8">
+        Welcome to Vignan Reddy Legal Journey. These Terms & Conditions
+        explain the rules for accessing and using this website. By visiting
+        or using the website, you agree to these terms. If you do not agree,
+        please discontinue using the website.
+      </p>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              2. Acceptance of Terms
-            </h2>
-            <p>
-              By accessing or using this website, you agree to these
-              Terms & Conditions. If you do not agree, please discontinue
-              using the website.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          1. About This Website
+        </h2>
+        <p className="leading-8">
+          Vignan Reddy Legal Journey is an independent, student-led
+          educational initiative managed by Vignan Reddy, a 3-Year LL.B
+          student at a college affiliated with Osmania University. It provides
+          educational resources to support law students in their studies.
+        </p>
+        <p className="mt-3 leading-8">
+          This website is not an official website of Osmania University, any
+          affiliated college, court or government authority. It is not
+          affiliated with or endorsed by these institutions.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              3. Educational Purpose
-            </h2>
-            <p>
-              All content, including assignments, internal questions,
-              study notes, case laws, internship resources, legal
-              dictionary entries and quizzes, is provided for educational
-              and informational purposes.
-            </p>
-            <p className="mt-2">
-              These resources are intended to support students and should
-              not replace prescribed textbooks, university instructions
-              or official study materials.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          2. Educational Purpose
+        </h2>
+        <p className="leading-8">
+          All content, including study notes, assignments, internal questions,
+          case law summaries, internship resources, legal dictionary entries,
+          quizzes and practice tests, is provided for general educational
+          purposes only. It does not constitute professional legal advice
+          or replace prescribed academic materials or independent study.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              4. Accuracy of Information
-            </h2>
-            <p>
-              Reasonable efforts are made to provide accurate and useful
-              information. However, laws, legal provisions, judgments and
-              academic requirements may change.
-            </p>
-            <p className="mt-2">
-              Users should verify important information through official
-              legal sources, legislation, court judgments and university
-              notifications.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          3. Permitted Use
+        </h2>
+        <p className="mb-3 leading-7">
+          You may use this website for lawful personal and educational
+          purposes. When using the website, you agree not to:
+        </p>
+        <ul className="list-disc space-y-2 pl-6 leading-7">
+          <li>Use the website for unlawful or harmful activities.</li>
+          <li>Attempt to disrupt, damage or gain unauthorised access to the website.</li>
+          <li>Copy or redistribute website content in a misleading manner.</li>
+          <li>Misrepresent the website or its content as official university material.</li>
+          <li>Use the website in a way that infringes another person's rights.</li>
+        </ul>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              5. No Legal Advice
-            </h2>
-            <p>
-              The content on this website does not constitute professional
-              legal advice or create a lawyer-client relationship.
-              Consult a qualified legal professional for actual legal
-              matters.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          4. Intellectual Property and Educational Materials
+        </h2>
+        <p className="leading-8">
+          Unless otherwise stated, original website text, explanations,
+          design and other original materials are managed by the website
+          operator. Third-party materials, statutory texts, judgments and
+          other referenced resources may belong to their respective owners
+          or be subject to their own legal conditions.
+        </p>
+        <p className="mt-3 leading-8">
+          You may use the materials for personal study and learning. You must
+          not reproduce, republish, sell or commercially distribute original
+          website content without appropriate permission, unless permitted
+          by applicable law.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              6. Permitted Use
-            </h2>
-            <p>
-              Users may access the materials for personal learning and
-              educational purposes.
-            </p>
-            <p className="mt-2">Users must not:</p>
-            <ul className="ml-6 mt-2 list-disc space-y-2">
-              <li>
-                Reproduce or redistribute website content for commercial
-                purposes without permission.
-              </li>
-              <li>
-                Misrepresent website materials as their own original work.
-              </li>
-              <li>Use the website for unlawful activities.</li>
-              <li>Attempt to disrupt or misuse the website.</li>
-            </ul>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          5. Accuracy and Availability
+        </h2>
+        <p className="leading-8">
+          We make reasonable efforts to keep the website useful and accurate.
+          However, errors, omissions, outdated information or temporary
+          interruptions may occur. We do not guarantee uninterrupted
+          availability or that every resource will always be current.
+          Please verify important legal information against authoritative
+          sources.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              7. Third-Party Resources
-            </h2>
-            <p>
-              This website may contain links to external websites and
-              educational resources. We do not control or guarantee their
-              accuracy, availability or content.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          6. No Legal Advice
+        </h2>
+        <p className="leading-8">
+          Nothing on this website creates an advocate-client relationship or
+          should be relied upon as advice for a specific legal matter. Please
+          consult a qualified advocate for professional legal assistance.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              8. Intellectual Property
-            </h2>
-            <p>
-              Original content, website design and branding created for
-              Vignan Reddy Legal Journey belong to their respective
-              owners.
-            </p>
-            <p className="mt-2">
-              Legislation, judicial decisions and third-party materials
-              remain subject to their respective ownership and applicable
-              laws.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          7. Third-Party Links and Services
+        </h2>
+        <p className="leading-8">
+          This website may link to external websites, documents and services.
+          These are provided for convenience and educational reference.
+          We do not control or take responsibility for their content,
+          availability, privacy practices or terms. Your use of those
+          services is subject to their respective policies.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              9. Limitation of Liability
-            </h2>
-            <p>
-              The website is provided for educational purposes. To the
-              extent permitted by applicable law, we are not responsible
-              for losses arising from reliance on website content,
-              errors, omissions, service interruptions or third-party
-              resources.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          8. Limitation of Responsibility
+        </h2>
+        <p className="leading-8">
+          To the extent permitted by applicable law, the website operator
+          shall not be responsible for loss or damage arising from reliance
+          on website information, inability to access the website or use of
+          external resources. Nothing in these terms excludes any liability
+          that cannot legally be excluded under applicable law.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              10. Changes to These Terms
-            </h2>
-            <p>
-              These Terms & Conditions may be updated when necessary.
-              Changes will be published on this page.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          9. Changes to the Website and Terms
+        </h2>
+        <p className="leading-8">
+          Website content, features and these Terms & Conditions may be
+          modified or updated when necessary. Updated terms will be published
+          on this page with a revised date. Continued use of the website after
+          changes are published indicates acceptance of the updated terms,
+          to the extent permitted by law.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              11. Contact
-            </h2>
-            <p>
-              For questions, suggestions or corrections, please contact:
-            </p>
-            <div className="mt-3">
-              <p className="font-semibold text-[#142b4a]">Vignan Reddy</p>
-              <p>Founder – Vignan Reddy Legal Journey</p>
-              <p>
-                Email:{" "}
-                <a
-                  href="mailto:vignanreddy.legal@gmail.com"
-                  className="font-medium text-[#b28a3c] hover:underline"
-                >
-                  vignanreddy.legal@gmail.com
-                </a>
-              </p>
-              <p className="mt-2 text-sm text-gray-500">
-                An independent student-led educational initiative.
-              </p>
-            </div>
-          </section>
-        </div>
-      </article>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          10. Governing Law
+        </h2>
+        <p className="leading-8">
+          These Terms & Conditions are governed by the laws applicable in
+          India. Any disputes will be subject to the jurisdiction of courts
+          having appropriate jurisdiction under applicable law.
+        </p>
+      </section>
+
+      <section className="rounded-xl border border-gray-200 p-6">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          11. Contact Us
+        </h2>
+        <p className="mb-3 leading-7">
+          If you have questions about these Terms & Conditions, contact us at:
+        </p>
+        <a
+          href="mailto:vignanreddy.legal@gmail.com"
+          className="break-all font-semibold text-amber-700 underline"
+        >
+          vignanreddy.legal@gmail.com
+        </a>
+      </section>
     </main>
   );
 }
