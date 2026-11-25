@@ -1076,3 +1076,17 @@ h2 em {
 
 
 
+.academic-selectors {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.academic-selectors .filter-box {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+
