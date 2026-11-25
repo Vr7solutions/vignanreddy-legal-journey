@@ -16,6 +16,24 @@ import PracticeTest from "@/components/practice-test";
 import { legalWord } from "@/lib/content";
 
 export default function Home() {
+  const today = new Date();
+  const startOfYear = Date.UTC(2026, 0, 1);
+  const currentDate = Date.UTC(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+
+  const dayNumber = Math.floor(
+    (currentDate - startOfYear) / 86400000
+  );
+
+  const wordIndex =
+    ((dayNumber % legalWord.length) + legalWord.length) %
+    legalWord.length;
+
+  const dailyWord = legalWord[wordIndex];
+
   return (
     <main>
       <div className="announcement">
@@ -161,13 +179,15 @@ export default function Home() {
 
           <div className="word-right">
             <span className="word-label">WORD OF THE DAY</span>
-            <h3>{legalWord.word}</h3>
-            <p className="pronunciation">{legalWord.pronunciation}</p>
-            <p>{legalWord.meaning}</p>
+            <h3>{dailyWord.word}</h3>
+            <p className="pronunciation">
+              {dailyWord.pronunciation}
+            </p>
+            <p>{dailyWord.meaning}</p>
 
             <div className="example">
               <b>IN A SENTENCE</b>
-              <p>“{legalWord.example}”</p>
+              <p>“{dailyWord.example}”</p>
             </div>
           </div>
         </div>
