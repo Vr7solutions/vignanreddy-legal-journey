@@ -1147,3 +1147,18 @@ h2 em {
 .resource-tools .search-box svg {
   flex-shrink: 0;
 }
+
+
+.resource-tools {
+  margin-bottom: 32px;
+  column-gap: 22px;
+}
+
+.resource-list {
+  margin-top: 20px;
+}
+
+.resource-row {
+  padding: 24px;
+  margin-bottom: 16px;
+}
