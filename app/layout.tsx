@@ -42,12 +42,21 @@ export const metadata: Metadata = {
     siteName: "Vignan Reddy Legal Journey",
     locale: "en_IN",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1648,
+        height: 928,
+        alt: "Vignan Reddy Legal Journey",
+      },
+    ],
   },
 
   twitter: {
     card: "summary_large_image",
     title: "Vignan Reddy Legal Journey",
     description: "Free learning resources for LL.B students.",
+    images: ["/og-image.png"],
   },
 
   robots: {
