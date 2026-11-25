@@ -36,10 +36,16 @@ export default function ResourceHub({
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("All resources");
   const [subject, setSubject] = useState("All subjects");
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     setSubject("All subjects");
+    setShowAll(false);
   }, [selectedSemester]);
+
+  useEffect(() => {
+    setShowAll(false);
+  }, [query, filter, subject]);
 
   const filtered = useMemo(
     () =>
@@ -68,6 +74,15 @@ export default function ResourceHub({
       }),
     [query, filter, selectedSemester, subject]
   );
+
+  const shouldLimit =
+    selectedSemester === "Semester 1" &&
+    query.trim() === "" &&
+    filter === "All resources" &&
+    subject === "All subjects";
+
+  const visibleResources =
+    shouldLimit && !showAll ? filtered.slice(0, 6) : filtered;
 
   return (
     <>
@@ -171,7 +186,7 @@ export default function ResourceHub({
           </div>
 
           <div className="resource-list">
-            {filtered.map((item, index) => (
+            {visibleResources.map((item, index) => (
               <article className="resource-row" key={item.title}>
                 <div className="resource-number">
                   {String(index + 1).padStart(2, "0")}
@@ -214,6 +229,18 @@ export default function ResourceHub({
               </div>
             )}
           </div>
+
+          {shouldLimit && filtered.length > 6 && (
+            <div className="mt-6 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setShowAll((previous) => !previous)}
+                className="rounded-xl border border-[#C49A45] bg-[#FFF8E8] px-6 py-3 font-semibold text-[#172554] shadow-sm transition hover:bg-[#FCEFCB]"
+              >
+                {showAll ? "Show Less" : `Show More (${filtered.length - 6} more)`}
+              </button>
+            </div>
+          )}
 
           <p className="demo-note">
             More verified study materials will be added semester by semester.
