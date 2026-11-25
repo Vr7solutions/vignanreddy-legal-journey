@@ -1090,3 +1090,22 @@ h2 em {
 }
 
 
+
+.resource-tools {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.resource-tools .search-box,
+.resource-tools .filter-box {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 700px) {
+  .resource-tools {
+    grid-template-columns: 1fr;
+  }
+}
