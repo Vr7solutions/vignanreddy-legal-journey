@@ -1056,3 +1056,21 @@ h2 em {
   }
 }
 
+
+
+
+.resource-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+}
+
+.resource-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  text-align: center;
+}
+
