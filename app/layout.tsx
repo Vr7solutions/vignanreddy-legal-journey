@@ -26,6 +26,10 @@ export const metadata: Metadata = {
 
   authors: [{ name: "Vignan Reddy" }],
 
+  verification: {
+    google: "4SUbiXkDGEEVHVDyf-yPYIJ2iMaCV40pIY-2Yf5Int0",
+  },
+
   alternates: {
     canonical: "/",
   },
