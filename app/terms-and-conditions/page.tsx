@@ -31,9 +31,7 @@ export default function TermsAndConditionsPage() {
       </p>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          1. About This Website
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">1. About This Website</h2>
         <p className="leading-8">
           Vignan Reddy Legal Journey is an independent, student-led
           educational initiative managed by Vignan Reddy, a 3-Year LL.B
@@ -48,9 +46,7 @@ export default function TermsAndConditionsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          2. Educational Purpose
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">2. Educational Purpose</h2>
         <p className="leading-8">
           All content, including study notes, assignments, internal questions,
           case law summaries, internship resources, legal dictionary entries,
@@ -61,9 +57,7 @@ export default function TermsAndConditionsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          3. Permitted Use
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">3. Permitted Use</h2>
         <p className="mb-3 leading-7">
           You may use this website for lawful personal and educational
           purposes. When using the website, you agree not to:
@@ -78,9 +72,7 @@ export default function TermsAndConditionsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          4. Intellectual Property and Educational Materials
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">4. Intellectual Property and Educational Materials</h2>
         <p className="leading-8">
           Unless otherwise stated, original website text, explanations,
           design and other original materials are managed by the website
@@ -97,9 +89,7 @@ export default function TermsAndConditionsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          5. Accuracy and Availability
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">5. Accuracy and Availability</h2>
         <p className="leading-8">
           We make reasonable efforts to keep the website useful and accurate.
           However, errors, omissions, outdated information or temporary
@@ -111,9 +101,7 @@ export default function TermsAndConditionsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          6. No Legal Advice
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">6. No Legal Advice</h2>
         <p className="leading-8">
           Nothing on this website creates an advocate-client relationship or
           should be relied upon as advice for a specific legal matter. Please
@@ -122,9 +110,7 @@ export default function TermsAndConditionsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          7. Third-Party Links and Services
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">7. Third-Party Links and Services</h2>
         <p className="leading-8">
           This website may link to external websites, documents and services.
           These are provided for convenience and educational reference.
@@ -135,9 +121,7 @@ export default function TermsAndConditionsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          8. Limitation of Responsibility
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">8. Limitation of Responsibility</h2>
         <p className="leading-8">
           To the extent permitted by applicable law, the website operator
           shall not be responsible for loss or damage arising from reliance
@@ -148,9 +132,7 @@ export default function TermsAndConditionsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          9. Changes to the Website and Terms
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">9. Changes to the Website and Terms</h2>
         <p className="leading-8">
           Website content, features and these Terms & Conditions may be
           modified or updated when necessary. Updated terms will be published
@@ -161,9 +143,7 @@ export default function TermsAndConditionsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          10. Governing Law
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">10. Governing Law</h2>
         <p className="leading-8">
           These Terms & Conditions are governed by the laws applicable in
           India. Any disputes will be subject to the jurisdiction of courts
@@ -172,9 +152,7 @@ export default function TermsAndConditionsPage() {
       </section>
 
       <section className="rounded-xl border border-gray-200 p-6">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          11. Contact Us
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">11. Contact Us</h2>
         <p className="mb-3 leading-7">
           If you have questions about these Terms & Conditions, contact us at:
         </p>
@@ -184,14 +162,16 @@ export default function TermsAndConditionsPage() {
         >
           vignanreddy.legal@gmail.com
         </a>
-        <br />
+      </section>
+
+      <div className="mt-8">
         <Link
           href="/"
-          className="mt-4 inline-block font-semibold text-amber-700 underline underline-offset-4"
+          className="font-semibold text-amber-700 underline underline-offset-4"
         >
-          Return to Home
+          ← Return to Home
         </Link>
-      </section>
+      </div>
     </main>
   );
 }
