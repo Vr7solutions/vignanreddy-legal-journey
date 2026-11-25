@@ -180,7 +180,7 @@ export const legalWord = [
   { word: "Arbitration", pronunciation: "ar-bih-TRAY-shun", meaning: "A method of resolving disputes outside ordinary court proceedings through an arbitrator.", example: "The parties chose arbitration to settle their dispute." },
   { word: "Mediation", pronunciation: "mee-dee-AY-shun", meaning: "A process in which a neutral person helps parties reach an agreement.", example: "The parties resolved their dispute through mediation." },
   { word: "Perjury", pronunciation: "PUR-juh-ree", meaning: "Knowingly giving false evidence under oath.", example: "Giving false testimony under oath may amount to perjury." },
-  { word: "Remedy", pronunciation: "REM-uh-dee", meaning: "A legal means of enforcing a right or obtaining relief.", example: "The law provides a remedy for the injured person." }
+  { word: "Remedy", pronunciation: "REM-uh-dee", meaning: "A legal means of enforcing a right or obtaining relief.", example: "The law provides a remedy for the injured person." },
    // ADDITIONAL LEGAL TERMS: 51–200
   { word: "Jurisprudence", pronunciation: "joor-is-PROO-dens", meaning: "The study and philosophy of law.", example: "Jurisprudence examines the nature and purpose of law." },
   { word: "Legal Right", pronunciation: "LEE-gul RYTE", meaning: "An interest or claim recognised and protected by law.", example: "A person may enforce a legal right in court." },
