@@ -1346,7 +1346,4 @@ export const legalWord = [
   { word: "Digital Harassment", pronunciation: "DIJ-ih-tul huh-RASS-ment", meaning: "Harassing conduct carried out through electronic communication.", example: "The victim reported digital harassment." },
   { word: "Online Threat", pronunciation: "ON-lyne THRET", meaning: "A threat communicated through the internet or digital platform.", example: "The police investigated the online threat." },
   { word: "Electronic Communication", pronunciation: "ee-lek-TRON-ik kuh-myoo-nih-KAY-shun", meaning: "Communication made through electronic means.", example: "The agreement was confirmed by electronic communication." },
-  { word: "Digital Platform", pronunciation: "DIJ-ih-tul PLAT-form", meaning: "An online service or system that enables users to interact or exchange information.", example: "The seller advertised goods on
-
-
 ];
