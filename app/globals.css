@@ -1170,3 +1170,133 @@ h2 em {
 }
 
 
+/* Resource Hub Alignment Fix */
+
+.resource-hub {
+  width: 100%;
+}
+
+.resource-hub .section-heading {
+  display: block;
+  margin-bottom: 30px;
+}
+
+.resource-categories {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.resource-category-card {
+  min-width: 0;
+  min-height: 145px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.resource-category-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.resource-category-card .category-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.resource-category-card .category-content strong,
+.resource-category-card .category-content small {
+  display: block;
+}
+
+.resource-category-card .category-content small {
+  margin-top: 7px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.resource-tools {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(145px, 190px));
+  gap: 12px;
+  align-items: center;
+}
+
+.resource-list {
+  width: 100%;
+}
+
+.resource-card {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 16px;
+  border-bottom: 1px solid #e2e5e8;
+}
+
+.resource-content {
+  min-width: 0;
+}
+
+.resource-content h3 {
+  margin: 8px 0;
+  font: 19px Georgia, serif;
+}
+
+.resource-content p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.resource-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  background: #f7f3eb;
+  color: #a47e43;
+}
+
+.resource-empty {
+  padding: 45px 20px;
+  text-align: center;
+  color: var(--muted);
+}
+
+@media (max-width: 760px) {
+  .resource-categories {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .resource-tools {
+    grid-template-columns: 1fr;
+  }
+
+  .resource-card {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .resource-card > .resource-arrow {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 390px) {
+  .resource-categories {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
