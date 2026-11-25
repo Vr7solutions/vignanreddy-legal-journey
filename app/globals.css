@@ -923,3 +923,67 @@ h2 em {
     display: none;
   }
 }
+
+
+/* Daily Legal Quiz */
+.daily-quiz {
+  padding: 60px 24px;
+  background: var(--cream);
+}
+
+.quiz-heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.quiz-card {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.quiz-options {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.quiz-option {
+  padding: 14px 16px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.quiz-option.correct {
+  border-color: #218838;
+  background: #eaf7ed;
+}
+
+.quiz-option.incorrect {
+  border-color: #dc3545;
+  background: #fff0f0;
+}
+
+.quiz-feedback {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 10px;
+  background: var(--cream);
+}
+
+@media (max-width: 600px) {
+  .daily-quiz {
+    padding: 40px 16px;
+  }
+
+  .quiz-card {
+    padding: 20px;
+  }
+}
+
