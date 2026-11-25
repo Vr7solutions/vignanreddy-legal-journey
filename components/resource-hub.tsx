@@ -1,212 +1,227 @@
 
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
-  Search,
-  ArrowUpRight,
-  ArrowDownToLine,
+  Search, ArrowUpRight, ArrowDownToLine, FileText, ClipboardList,
+  BookOpen, Scale, BriefcaseBusiness, Languages, SlidersHorizontal
+} from "lucide-react";
+import { categories, resources } from "@/lib/content";
+
+const iconMap = {
   FileText,
   ClipboardList,
   BookOpen,
   Scale,
   BriefcaseBusiness,
-  SlidersHorizontal
-} from "lucide-react";
-
-import { categories, resources } from "@/lib/content";
+  Languages
+};
 
 interface ResourceHubProps {
-  selectedSemester?: string;
-  selectedSubjects?: string[];
+  selectedSemester: string;
+  selectedSubjects: string[];
 }
-
-interface ResourceItem {
-  title: string;
-  subject: string;
-  type: string;
-  semester: string;
-  description: string;
-  downloadUrl?: string;
-}
-
-const resourceTypes = [
-  "All resources",
-  "Internal 1",
-  "Internal 2",
-  "Study Material",
-  "Final Exam Q&A",
-  "Case Laws",
-  "Internship Record"
-];
 
 export default function ResourceHub({
-  selectedSemester = "All Semesters",
-  selectedSubjects = []
+  selectedSemester,
+  selectedSubjects
 }: ResourceHubProps) {
-  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("All resources");
+  const [subject, setSubject] = useState("All subjects");
 
-  const filteredResources = useMemo((): ResourceItem[] => {
-    return (resources as ResourceItem[]).filter((item) => {
-      const searchTerm = search.toLowerCase();
+  useEffect(() => {
+    setSubject("All subjects");
+  }, [selectedSemester]);
 
-      const matchesSearch =
-        item.title.toLowerCase().includes(searchTerm) ||
-        item.description.toLowerCase().includes(searchTerm) ||
-        item.subject.toLowerCase().includes(searchTerm);
+  const filtered = useMemo(
+    () =>
+      resources.filter((item) => {
+        const matchesSearch =
+          `${item.title} ${item.subject} ${item.type} ${item.description}`
+            .toLowerCase()
+            .includes(query.toLowerCase());
 
-      const matchesType =
-        filter === "All resources" || item.type === filter;
+        const matchesType =
+          filter === "All resources" || item.type === filter;
 
-      const matchesSubject =
-        selectedSubjects.length === 0 ||
-        selectedSubjects.includes(item.subject);
+        const matchesSemester =
+          item.semester === selectedSemester ||
+          item.semester === "All Semesters";
 
-      const matchesSemester =
-        selectedSemester === "All Semesters" ||
-        item.semester === selectedSemester ||
-        item.semester === "All Semesters";
+        const matchesSubject =
+          subject === "All subjects" || item.subject === subject;
 
-      return (
-        matchesSearch &&
-        matchesType &&
-        matchesSubject &&
-        matchesSemester
-      );
-    });
-  }, [search, filter, selectedSemester, selectedSubjects]);
+        return (
+          matchesSearch &&
+          matchesType &&
+          matchesSemester &&
+          matchesSubject
+        );
+      }),
+    [query, filter, selectedSemester, subject]
+  );
 
   return (
-    <section className="resource-hub" id="resources">
-      <div className="section-heading">
-        <div>
-          <span className="eyebrow">LEARNING RESOURCES</span>
-          <h2>Resource Hub</h2>
-          <p>
-            Access internal questions, study material, final exam
-            preparation, case laws and internship resources.
-          </p>
-        </div>
-      </div>
-
-      <div className="resource-category-grid">
-        {categories.map((category) => {
-          const Icon =
-            category.icon === "ClipboardList"
-              ? ClipboardList
-              : category.icon === "BookOpen"
-                ? BookOpen
-                : category.icon === "Scale"
-                  ? Scale
-                  : category.icon === "BriefcaseBusiness"
-                    ? BriefcaseBusiness
-                    : FileText;
-
-          return (
-            <button
-              type="button"
-              className="resource-category-card"
-              key={category.title}
-              onClick={() => setFilter(category.title)}
-            >
-              <Icon size={24} />
-              <h3>{category.title}</h3>
-              <p>{category.detail}</p>
-              <span>{category.count}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="resource-tools">
-        <div className="search-box">
-          <Search size={19} />
-          <input
-            type="search"
-            placeholder="Search resources..."
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
+    <>
+      <section id="explore" className="section-wrap scroll-mt-24">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">THE STUDENT RESOURCE CENTRE</p>
+            <h2>Everything you need, <em>in one place.</em></h2>
+            <p className="section-copy">
+              Explore learning resources created to make your LL.B journey
+              clearer and more manageable.
+            </p>
+          </div>
+          <a className="text-link" href="#resources">
+            Browse resources <ArrowUpRight size={16} />
+          </a>
         </div>
 
-        <div className="filter-box">
-          <SlidersHorizontal size={17} />
-          <select
-            value={filter}
-            onChange={(event) => setFilter(event.target.value)}
-          >
-            {resourceTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+        <div className="category-grid">
+          {categories.map((item) => {
+            const Icon = iconMap[item.icon as keyof typeof iconMap];
 
-      <div className="resource-results">
-        <div className="resource-results-heading">
-          <h3>Available Resources</h3>
-          <span>{filteredResources.length} resources</span>
-        </div>
-
-        {filteredResources.length > 0 ? (
-          <div className="resource-list">
-            {filteredResources.map((item, index) => (
-              <article
-                className="resource-card"
-                key={`${item.title}-${index}`}
+            return (
+              <a
+                className="category-card"
+                href="#resources"
+                key={item.title}
+                onClick={() =>
+                  setFilter(
+                    item.title === "Internal Questions"
+                      ? "Question Bank"
+                      : item.title === "Assignments"
+                      ? "Assignment Guide"
+                      : item.title === "Study Notes"
+                      ? "Study Notes"
+                      : item.title === "Case Laws"
+                      ? "Case Laws"
+                      : "All resources"
+                  )
+                }
               >
-                <div className="resource-card-icon">
-                  <FileText size={22} />
+                <span className="category-icon">
+                  <Icon size={21} />
+                </span>
+                <span className="category-title">{item.title}</span>
+                <span className="category-detail">{item.detail}</span>
+                <span className="category-bottom">
+                  Explore <ArrowUpRight size={15} />
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+
+      <section id="resources" className="resource-section scroll-mt-24">
+        <div className="section-wrap">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">THE LL.B RESOURCE LIBRARY</p>
+              <h2>Find materials by <em>semester.</em></h2>
+              <p className="section-copy">
+                Browse materials for {selectedSemester}. Choose a subject
+                or resource type to narrow your search.
+              </p>
+            </div>
+          </div>
+
+          <div className="resource-tools">
+            <label className="search-box">
+              <Search size={18} />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search subjects, topics or resources..."
+                aria-label="Search resources"
+              />
+            </label>
+
+            <label className="filter-box">
+              <BookOpen size={17} />
+              <select
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                aria-label="Filter by subject"
+              >
+                <option>All subjects</option>
+                {selectedSubjects.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="filter-box">
+              <SlidersHorizontal size={17} />
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                aria-label="Filter by resource type"
+              >
+                <option>All resources</option>
+                <option>Question Bank</option>
+                <option>Assignment Guide</option>
+                <option>Study Notes</option>
+                <option>Practical Guide</option>
+                <option>Case Laws</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="resource-list">
+            {filtered.map((item, index) => (
+              <article className="resource-row" key={item.title}>
+                <div className="resource-number">
+                  {String(index + 1).padStart(2, "0")}
                 </div>
 
-                <div className="resource-card-content">
-                  <span className="resource-type">
-                    {item.type}
-                  </span>
-
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-
+                <div className="resource-main">
                   <div className="resource-meta">
-                    <span>{item.subject}</span>
+                    <span>{item.type}</span>
                     <span>{item.semester}</span>
                   </div>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                  <small>{item.subject}</small>
                 </div>
 
-                {item.downloadUrl ? (
+                {"downloadUrl" in item && item.downloadUrl ? (
                   <a
+                    className="resource-arrow download-button"
                     href={item.downloadUrl}
-                    className="resource-action"
                     download
                     aria-label={`Download ${item.title}`}
+                    title="Download PDF"
                   >
-                    <ArrowDownToLine size={19} />
+                    <ArrowDownToLine size={17} />
+                    <span>Download PDF</span>
                   </a>
                 ) : (
-                  <span
-                    className="resource-action unavailable"
-                    title="Material will be added later"
-                  >
-                    <ArrowUpRight size={19} />
+                  <span className="resource-arrow">
+                    <ArrowUpRight size={20} />
                   </span>
                 )}
               </article>
             ))}
+
+            {filtered.length === 0 && (
+              <div className="empty-state">
+                No matching resources available for {selectedSemester} yet.
+                More materials will be added.
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="resource-empty">
-            <FileText size={32} />
-            <h3>No resources found</h3>
-            <p>
-              Try changing your search or filters. Resources
-              will appear here when available.
-            </p>
-          </div>
-        )}
-      </div>
-    </section>
+
+          <p className="demo-note">
+            More verified study materials will be added semester by semester.
+          </p>
+        </div>
+      </section>
+    </>
   );
 }
