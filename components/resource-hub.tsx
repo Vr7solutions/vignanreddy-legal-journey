@@ -14,7 +14,12 @@ import {
   SlidersHorizontal
 } from "lucide-react";
 
-import { categories, resources, subjects } from "@/lib/content";
+import { categories, resources } from "@/lib/content";
+
+interface ResourceHubProps {
+  selectedSemester?: string;
+  selectedSubjects?: string[];
+}
 
 const resourceTypes = [
   "All resources",
@@ -26,39 +31,33 @@ const resourceTypes = [
   "Internship Record"
 ];
 
-const categoryIcons: Record<string, React.ElementType> = {
-  ClipboardList,
-  BookOpen,
-  FileText,
-  Scale,
-  BriefcaseBusiness
-};
-
-export default function ResourceHub() {
+export default function ResourceHub({
+  selectedSemester = "All Semesters",
+  selectedSubjects = []
+}: ResourceHubProps) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All resources");
-  const [selectedSubject, setSelectedSubject] = useState("All Subjects");
-  const [selectedSemester, setSelectedSemester] = useState("All Semesters");
-
-  const semesters = ["All Semesters", "Semester 1", "All Semesters"];
 
   const filteredResources = useMemo(() => {
     return resources.filter((item) => {
+      const searchTerm = search.toLowerCase();
+
       const matchesSearch =
-        item.title.toLowerCase().includes(search.toLowerCase()) ||
-        item.description.toLowerCase().includes(search.toLowerCase()) ||
-        item.subject.toLowerCase().includes(search.toLowerCase());
+        item.title.toLowerCase().includes(searchTerm) ||
+        item.description.toLowerCase().includes(searchTerm) ||
+        item.subject.toLowerCase().includes(searchTerm);
 
       const matchesType =
         filter === "All resources" || item.type === filter;
 
       const matchesSubject =
-        selectedSubject === "All Subjects" ||
-        item.subject === selectedSubject;
+        selectedSubjects.length === 0 ||
+        selectedSubjects.includes(item.subject);
 
       const matchesSemester =
         selectedSemester === "All Semesters" ||
-        item.semester === selectedSemester;
+        item.semester === selectedSemester ||
+        item.semester === "All Semesters";
 
       return (
         matchesSearch &&
@@ -67,7 +66,7 @@ export default function ResourceHub() {
         matchesSemester
       );
     });
-  }, [search, filter, selectedSubject, selectedSemester]);
+  }, [search, filter, selectedSemester, selectedSubjects]);
 
   return (
     <section className="resource-hub" id="resources">
@@ -76,8 +75,8 @@ export default function ResourceHub() {
           <span className="eyebrow">LEARNING RESOURCES</span>
           <h2>Resource Hub</h2>
           <p>
-            Access subject-wise internal questions, study material,
-            final exam preparation and case laws.
+            Access internal questions, study material, final exam
+            preparation, case laws and internship resources.
           </p>
         </div>
       </div>
@@ -85,17 +84,22 @@ export default function ResourceHub() {
       <div className="resource-category-grid">
         {categories.map((category) => {
           const Icon =
-            categoryIcons[category.icon] || FileText;
+            category.icon === "ClipboardList"
+              ? ClipboardList
+              : category.icon === "BookOpen"
+                ? BookOpen
+                : category.icon === "Scale"
+                  ? Scale
+                  : category.icon === "BriefcaseBusiness"
+                    ? BriefcaseBusiness
+                    : FileText;
 
           return (
             <button
               type="button"
               className="resource-category-card"
               key={category.title}
-              onClick={() => {
-                setFilter(category.title);
-                setSelectedSubject("All Subjects");
-              }}
+              onClick={() => setFilter(category.title)}
             >
               <Icon size={24} />
               <h3>{category.title}</h3>
@@ -130,36 +134,6 @@ export default function ResourceHub() {
             ))}
           </select>
         </div>
-
-        <div className="filter-box">
-          <select
-            value={selectedSubject}
-            onChange={(event) =>
-              setSelectedSubject(event.target.value)
-            }
-          >
-            <option value="All Subjects">All Subjects</option>
-            {subjects.map((subject) => (
-              <option key={subject} value={subject}>
-                {subject}
-              </option>
-            ))}
-            <option value="Internship">Internship</option>
-            <option value="Legal Skills">Legal Skills</option>
-          </select>
-        </div>
-
-        <div className="filter-box">
-          <select
-            value={selectedSemester}
-            onChange={(event) =>
-              setSelectedSemester(event.target.value)
-            }
-          >
-            <option value="All Semesters">All Semesters</option>
-            <option value="Semester 1">Semester 1</option>
-          </select>
-        </div>
       </div>
 
       <div className="resource-results">
@@ -185,7 +159,6 @@ export default function ResourceHub() {
                   </span>
 
                   <h3>{item.title}</h3>
-
                   <p>{item.description}</p>
 
                   <div className="resource-meta">
@@ -219,8 +192,8 @@ export default function ResourceHub() {
             <FileText size={32} />
             <h3>No resources found</h3>
             <p>
-              Try changing your search or filters. New materials
-              will be added here.
+              Try changing your search or filters. Resources
+              will appear here when available.
             </p>
           </div>
         )}
