@@ -211,7 +211,7 @@ export default function Home() {
         <p className="about-copy">
           Vignan Reddy Legal Journey is an independent, non-commercial
           educational initiative created to share useful learning
-          materials with Osmania University 3-Year LL.B (3YDC) students.
+          materials for Osmania University 3-Year LL.B students.
           The goal is simple: make legal learning more accessible,
           organised and understandable for everyone.
         </p>
