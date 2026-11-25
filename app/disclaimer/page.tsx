@@ -172,14 +172,16 @@ export default function DisclaimerPage() {
         >
           vignanreddy.legal@gmail.com
         </a>
-        <br />
+      </section>
+
+      <div className="mt-8">
         <Link
           href="/"
-          className="mt-4 inline-block font-semibold text-amber-700 underline underline-offset-4"
+          className="font-semibold text-amber-700 underline underline-offset-4"
         >
-          Return to Home
+          ← Return to Home
         </Link>
-      </section>
+      </div>
     </main>
   );
 }
