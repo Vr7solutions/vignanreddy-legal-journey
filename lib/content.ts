@@ -1,52 +1,19 @@
-export const resources = [
-  {
-    title: "Constitutional Law – 10 Important Case Laws",
-    subject: "Constitutional Law – I",
-    type: "Case Laws",
-    semester: "Semester 1",
-    description: "Download 10 important Constitutional Law case analyses.",
-    downloadUrl: "/pdfs/Constitutional_10_Case_Laws.pdf"
-  },
-  {
-    title: "Law of Contract – 10 Landmark Case Analyses",
-    subject: "Law of Contract – I",
-    type: "Case Laws",
-    semester: "Semester 1",
-    description: "Download 10 landmark Contract Law case analyses.",
-    downloadUrl: "/pdfs/Contract_Law_10_Landmark_Case_Analyses.pdf"
-  },
-  {
-    title: "Environmental Law – 10 Landmark Case Analyses",
-    subject: "Environmental Law",
-    type: "Case Laws",
-    semester: "Semester 1",
-    description: "Download 10 landmark Environmental Law case analyses.",
-    downloadUrl: "/pdfs/Environmental_Law_10_Landmark_Case_Analyses.pdf"
-  },
-  {
-    title: "History of Courts – 10 Case Analyses",
-    subject: "Legal and Constitutional History of India",
-    type: "Case Laws",
-    semester: "Semester 1",
-    description: "Download 10 important History of Courts case analyses.",
-    downloadUrl: "/pdfs/HOC_10_Case_Analyses.pdf"
-  },
-  {
-    title: "Family Law – 10 Hindu Law Case Analyses",
-    subject: "Family Law – I (Hindu Law)",
-    type: "Case Laws",
-    semester: "Semester 1",
-    description: "Download 10 important Hindu Law case analyses.",
-    downloadUrl: "/pdfs/Hindu_Law_10_Case_Analyses.pdf"
-  },
-  {
-    title: "Law of Torts – 10 Landmark Case Analyses",
-    subject: "Law of Torts",
-    type: "Case Laws",
-    semester: "Semester 1",
-    description: "Download 10 important Law of Torts case analyses.",
-    downloadUrl: "/pdfs/Tort_Law_10_Case_Analyses.pdf"
-  }
+export const subjects = [
+  "Law of Contract – I",
+  "Family Law – I (Hindu Law)",
+  "Constitutional Law – I",
+  "Law of Torts",
+  "Environmental Law",
+  "Legal and Constitutional History of India"
+];
+
+export const categories = [
+  { title: "Internal 1", detail: "Internal 1 questions and answers", icon: "ClipboardList", count: "6 Subjects" },
+  { title: "Internal 2", detail: "Internal 2 questions and answers", icon: "ClipboardList", count: "6 Subjects" },
+  { title: "Study Material", detail: "Subject-wise study notes", icon: "BookOpen", count: "Study material" },
+  { title: "Final Exam Q&A", detail: "Final examination preparation", icon: "FileText", count: "6 Subjects" },
+  { title: "Case Laws", detail: "Important case law analyses", icon: "Scale", count: "6 PDFs" },
+  { title: "Internship Record", detail: "Internship resources", icon: "BriefcaseBusiness", count: "Resources" }
 ];
 
 export const legalWord = [
