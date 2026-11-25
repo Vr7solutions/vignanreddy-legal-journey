@@ -11,59 +11,46 @@ import {
   BookOpen,
   Scale,
   BriefcaseBusiness,
-  Languages,
   SlidersHorizontal
 } from "lucide-react";
 
 import { categories, resources, subjects } from "@/lib/content";
 
-const iconMap: Record<string, any> = {
-  FileText,
+const resourceTypes = [
+  "All resources",
+  "Internal 1",
+  "Internal 2",
+  "Study Material",
+  "Final Exam Q&A",
+  "Case Laws",
+  "Internship Record"
+];
+
+const categoryIcons: Record<string, React.ElementType> = {
   ClipboardList,
   BookOpen,
+  FileText,
   Scale,
-  BriefcaseBusiness,
-  Languages
+  BriefcaseBusiness
 };
 
-const resourceTypeMap: Record<string, string> = {
-  "Case Laws": "Case Laws",
-  "Internal 1": "Internal 1",
-  "Internal 2": "Internal 2",
-  "Internship": "Internship",
-  "Notes": "Study Notes"
-};
-
-type ResourceHubProps = {
-  selectedSemester?: string;
-  selectedYear?: string;
-  selectedSubjects?: string[];
-};
-
-export default function ResourceHub(props: ResourceHubProps) {
-  const [query, setQuery] = useState("");
+export default function ResourceHub() {
+  const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All resources");
+  const [selectedSubject, setSelectedSubject] = useState("All Subjects");
+  const [selectedSemester, setSelectedSemester] = useState("All Semesters");
 
-  const [selectedSubject, setSelectedSubject] = useState(
-    props.selectedSubjects?.[0] || "All Subjects"
-  );
-
-  const [selectedSemester, setSelectedSemester] = useState(
-    props.selectedSemester || "All Semesters"
-  );
+  const semesters = ["All Semesters", "Semester 1", "All Semesters"];
 
   const filteredResources = useMemo(() => {
     return resources.filter((item) => {
-      const searchText = query.toLowerCase();
-
       const matchesSearch =
-        item.title.toLowerCase().includes(searchText) ||
-        item.description.toLowerCase().includes(searchText) ||
-        item.subject.toLowerCase().includes(searchText);
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.description.toLowerCase().includes(search.toLowerCase()) ||
+        item.subject.toLowerCase().includes(search.toLowerCase());
 
       const matchesType =
-        filter === "All resources" ||
-        item.type === resourceTypeMap[filter];
+        filter === "All resources" || item.type === filter;
 
       const matchesSubject =
         selectedSubject === "All Subjects" ||
@@ -71,8 +58,7 @@ export default function ResourceHub(props: ResourceHubProps) {
 
       const matchesSemester =
         selectedSemester === "All Semesters" ||
-        item.semester === selectedSemester ||
-        item.semester === "All Semesters";
+        item.semester === selectedSemester;
 
       return (
         matchesSearch &&
@@ -81,53 +67,40 @@ export default function ResourceHub(props: ResourceHubProps) {
         matchesSemester
       );
     });
-  }, [query, filter, selectedSubject, selectedSemester]);
-
-  const handleCategoryClick = (title: string) => {
-    const categoryFilters: Record<string, string> = {
-      "Case Laws": "Case Laws",
-      "Internal Questions": "All resources",
-      "Study Notes": "Notes",
-      "Internship Resources": "Internship",
-      "Assignments": "All resources",
-      "Legal Dictionary": "All resources"
-    };
-
-    setFilter(categoryFilters[title] || "All resources");
-  };
+  }, [search, filter, selectedSubject, selectedSemester]);
 
   return (
     <section className="resource-hub" id="resources">
       <div className="section-heading">
-        <span className="section-eyebrow">LEARNING RESOURCES</span>
-        <h2>Resource Hub</h2>
-        <p>
-          Find study materials, internal questions, case laws and other
-          useful resources.
-        </p>
+        <div>
+          <span className="eyebrow">LEARNING RESOURCES</span>
+          <h2>Resource Hub</h2>
+          <p>
+            Access subject-wise internal questions, study material,
+            final exam preparation and case laws.
+          </p>
+        </div>
       </div>
 
-      <div className="resource-categories">
+      <div className="resource-category-grid">
         {categories.map((category) => {
-          const Icon = iconMap[category.icon] || FileText;
+          const Icon =
+            categoryIcons[category.icon] || FileText;
 
           return (
             <button
-              key={category.title}
-              className="resource-category-card"
-              onClick={() => handleCategoryClick(category.title)}
               type="button"
+              className="resource-category-card"
+              key={category.title}
+              onClick={() => {
+                setFilter(category.title);
+                setSelectedSubject("All Subjects");
+              }}
             >
-              <span className="category-icon">
-                <Icon size={22} />
-              </span>
-
-              <span className="category-content">
-                <strong>{category.title}</strong>
-                <small>{category.detail}</small>
-              </span>
-
-              <ArrowUpRight size={18} />
+              <Icon size={24} />
+              <h3>{category.title}</h3>
+              <p>{category.detail}</p>
+              <span>{category.count}</span>
             </button>
           );
         })}
@@ -139,8 +112,8 @@ export default function ResourceHub(props: ResourceHubProps) {
           <input
             type="search"
             placeholder="Search resources..."
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
           />
         </div>
 
@@ -149,91 +122,105 @@ export default function ResourceHub(props: ResourceHubProps) {
           <select
             value={filter}
             onChange={(event) => setFilter(event.target.value)}
-            aria-label="Filter by resource type"
           >
-            <option>All resources</option>
-            <option>Case Laws</option>
-            <option>Internal 1</option>
-            <option>Internal 2</option>
-            <option>Internship</option>
-            <option>Notes</option>
-          </select>
-        </div>
-
-        <div className="filter-box">
-          <select
-            value={selectedSubject}
-            onChange={(event) => setSelectedSubject(event.target.value)}
-            aria-label="Filter by subject"
-          >
-            <option>All Subjects</option>
-            {subjects.map((subject) => (
-              <option key={subject}>{subject}</option>
+            {resourceTypes.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
             ))}
           </select>
         </div>
 
         <div className="filter-box">
           <select
-            value={selectedSemester}
-            onChange={(event) => setSelectedSemester(event.target.value)}
-            aria-label="Filter by semester"
+            value={selectedSubject}
+            onChange={(event) =>
+              setSelectedSubject(event.target.value)
+            }
           >
-            <option>All Semesters</option>
-            <option>Semester 1</option>
-            <option>Semester 2</option>
-            <option>Semester 3</option>
-            <option>Semester 4</option>
-            <option>Semester 5</option>
-            <option>Semester 6</option>
+            <option value="All Subjects">All Subjects</option>
+            {subjects.map((subject) => (
+              <option key={subject} value={subject}>
+                {subject}
+              </option>
+            ))}
+            <option value="Internship">Internship</option>
+            <option value="Legal Skills">Legal Skills</option>
+          </select>
+        </div>
+
+        <div className="filter-box">
+          <select
+            value={selectedSemester}
+            onChange={(event) =>
+              setSelectedSemester(event.target.value)
+            }
+          >
+            <option value="All Semesters">All Semesters</option>
+            <option value="Semester 1">Semester 1</option>
           </select>
         </div>
       </div>
 
-      <div className="resource-list">
+      <div className="resource-results">
+        <div className="resource-results-heading">
+          <h3>Available Resources</h3>
+          <span>{filteredResources.length} resources</span>
+        </div>
+
         {filteredResources.length > 0 ? (
-          filteredResources.map((item, index) => (
-            <article
-              className="resource-card"
-              key={`${item.title}-${index}`}
-            >
-              <div className="resource-icon">
-                <FileText size={22} />
-              </div>
-
-              <div className="resource-content">
-                <span className="resource-type">{item.type}</span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-
-                <div className="resource-meta">
-                  <span>{item.subject}</span>
-                  <span>{item.semester}</span>
+          <div className="resource-list">
+            {filteredResources.map((item, index) => (
+              <article
+                className="resource-card"
+                key={`${item.title}-${index}`}
+              >
+                <div className="resource-card-icon">
+                  <FileText size={22} />
                 </div>
-              </div>
 
-              {"downloadUrl" in item && item.downloadUrl ? (
-                <a
-                  href={item.downloadUrl}
-                  className="resource-arrow download-button"
-                  download
-                >
-                  <ArrowDownToLine size={18} />
-                  <span>Download PDF</span>
-                </a>
-              ) : (
-                <span className="resource-arrow">
-                  <ArrowUpRight size={18} />
-                </span>
-              )}
-            </article>
-          ))
+                <div className="resource-card-content">
+                  <span className="resource-type">
+                    {item.type}
+                  </span>
+
+                  <h3>{item.title}</h3>
+
+                  <p>{item.description}</p>
+
+                  <div className="resource-meta">
+                    <span>{item.subject}</span>
+                    <span>{item.semester}</span>
+                  </div>
+                </div>
+
+                {item.downloadUrl ? (
+                  <a
+                    href={item.downloadUrl}
+                    className="resource-action"
+                    download
+                    aria-label={`Download ${item.title}`}
+                  >
+                    <ArrowDownToLine size={19} />
+                  </a>
+                ) : (
+                  <span
+                    className="resource-action unavailable"
+                    title="Material will be added later"
+                  >
+                    <ArrowUpRight size={19} />
+                  </span>
+                )}
+              </article>
+            ))}
+          </div>
         ) : (
           <div className="resource-empty">
-            <BookOpen size={30} />
+            <FileText size={32} />
             <h3>No resources found</h3>
             <p>
-              No resources are currently available for this selection.
+              Try changing your search or filters. New materials
+              will be added here.
             </p>
           </div>
         )}
