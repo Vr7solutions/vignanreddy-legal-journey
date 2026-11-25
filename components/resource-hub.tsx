@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -183,19 +184,19 @@ export default function ResourceHub({
                   </div>
 
                   <h3>{item.title}</h3>
-                  
+
                   <small>{item.subject}</small>
                 </div>
 
                 {"downloadUrl" in item && item.downloadUrl ? (
                   <a
-                    className="resource-arrow download-button"
+                    className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
                     href={item.downloadUrl}
                     download
                     aria-label={`Download ${item.title}`}
                     title="Download PDF"
                   >
-                    <ArrowDownToLine size={17} />
+                    <ArrowDownToLine size={18} className="text-[#A77D2D]" />
                     <span>Download PDF</span>
                   </a>
                 ) : (
