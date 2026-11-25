@@ -21,6 +21,16 @@ const questions: PracticeQuestion[] = [
   ...legalHistoryQuestions.slice(0, 100)
 ];
 
+const subjects = [
+  "All Subjects",
+  "Law of Contract – I",
+  "Family Law – I (Hindu Law)",
+  "Constitutional Law – I",
+  "Law of Torts",
+  "Environmental Law",
+  "Legal and Constitutional History of India"
+];
+
 interface PracticeTestProps {
   selectedSemester?: string;
 }
@@ -28,6 +38,7 @@ interface PracticeTestProps {
 export default function PracticeTest({
   selectedSemester = "Semester 1"
 }: PracticeTestProps) {
+  const [selectedSubject, setSelectedSubject] = useState("All Subjects");
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -36,27 +47,32 @@ export default function PracticeTest({
   const semesterQuestions =
     selectedSemester === "Semester 1" ? questions : [];
 
+  const filteredQuestions =
+    selectedSubject === "All Subjects"
+      ? semesterQuestions
+      : semesterQuestions.filter(
+          (question) => question.subject === selectedSubject
+        );
+
   useEffect(() => {
     setCurrent(0);
     setSelected(null);
     setScore(0);
     setFinished(false);
-  }, [selectedSemester]);
-
-  const question = semesterQuestions[current];
+  }, [selectedSemester, selectedSubject]);
 
   function chooseAnswer(index: number) {
     if (selected !== null) return;
 
     setSelected(index);
 
-    if (index === question.answer) {
+    if (index === filteredQuestions[current].answer) {
       setScore((previousScore) => previousScore + 1);
     }
   }
 
   function nextQuestion() {
-    if (current === semesterQuestions.length - 1) {
+    if (current === filteredQuestions.length - 1) {
       setFinished(true);
     } else {
       setCurrent((previous) => previous + 1);
@@ -86,53 +102,63 @@ export default function PracticeTest({
     );
   }
 
-  const percentage = Math.round(
-    (score / semesterQuestions.length) * 100
-  );
+  const question = filteredQuestions[current];
 
   return (
     <section className="practice-test">
       <div className="practice-heading">
         <span>TEST YOUR KNOWLEDGE</span>
         <h2>LL.B Practice Test</h2>
-        <p>
-          Practise {semesterQuestions.length} questions from
-          {" "}{selectedSemester}.
-        </p>
+        <p>Choose a subject and test your knowledge.</p>
       </div>
 
       <div className="practice-card">
-        {finished ? (
+        <div className="practice-subject-selection">
+          <label htmlFor="practice-subject">Select Subject</label>
+          <select
+            id="practice-subject"
+            className="practice-subject-select"
+            value={selectedSubject}
+            onChange={(event) => setSelectedSubject(event.target.value)}
+          >
+            {subjects.map((subject) => (
+              <option key={subject} value={subject}>
+                {subject}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {filteredQuestions.length === 0 ? (
+          <p>No questions are available for this subject yet.</p>
+        ) : finished ? (
           <div className="practice-result">
             <h3>Test Completed!</h3>
             <p>Your score</p>
-
             <strong>
-              {score} / {semesterQuestions.length}
+              {score} / {filteredQuestions.length}
             </strong>
-
-            <p>{percentage}%</p>
-
             <p>
-              {percentage >= 80
+              {Math.round((score / filteredQuestions.length) * 100)}%
+            </p>
+            <p>
+              {score / filteredQuestions.length >= 0.8
                 ? "Excellent work! Keep learning."
-                : percentage >= 50
+                : score / filteredQuestions.length >= 0.5
                 ? "Good effort! Keep practising."
                 : "Keep studying. You can improve!"}
             </p>
-
             <button onClick={restartTest}>Try Again</button>
           </div>
         ) : (
           <>
             <div className="practice-progress">
               <span>
-                Question {current + 1} of {semesterQuestions.length}
+                Question {current + 1} of {filteredQuestions.length}
               </span>
-
               <span>
                 {Math.round(
-                  ((current + 1) / semesterQuestions.length) * 100
+                  ((current + 1) / filteredQuestions.length) * 100
                 )}%
               </span>
             </div>
@@ -141,14 +167,13 @@ export default function PracticeTest({
               <div
                 style={{
                   width: `${
-                    ((current + 1) / semesterQuestions.length) * 100
+                    ((current + 1) / filteredQuestions.length) * 100
                   }%`
                 }}
               />
             </div>
 
             <p className="practice-subject">{question.subject}</p>
-
             <h3>{question.question}</h3>
 
             <div className="practice-options">
@@ -173,11 +198,8 @@ export default function PracticeTest({
             {selected !== null && (
               <div className="practice-explanation">
                 <strong>
-                  {selected === question.answer
-                    ? "Correct!"
-                    : "Incorrect!"}
+                  {selected === question.answer ? "Correct!" : "Incorrect!"}
                 </strong>
-
                 <p>{question.explanation}</p>
               </div>
             )}
@@ -187,7 +209,7 @@ export default function PracticeTest({
               onClick={nextQuestion}
               disabled={selected === null}
             >
-              {current === semesterQuestions.length - 1
+              {current === filteredQuestions.length - 1
                 ? "View Result"
                 : "Next Question"}
             </button>
