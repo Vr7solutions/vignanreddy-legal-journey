@@ -183,7 +183,7 @@ export default function ResourceHub({
                   </div>
 
                   <h3>{item.title}</h3>
-                  <p>{item.description}</p>
+                  
                   <small>{item.subject}</small>
                 </div>
 
