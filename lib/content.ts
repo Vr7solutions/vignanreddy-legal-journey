@@ -68,7 +68,7 @@ export const resources = [
   }
 ];
 
-export const legalWord = [
+export const legalWords = [
   { word: "Precedent", pronunciation: "PRES-ih-dent", meaning: "An earlier court decision used as a guide in similar cases.", example: "The court followed a precedent while deciding the case." },
   { word: "Jurisdiction", pronunciation: "joor-is-DIK-shun", meaning: "The legal authority of a court to hear and decide a case.", example: "The court must have jurisdiction over the matter." },
   { word: "Litigation", pronunciation: "lit-ih-GAY-shun", meaning: "The process of resolving disputes through court proceedings.", example: "The dispute resulted in lengthy litigation." },
@@ -1285,3 +1285,24 @@ export const legalWord = [
   { word: "Online Threat", pronunciation: "ON-lyne THRET", meaning: "A threat communicated through the internet or digital platform.", example: "The police investigated the online threat." },
   { word: "Electronic Communication", pronunciation: "ee-lek-TRON-ik kuh-myoo-nih-KAY-shun", meaning: "Communication made through electronic means.", example: "The agreement was confirmed by electronic communication." }
 ];
+
+export function getLegalWord() {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date());
+
+  const get = (type: string) =>
+    Number(parts.find((part) => part.type === type)?.value);
+
+  const day = Math.floor(
+    Date.UTC(get("year"), get("month") - 1, get("day")) / 86400000
+  );
+
+  const slot = Math.floor(get("hour") / 6);
+  return legalWords[(day * 4 + slot) % legalWords.length];
+}
