@@ -1,5 +1,6 @@
 
 import type { Metadata } from "next";
+import BackToTop from "@/components/back-to-top";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,10 +11,8 @@ export const metadata: Metadata = {
       "Osmania University 3-Year LL.B Study Materials | Vignan Reddy Legal Journey",
     template: "%s | Vignan Reddy Legal Journey",
   },
-
   description:
     "Free study materials for Osmania University 3-Year LL.B (3YDC), 1st Year 1st Semester students. Access subject-wise notes, assignments, landmark case laws, quizzes and practice tests.",
-
   keywords: [
     "Osmania University 3 Year LLB",
     "OU 3YDC LLB 1st Year 1st Semester",
@@ -36,7 +35,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-
   openGraph: {
     title: "Osmania University 3-Year LL.B | Vignan Reddy Legal Journey",
     description:
@@ -54,7 +52,6 @@ export const metadata: Metadata = {
       },
     ],
   },
-
   twitter: {
     card: "summary_large_image",
     title: "Osmania University 3-Year LL.B | Vignan Reddy Legal Journey",
@@ -76,7 +73,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <BackToTop />
+      </body>
     </html>
   );
 }
