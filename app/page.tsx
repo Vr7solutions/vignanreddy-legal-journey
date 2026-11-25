@@ -234,7 +234,24 @@ export default function Home() {
           </span>
         </a>
 
-        <p>Independent student learning initiative · Free for everyone</p>
+        <p>
+          Independent student learning initiative · Free for everyone
+        </p>
+
+        <div style={{
+          display: "flex",
+          gap: "20px",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          margin: "16px 0",
+        }}>
+          <a href="/privacy-policy" style={{ color: "inherit" }}>
+            Privacy Policy
+          </a>
+          <a href="/disclaimer" style={{ color: "inherit" }}>
+            Disclaimer
+          </a>
+        </div>
 
         <span>
           © {new Date().getFullYear()} Vignan Reddy Legal Journey
