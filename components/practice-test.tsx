@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const questions = [
   {
@@ -120,25 +120,43 @@ const questions = [
   }
 ];
 
-export default function PracticeTest() {
+interface PracticeTestProps {
+  selectedSemester?: string;
+}
+
+export default function PracticeTest({
+  selectedSemester = "Semester 1"
+}: PracticeTestProps) {
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
 
-  const question = questions[current];
+  const semesterQuestions =
+    selectedSemester === "Semester 1" ? questions : [];
+
+  useEffect(() => {
+    setCurrent(0);
+    setSelected(null);
+    setScore(0);
+    setFinished(false);
+  }, [selectedSemester]);
 
   function chooseAnswer(index: number) {
     if (selected !== null) return;
+
     setSelected(index);
-    if (index === question.answer) setScore(score + 1);
+
+    if (index === question.answer) {
+      setScore((previousScore) => previousScore + 1);
+    }
   }
 
   function nextQuestion() {
-    if (current === questions.length - 1) {
+    if (current === semesterQuestions.length - 1) {
       setFinished(true);
     } else {
-      setCurrent(current + 1);
+      setCurrent((previous) => previous + 1);
       setSelected(null);
     }
   }
@@ -150,12 +168,29 @@ export default function PracticeTest() {
     setFinished(false);
   }
 
+  if (semesterQuestions.length === 0) {
+    return (
+      <section className="practice-test">
+        <div className="practice-heading">
+          <span>TEST YOUR KNOWLEDGE</span>
+          <h2>LL.B Practice Test</h2>
+          <p>
+            Practice questions for {selectedSemester} are being prepared.
+            Please check back soon!
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  const question = semesterQuestions[current];
+
   return (
     <section className="practice-test">
       <div className="practice-heading">
         <span>TEST YOUR KNOWLEDGE</span>
         <h2>LL.B Practice Test</h2>
-        <p>Practise important questions from all six subjects.</p>
+        <p>Practise important questions from {selectedSemester}.</p>
       </div>
 
       <div className="practice-card">
@@ -163,7 +198,9 @@ export default function PracticeTest() {
           <div className="practice-result">
             <h3>Test Completed!</h3>
             <p>Your score</p>
-            <strong>{score} / {questions.length}</strong>
+            <strong>
+              {score} / {semesterQuestions.length}
+            </strong>
             <p>
               {score >= 10
                 ? "Excellent work! Keep learning."
@@ -176,12 +213,24 @@ export default function PracticeTest() {
         ) : (
           <>
             <div className="practice-progress">
-              <span>Question {current + 1} of {questions.length}</span>
-              <span>{Math.round(((current + 1) / questions.length) * 100)}%</span>
+              <span>
+                Question {current + 1} of {semesterQuestions.length}
+              </span>
+              <span>
+                {Math.round(
+                  ((current + 1) / semesterQuestions.length) * 100
+                )}%
+              </span>
             </div>
 
             <div className="practice-progress-bar">
-              <div style={{ width: `${((current + 1) / questions.length) * 100}%` }} />
+              <div
+                style={{
+                  width: `${
+                    ((current + 1) / semesterQuestions.length) * 100
+                  }%`
+                }}
+              />
             </div>
 
             <p className="practice-subject">{question.subject}</p>
@@ -192,8 +241,11 @@ export default function PracticeTest() {
                 <button
                   key={index}
                   className={`practice-option ${
-                    selected !== null && index === question.answer ? "correct" :
-                    selected === index ? "incorrect" : ""
+                    selected !== null && index === question.answer
+                      ? "correct"
+                      : selected === index
+                      ? "incorrect"
+                      : ""
                   }`}
                   onClick={() => chooseAnswer(index)}
                   disabled={selected !== null}
@@ -217,7 +269,9 @@ export default function PracticeTest() {
               onClick={nextQuestion}
               disabled={selected === null}
             >
-              {current === questions.length - 1 ? "View Result" : "Next Question"}
+              {current === semesterQuestions.length - 1
+                ? "View Result"
+                : "Next Question"}
             </button>
           </>
         )}
