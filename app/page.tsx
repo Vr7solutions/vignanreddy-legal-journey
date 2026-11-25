@@ -1,4 +1,6 @@
 
+export const dynamic = "force-dynamic";
+
 import {
   ArrowRight,
   ArrowUpRight,
@@ -12,26 +14,10 @@ import {
 
 import AcademicDashboard from "@/components/academic-dashboard";
 import VisitorCounter from "@/components/visitor-counter";
-import { legalWord } from "@/lib/content";
+import { getLegalWord } from "@/lib/content";
 
 export default function Home() {
-  const today = new Date();
-  const startOfYear = Date.UTC(2026, 0, 1);
-  const currentDate = Date.UTC(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
-  );
-
-  const dayNumber = Math.floor(
-    (currentDate - startOfYear) / 86400000
-  );
-
-  const wordIndex =
-    ((dayNumber % legalWord.length) + legalWord.length) %
-    legalWord.length;
-
-  const dailyWord = legalWord[wordIndex];
+  const dailyWord = getLegalWord();
 
   return (
     <main>
