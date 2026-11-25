@@ -6,7 +6,7 @@ import {
   Search, ArrowUpRight, FileText, ClipboardList, BookOpen,
   Scale, BriefcaseBusiness, Languages, SlidersHorizontal
 } from "lucide-react";
-import { categories, resources } from "@/lib/content";
+import { categories, resources, subjects } from "@/lib/content";
 
 const iconMap = {
   FileText, ClipboardList, BookOpen, Scale,
@@ -28,6 +28,7 @@ export default function ResourceHub() {
   const [filter, setFilter] = useState("All resources");
   const [year, setYear] = useState("All years");
   const [semester, setSemester] = useState("All semesters");
+  const [subject, setSubject] = useState("All subjects");
 
   const filtered = useMemo(
     () =>
@@ -50,14 +51,18 @@ export default function ResourceHub() {
           item.semester === semester ||
           item.semester === "All Semesters";
 
+        const matchesSubject =
+          subject === "All subjects" || item.subject === subject;
+
         return (
           matchesSearch &&
           matchesType &&
           matchesYear &&
-          matchesSemester
+          matchesSemester &&
+          matchesSubject
         );
       }),
-    [query, filter, year, semester]
+    [query, filter, year, semester, subject]
   );
 
   return (
@@ -122,8 +127,8 @@ export default function ResourceHub() {
               <p className="eyebrow">THE LL.B RESOURCE LIBRARY</p>
               <h2>Find materials by <em>semester.</em></h2>
               <p className="section-copy">
-                Choose your year, semester and resource type to find
-                relevant learning materials.
+                Choose your year, semester, subject and resource type
+                to find relevant learning materials.
               </p>
             </div>
           </div>
@@ -170,6 +175,22 @@ export default function ResourceHub() {
                 <option>Semester 4</option>
                 <option>Semester 5</option>
                 <option>Semester 6</option>
+              </select>
+            </label>
+
+            <label className="filter-box">
+              <BookOpen size={17} />
+              <select
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                aria-label="Filter by subject"
+              >
+                <option>All subjects</option>
+                {subjects.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
               </select>
             </label>
 
