@@ -12,8 +12,8 @@ import {
 
 import ResourceHub from "@/components/resource-hub";
 import DailyQuiz from "@/components/daily-quiz";
-import { legalWord } from "@/lib/content";
 import PracticeTest from "@/components/practice-test";
+import { legalWord } from "@/lib/content";
 
 export default function Home() {
   return (
@@ -39,6 +39,7 @@ export default function Home() {
           <a href="#resources">Resources</a>
           <a href="#daily-word">Legal word</a>
           <a href="#daily-quiz">Legal quiz</a>
+          <a href="#practice-test">Practice test</a>
           <a href="#about">About</a>
         </nav>
 
@@ -174,6 +175,10 @@ export default function Home() {
 
       <section id="daily-quiz" className="scroll-mt-24">
         <DailyQuiz />
+      </section>
+
+      <section id="practice-test" className="scroll-mt-24">
+        <PracticeTest />
       </section>
 
       <section id="about" className="about-section scroll-mt-24">
