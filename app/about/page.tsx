@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -115,6 +116,13 @@ export default function AboutPage() {
           className="font-semibold text-amber-700 underline underline-offset-4"
         >
           Contact Us
+        </Link>
+        <br />
+        <Link
+          href="/"
+          className="mt-4 inline-block font-semibold text-amber-700 underline underline-offset-4"
+        >
+          Return to Home
         </Link>
       </section>
     </main>
