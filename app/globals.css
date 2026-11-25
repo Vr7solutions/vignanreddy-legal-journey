@@ -1276,3 +1276,36 @@ h2 em {
     display: none;
   }
 }
+
+
+/* Resource Hub - Full Width Alignment Fix */
+
+.resource-section {
+  width: 100%;
+  padding: 0;
+}
+
+.resource-section .section-wrap {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 78px 40px;
+}
+
+.resource-hub {
+  width: 100%;
+  max-width: none;
+}
+
+.resource-hub .resource-categories,
+.resource-hub .resource-tools,
+.resource-hub .resource-list {
+  width: 100%;
+}
+
+@media (max-width: 760px) {
+  .resource-section .section-wrap {
+    padding: 55px 20px;
+  }
+}
+
