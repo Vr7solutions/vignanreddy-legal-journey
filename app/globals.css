@@ -1109,3 +1109,28 @@ h2 em {
     grid-template-columns: 1fr;
   }
 }
+
+.resource-tools .search-box,
+.resource-tools .filter-box {
+  min-height: 58px;
+  padding: 0 18px;
+  border: 2px solid #c9b98f;
+  border-radius: 10px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.resource-tools .search-box input,
+.resource-tools .filter-box select {
+  min-height: 54px;
+  font-size: 15px;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.resource-tools .search-box:focus-within,
+.resource-tools .filter-box:focus-within {
+  border-color: #b28a3c;
+}
