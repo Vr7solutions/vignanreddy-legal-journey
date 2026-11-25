@@ -21,6 +21,15 @@ interface ResourceHubProps {
   selectedSubjects?: string[];
 }
 
+interface ResourceItem {
+  title: string;
+  subject: string;
+  type: string;
+  semester: string;
+  description: string;
+  downloadUrl?: string;
+}
+
 const resourceTypes = [
   "All resources",
   "Internal 1",
@@ -38,8 +47,8 @@ export default function ResourceHub({
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All resources");
 
-  const filteredResources = useMemo(() => {
-    return resources.filter((item) => {
+  const filteredResources = useMemo((): ResourceItem[] => {
+    return (resources as ResourceItem[]).filter((item) => {
       const searchTerm = search.toLowerCase();
 
       const matchesSearch =
