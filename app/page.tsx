@@ -241,6 +241,12 @@ export default function Home() {
           flexWrap: "wrap",
           margin: "16px 0",
         }}>
+          <a href="/about" style={{ color: "inherit" }}>
+            About Us
+          </a>
+          <a href="/contact" style={{ color: "inherit" }}>
+            Contact Us
+          </a>
           <a href="/privacy-policy" style={{ color: "inherit" }}>
             Privacy Policy
           </a>
