@@ -9,12 +9,12 @@ export const subjects = [
 ];
 
 export const categories = [
-  { title: "Internal 1", detail: "Internal 1 questions and answers", icon: "ClipboardList", count: "6 Subjects" },
-  { title: "Internal 2", detail: "Internal 2 questions and answers", icon: "ClipboardList", count: "6 Subjects" },
-  { title: "Study Material", detail: "Subject-wise study notes", icon: "BookOpen", count: "Study material" },
-  { title: "Final Exam Q&A", detail: "Final examination preparation", icon: "FileText", count: "6 Subjects" },
+  { title: "Assignments", detail: "Subject-wise assignments", icon: "FileText", count: "Assignments" },
+  { title: "Internal Questions", detail: "Internal examination preparation", icon: "ClipboardList", count: "Internal Questions" },
+  { title: "Study Notes", detail: "Subject-wise study materials", icon: "BookOpen", count: "Study Notes" },
   { title: "Case Laws", detail: "Important case law analyses", icon: "Scale", count: "6 PDFs" },
-  { title: "Internship Record", detail: "Internship resources", icon: "BriefcaseBusiness", count: "Resources" }
+  { title: "Internship Resources", detail: "Internship-related resources", icon: "BriefcaseBusiness", count: "Resources" },
+  { title: "Legal Dictionary", detail: "Important legal terms and meanings", icon: "BookOpen", count: "Dictionary" }
 ];
 
 export const resources = [
