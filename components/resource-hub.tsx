@@ -1,11 +1,18 @@
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  Search, ArrowUpRight, ArrowDownToLine, FileText, ClipboardList,
-  BookOpen, Scale, BriefcaseBusiness, Languages, SlidersHorizontal
+  Search,
+  ArrowUpRight,
+  ArrowDownToLine,
+  FileText,
+  ClipboardList,
+  BookOpen,
+  Scale,
+  BriefcaseBusiness,
+  SlidersHorizontal
 } from "lucide-react";
+
 import { categories, resources } from "@/lib/content";
 
 const iconMap = {
@@ -13,8 +20,7 @@ const iconMap = {
   ClipboardList,
   BookOpen,
   Scale,
-  BriefcaseBusiness,
-  Languages
+  BriefcaseBusiness
 };
 
 interface ResourceHubProps {
@@ -74,6 +80,7 @@ export default function ResourceHub({
               clearer and more manageable.
             </p>
           </div>
+
           <a className="text-link" href="#resources">
             Browse resources <ArrowUpRight size={16} />
           </a>
@@ -88,22 +95,10 @@ export default function ResourceHub({
                 className="category-card"
                 href="#resources"
                 key={item.title}
-                onClick={() =>
-                  setFilter(
-                    item.title === "Internal Questions"
-                      ? "Question Bank"
-                      : item.title === "Assignments"
-                      ? "Assignment Guide"
-                      : item.title === "Study Notes"
-                      ? "Study Notes"
-                      : item.title === "Case Laws"
-                      ? "Case Laws"
-                      : "All resources"
-                  )
-                }
+                onClick={() => setFilter(item.title)}
               >
                 <span className="category-icon">
-                  <Icon size={21} />
+                  {Icon && <Icon size={21} />}
                 </span>
                 <span className="category-title">{item.title}</span>
                 <span className="category-detail">{item.detail}</span>
@@ -164,11 +159,12 @@ export default function ResourceHub({
                 aria-label="Filter by resource type"
               >
                 <option>All resources</option>
-                <option>Question Bank</option>
-                <option>Assignment Guide</option>
-                <option>Study Notes</option>
-                <option>Practical Guide</option>
+                <option>Internal 1</option>
+                <option>Internal 2</option>
+                <option>Study Material</option>
+                <option>Final Exam Q&A</option>
                 <option>Case Laws</option>
+                <option>Internship Record</option>
               </select>
             </label>
           </div>
@@ -185,6 +181,7 @@ export default function ResourceHub({
                     <span>{item.type}</span>
                     <span>{item.semester}</span>
                   </div>
+
                   <h3>{item.title}</h3>
                   <p>{item.description}</p>
                   <small>{item.subject}</small>
