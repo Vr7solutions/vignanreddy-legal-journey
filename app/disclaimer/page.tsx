@@ -1,91 +1,204 @@
 
-import Link from "next/link";
+export const metadata = {
+  title: "Disclaimer | Vignan Reddy Legal Journey",
+  description:
+    "Educational and legal disclaimer for Vignan Reddy Legal Journey, an independent student-led educational initiative.",
+};
 
 export default function Disclaimer() {
   return (
-    <main style={{
-      maxWidth: "900px",
-      margin: "60px auto",
-      padding: "24px",
-      color: "#142541",
-      lineHeight: 1.8,
-    }}>
-      <Link href="/" style={{ color: "#c7a36b" }}>
-        ← Back to Home
-      </Link>
+    <main className="min-h-screen bg-[#f8f7f2] px-5 py-12">
+      <article className="mx-auto max-w-4xl rounded-2xl bg-white p-6 shadow-sm sm:p-10">
+        <h1 className="mb-3 text-3xl font-bold text-[#142b4a]">
+          Disclaimer
+        </h1>
 
-      <h1>Disclaimer</h1>
-      <p>Last updated: November 2026</p>
+        <p className="mb-8 text-sm text-gray-500">
+          Last Updated: 25 November 2026
+        </p>
 
-      <h2>1. Educational Purpose</h2>
-      <p>
-        Vignan Reddy Legal Journey is an independent, non-commercial
-        educational initiative created to support students pursuing
-        the 3-Year LL.B (3YDC) course, particularly 1st Year,
-        1st Semester students of Osmania University, through study
-        materials, notes, assignments, quizzes and legal information.
-      </p>
+        <div className="space-y-7 leading-7 text-gray-700">
+          <section>
+            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
+              1. About This Website
+            </h2>
+            <p>
+              Vignan Reddy Legal Journey is an independent, student-led
+              educational initiative run by <strong>Vignan Reddy</strong>,
+              a student pursuing the 3-Year LL.B programme at a college
+              affiliated with Osmania University.
+            </p>
+            <p className="mt-2">
+              The website aims to help fellow law students learn,
+              prepare for examinations and access educational resources.
+            </p>
+            <p className="mt-2">
+              This website is not officially associated with, endorsed
+              by or operated by Osmania University, any affiliated
+              college or any government authority.
+            </p>
+          </section>
 
-      <h2>2. No University Affiliation</h2>
-      <p>
-        This website is independently created and managed by a student.
-        It is not an official website of Osmania University and is not
-        affiliated with, endorsed by, or operated by Osmania University
-        or its departments. University names are used only to identify
-        the intended academic audience.
-      </p>
+          <section>
+            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
+              2. Educational Purpose Only
+            </h2>
+            <p>
+              All materials available on this website, including
+              assignments, internal questions, study notes, case laws,
+              quizzes, internship resources and legal dictionary
+              entries, are provided for general educational and
+              informational purposes only.
+            </p>
+            <p className="mt-2">
+              These resources are intended to support learning and
+              examination preparation. They should not be treated as
+              a replacement for prescribed textbooks, classroom
+              instruction or official university materials.
+            </p>
+          </section>
 
-      <h2>3. Not Legal Advice</h2>
-      <p>
-        The information provided on this website is for educational
-        and informational purposes only. It does not constitute
-        legal advice, a legal opinion, or a lawyer-client relationship.
-        Consult a qualified legal professional for advice about
-        your specific situation.
-      </p>
+          <section>
+            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
+              3. No Professional Legal Advice
+            </h2>
+            <p>
+              The information on this website does not constitute
+              professional legal advice, legal representation or
+              legal services.
+            </p>
+            <p className="mt-2">
+              Laws and legal interpretations may depend on the facts
+              of each situation. For advice concerning an actual legal
+              matter, consult a qualified legal professional.
+            </p>
+          </section>
 
-      <h2>4. Accuracy and Updates</h2>
-      <p>
-        We make reasonable efforts to provide accurate and useful
-        information. However, laws, judgments, rules and regulations
-        may change. We do not guarantee that all content is complete,
-        current or error-free.
-      </p>
+          <section>
+            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
+              4. Accuracy and Updates
+            </h2>
+            <p>
+              Reasonable efforts are made to provide useful and accurate
+              educational information. However, errors, omissions or
+              outdated information may occur.
+            </p>
+            <p className="mt-2">
+              Laws, amendments, judicial decisions and university
+              requirements may change. Users should independently
+              verify important information using official and
+              authoritative sources.
+            </p>
+          </section>
 
-      <h2>5. Jurisdiction</h2>
-      <p>
-        Legal content primarily focuses on Indian law unless
-        otherwise stated. Laws and legal procedures may differ
-        across jurisdictions.
-      </p>
+          <section>
+            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
+              5. Case Laws and Legal References
+            </h2>
+            <p>
+              Case summaries and legal explanations are provided to
+              assist students in understanding legal principles.
+              They may be simplified for educational purposes and
+              should not be treated as substitutes for the complete
+              original judgments or statutory provisions.
+            </p>
+            <p className="mt-2">
+              Users are encouraged to refer to original judgments,
+              applicable legislation and official legal publications
+              whenever necessary.
+            </p>
+          </section>
 
-      <h2>6. Academic Use</h2>
-      <p>
-        Study materials are provided as learning aids. Students
-        should consult prescribed textbooks, official legal sources,
-        the applicable Osmania University syllabus and university
-        guidelines for examinations and assignments.
-      </p>
+          <section>
+            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
+              6. External Links and Resources
+            </h2>
+            <p>
+              This website may contain links to third-party websites,
+              documents and educational resources for convenience.
+            </p>
+            <p className="mt-2">
+              We do not control or guarantee the accuracy, availability,
+              security or content of external websites. Accessing them
+              is at the user's discretion.
+            </p>
+          </section>
 
-      <h2>7. External References</h2>
-      <p>
-        This website may link to external websites and legal
-        resources. We do not control or guarantee the accuracy
-        or availability of third-party content.
-      </p>
+          <section>
+            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
+              7. Limitation of Responsibility
+            </h2>
+            <p>
+              To the extent permitted by applicable law, Vignan Reddy
+              Legal Journey shall not be responsible for any loss or
+              consequences arising from reliance on the information
+              provided on this website, or from errors, omissions,
+              interruptions or third-party resources.
+            </p>
+            <p className="mt-2">
+              Users are responsible for independently checking
+              information before relying on it for academic,
+              professional or other purposes.
+            </p>
+          </section>
 
-      <h2>8. Limitation of Responsibility</h2>
-      <p>
-        To the extent permitted by applicable law, we are not
-        responsible for decisions or actions taken solely on
-        the basis of information published on this website.
-      </p>
+          <section>
+            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
+              8. Copyright and Ownership
+            </h2>
+            <p>
+              Original materials created for this website remain
+              subject to the rights of their respective owners.
+              Third-party materials, legislation and judicial
+              decisions remain subject to applicable laws and
+              their respective rights.
+            </p>
+            <p className="mt-2">
+              If you believe any material has been used improperly,
+              please contact us so that the concern can be reviewed.
+            </p>
+          </section>
 
-      <h2>9. Contact</h2>
-      <p>
-        For questions about this disclaimer, please use the
-        contact details provided on our website, if available.
-      </p>
+          <section>
+            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
+              9. Changes to This Disclaimer
+            </h2>
+            <p>
+              This Disclaimer may be updated whenever necessary.
+              Any changes will be published on this page.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
+              10. Contact
+            </h2>
+            <p>
+              For questions, suggestions, corrections or concerns
+              regarding this Disclaimer, please contact:
+            </p>
+
+            <div className="mt-3">
+              <p className="font-semibold text-[#142b4a]">
+                Vignan Reddy
+              </p>
+              <p>Founder – Vignan Reddy Legal Journey</p>
+              <p>
+                Email:{" "}
+                <a
+                  href="mailto:vignanreddy.legal@gmail.com"
+                  className="font-medium text-[#b28a3c] hover:underline"
+                >
+                  vignanreddy.legal@gmail.com
+                </a>
+              </p>
+              <p className="mt-2 text-sm text-gray-500">
+                An independent student-led educational initiative.
+              </p>
+            </div>
+          </section>
+        </div>
+      </article>
     </main>
   );
 }
