@@ -13,6 +13,7 @@ import {
 import ResourceHub from "@/components/resource-hub";
 import DailyQuiz from "@/components/daily-quiz";
 import { legalWord } from "@/lib/content";
+import PracticeTest from "@/components/practice-test";
 
 export default function Home() {
   return (
