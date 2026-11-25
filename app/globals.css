@@ -1162,3 +1162,44 @@ h2 em {
   padding: 24px;
   margin-bottom: 16px;
 }
+
+
+.academic-selectors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-top: 24px;
+}
+
+.academic-selectors .filter-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 58px;
+  padding: 0 18px;
+  border: 2px solid #c9b98f;
+  border-radius: 10px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.academic-selectors .filter-box svg {
+  flex-shrink: 0;
+}
+
+.academic-selectors select {
+  flex: 1;
+  width: 100%;
+  min-height: 54px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+}
+
+@media (max-width: 700px) {
+  .academic-selectors {
+    grid-template-columns: 1fr;
+  }
+}
