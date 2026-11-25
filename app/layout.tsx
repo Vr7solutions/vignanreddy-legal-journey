@@ -1,5 +1,6 @@
 
 import type { Metadata } from "next";
+import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -76,7 +77,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <div className="mx-auto w-full max-w-7xl px-5 pt-5">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-lg border border-[#d8c59d] px-4 py-2 text-sm font-semibold text-[#142b4a] transition hover:bg-[#142b4a] hover:text-white"
+          >
+            ← Back to Home
+          </Link>
+        </div>
+
+        {children}
+      </body>
     </html>
   );
 }
