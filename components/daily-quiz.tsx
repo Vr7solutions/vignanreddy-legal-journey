@@ -125,6 +125,9 @@ const questions = [
   { question: "Which Act governs the legal profession in India?", options: ["Advocates Act, 1961", "Companies Act, 2013", "Indian Contract Act, 1872", "Environment Protection Act, 1986"], answer: 0, explanation: "The Advocates Act, 1961 regulates the legal profession and Bar Councils in India." }
 ];
 
+// Exactly 100 questions are used for Semester 1.
+const semesterOneQuestions = questions.slice(0, 100);
+
 const today = new Date().toLocaleDateString("en-CA", {
   timeZone: "Asia/Kolkata"
 });
@@ -133,11 +136,36 @@ const dayNumber = Math.floor(
   new Date(`${today}T00:00:00+05:30`).getTime() / 86400000
 );
 
-const dailyQuestion =
-  questions[((dayNumber % questions.length) + questions.length) % questions.length];
+interface DailyQuizProps {
+  selectedSemester?: string;
+}
 
-export default function DailyQuiz() {
+export default function DailyQuiz({
+  selectedSemester = "Semester 1"
+}: DailyQuizProps) {
   const [selected, setSelected] = useState<number | null>(null);
+
+  if (selectedSemester !== "Semester 1") {
+    return (
+      <section className="daily-quiz">
+        <div className="quiz-heading">
+          <span>TEST YOUR LEGAL KNOWLEDGE</span>
+          <h2>Legal Quiz of the Day</h2>
+          <p>
+            Questions for {selectedSemester} are being prepared.
+            Please check back soon!
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  const dailyQuestion =
+    semesterOneQuestions[
+      ((dayNumber % semesterOneQuestions.length) +
+        semesterOneQuestions.length) %
+        semesterOneQuestions.length
+    ];
 
   return (
     <section className="daily-quiz">
