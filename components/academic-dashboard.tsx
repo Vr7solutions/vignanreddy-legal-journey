@@ -3,12 +3,16 @@
 
 import { useState } from "react";
 import { GraduationCap, BookOpen } from "lucide-react";
+
 import ResourceHub from "@/components/resource-hub";
 import DailyQuiz from "@/components/daily-quiz";
+import PracticeTest from "@/components/practice-test";
+
 import { academicYears, semesterData } from "@/lib/academic";
 
 export default function AcademicDashboard() {
   const [selectedYear, setSelectedYear] = useState(academicYears[0].name);
+
   const [selectedSemester, setSelectedSemester] = useState(
     academicYears[0].semesters[0]
   );
@@ -25,7 +29,11 @@ export default function AcademicDashboard() {
         <div className="section-heading">
           <div>
             <p className="eyebrow">YOUR ACADEMIC DASHBOARD</p>
-            <h2>Choose your <em>learning year.</em></h2>
+
+            <h2>
+              Choose your <em>learning year.</em>
+            </h2>
+
             <p className="section-copy">
               Select your year and semester to view the relevant subjects
               and learning resources.
@@ -36,10 +44,12 @@ export default function AcademicDashboard() {
         <div className="resource-tools">
           <label className="filter-box">
             <GraduationCap size={18} />
+
             <select
               value={selectedYear}
               onChange={(e) => {
                 const newYear = e.target.value;
+
                 const newSemesters =
                   academicYears.find((year) => year.name === newYear)
                     ?.semesters ?? [];
@@ -59,6 +69,7 @@ export default function AcademicDashboard() {
 
           <label className="filter-box">
             <BookOpen size={18} />
+
             <select
               value={selectedSemester}
               onChange={(e) => setSelectedSemester(e.target.value)}
@@ -81,6 +92,10 @@ export default function AcademicDashboard() {
 
       <section id="daily-quiz" className="scroll-mt-24">
         <DailyQuiz selectedSemester={selectedSemester} />
+      </section>
+
+      <section id="practice-test" className="scroll-mt-24">
+        <PracticeTest selectedSemester={selectedSemester} />
       </section>
     </>
   );
