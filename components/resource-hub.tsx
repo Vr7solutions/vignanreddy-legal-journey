@@ -3,9 +3,18 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  Search, ArrowUpRight, ArrowDownToLine, FileText, ClipboardList,
-  BookOpen, Scale, BriefcaseBusiness, Languages, SlidersHorizontal
+  Search,
+  ArrowUpRight,
+  ArrowDownToLine,
+  FileText,
+  ClipboardList,
+  BookOpen,
+  Scale,
+  BriefcaseBusiness,
+  Languages,
+  SlidersHorizontal
 } from "lucide-react";
+
 import { categories, resources } from "@/lib/content";
 
 const iconMap = {
@@ -15,6 +24,13 @@ const iconMap = {
   Scale,
   BriefcaseBusiness,
   Languages
+};
+
+const resourceTypeMap: Record<string, string> = {
+  "Internal Questions & Answers": "Question Bank",
+  "Notes": "Study Notes",
+  "Internship": "Internship",
+  "Case Laws": "Case Laws"
 };
 
 interface ResourceHubProps {
@@ -43,7 +59,8 @@ export default function ResourceHub({
             .includes(query.toLowerCase());
 
         const matchesType =
-          filter === "All resources" || item.type === filter;
+          filter === "All resources" ||
+          item.type === resourceTypeMap[filter];
 
         const matchesSemester =
           item.semester === selectedSemester ||
@@ -68,12 +85,15 @@ export default function ResourceHub({
         <div className="section-heading">
           <div>
             <p className="eyebrow">THE STUDENT RESOURCE CENTRE</p>
-            <h2>Everything you need, <em>in one place.</em></h2>
+            <h2>
+              Everything you need, <em>in one place.</em>
+            </h2>
             <p className="section-copy">
               Explore learning resources created to make your LL.B journey
               clearer and more manageable.
             </p>
           </div>
+
           <a className="text-link" href="#resources">
             Browse resources <ArrowUpRight size={16} />
           </a>
@@ -91,13 +111,15 @@ export default function ResourceHub({
                 onClick={() =>
                   setFilter(
                     item.title === "Internal Questions"
-                      ? "Question Bank"
+                      ? "Internal Questions & Answers"
                       : item.title === "Assignments"
-                      ? "Assignment Guide"
+                      ? "All resources"
                       : item.title === "Study Notes"
-                      ? "Study Notes"
+                      ? "Notes"
                       : item.title === "Case Laws"
                       ? "Case Laws"
+                      : item.title === "Internship Resources"
+                      ? "Internship"
                       : "All resources"
                   )
                 }
@@ -105,8 +127,11 @@ export default function ResourceHub({
                 <span className="category-icon">
                   <Icon size={21} />
                 </span>
+
                 <span className="category-title">{item.title}</span>
+
                 <span className="category-detail">{item.detail}</span>
+
                 <span className="category-bottom">
                   Explore <ArrowUpRight size={15} />
                 </span>
@@ -121,7 +146,9 @@ export default function ResourceHub({
           <div className="section-heading">
             <div>
               <p className="eyebrow">THE LL.B RESOURCE LIBRARY</p>
-              <h2>Find materials by <em>semester.</em></h2>
+              <h2>
+                Find materials by <em>semester.</em>
+              </h2>
               <p className="section-copy">
                 Browse materials for {selectedSemester}. Choose a subject
                 or resource type to narrow your search.
@@ -132,6 +159,7 @@ export default function ResourceHub({
           <div className="resource-tools">
             <label className="search-box">
               <Search size={18} />
+
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -142,12 +170,14 @@ export default function ResourceHub({
 
             <label className="filter-box">
               <BookOpen size={17} />
+
               <select
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 aria-label="Filter by subject"
               >
                 <option>All subjects</option>
+
                 {selectedSubjects.map((item) => (
                   <option key={item} value={item}>
                     {item}
@@ -158,17 +188,17 @@ export default function ResourceHub({
 
             <label className="filter-box">
               <SlidersHorizontal size={17} />
+
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
                 aria-label="Filter by resource type"
               >
                 <option>All resources</option>
-                <option>Question Bank</option>
-                <option>Assignment Guide</option>
-                <option>Study Notes</option>
-                <option>Practical Guide</option>
                 <option>Case Laws</option>
+                <option>Internal Questions & Answers</option>
+                <option>Internship</option>
+                <option>Notes</option>
               </select>
             </label>
           </div>
@@ -185,8 +215,11 @@ export default function ResourceHub({
                     <span>{item.type}</span>
                     <span>{item.semester}</span>
                   </div>
+
                   <h3>{item.title}</h3>
+
                   <p>{item.description}</p>
+
                   <small>{item.subject}</small>
                 </div>
 
