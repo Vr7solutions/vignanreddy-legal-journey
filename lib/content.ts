@@ -1,3 +1,13 @@
+
+export const subjects = [
+  "Law of Contract – I",
+  "Family Law – I (Hindu Law)",
+  "Constitutional Law – I",
+  "Law of Torts",
+  "Environmental Law",
+  "Legal and Constitutional History of India"
+];
+
 export const categories = [
   { title: "Assignments", detail: "Ready-to-study formats and subject-wise assignments", icon: "FileText", count: "Assignments" },
   { title: "Internal Questions", detail: "Important questions for internal examinations", icon: "ClipboardList", count: "Question banks" },
@@ -9,9 +19,14 @@ export const categories = [
 
 export const resources = [
   { title: "Law of Torts – Important Internal Questions", subject: "Law of Torts", type: "Question Bank", semester: "Semester 1", description: "Key topics for revision, including the nature of tort, liability and remedies." },
-  { title: "History of Courts – Case Law Analysis Format", subject: "History of Courts", type: "Assignment Guide", semester: "Semester 1", description: "A clear structure for presenting facts, issues, arguments, principles and judgments." },
+  { title: "History of Courts – Case Law Analysis Format", subject: "Legal and Constitutional History of India", type: "Assignment Guide", semester: "Semester 1", description: "A clear structure for presenting facts, issues, arguments, principles and judgments." },
   { title: "Environmental Law – Short Notes", subject: "Environmental Law", type: "Study Notes", semester: "Semester 1", description: "Student-friendly explanations of core environmental law concepts." },
   { title: "How to Read and Brief a Case", subject: "Legal Skills", type: "Practical Guide", semester: "All Semesters", description: "A step-by-step approach to understanding judgments and identifying legal principles." }
 ];
 
-export const legalWord = { word: "Precedent", pronunciation: "PRES-ih-dent", meaning: "A legal decision from an earlier case that may guide or bind a court when deciding a similar case.", example: "A court may follow a precedent when the important facts and legal issue are similar." };
+export const legalWord = {
+  word: "Precedent",
+  pronunciation: "PRES-ih-dent",
+  meaning: "A legal decision from an earlier case that may guide or bind a court when deciding a similar case.",
+  example: "A court may follow a precedent when the important facts and legal issue are similar."
+};
