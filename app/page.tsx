@@ -244,6 +244,9 @@ export default function Home() {
           <a href="/privacy-policy" style={{ color: "inherit" }}>
             Privacy Policy
           </a>
+          <a href="/terms-and-conditions" style={{ color: "inherit" }}>
+            Terms &amp; Conditions
+          </a>
           <a href="/disclaimer" style={{ color: "inherit" }}>
             Disclaimer
           </a>
