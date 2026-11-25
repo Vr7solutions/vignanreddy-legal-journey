@@ -96,9 +96,7 @@ export const resources = [
   }
 ];
 
-
-
-const legalWords = [
+export const legalWord = [
   { word: "Precedent", pronunciation: "PRES-ih-dent", meaning: "An earlier court decision used as a guide in similar cases.", example: "The court followed a precedent while deciding the case." },
   { word: "Jurisdiction", pronunciation: "joor-is-DIK-shun", meaning: "The legal authority of a court to hear and decide a case.", example: "The court must have jurisdiction over the matter." },
   { word: "Litigation", pronunciation: "lit-ih-GAY-shun", meaning: "The process of resolving disputes through court proceedings.", example: "The dispute resulted in lengthy litigation." },
@@ -150,4 +148,3 @@ const legalWords = [
   { word: "Perjury", pronunciation: "PUR-juh-ree", meaning: "Knowingly giving false evidence under oath.", example: "Giving false testimony under oath may amount to perjury." },
   { word: "Remedy", pronunciation: "REM-uh-dee", meaning: "A legal means of enforcing a right or obtaining relief.", example: "The law provides a remedy for the injured person." }
 ];
-
