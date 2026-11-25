@@ -1134,3 +1134,16 @@ h2 em {
 .resource-tools .filter-box:focus-within {
   border-color: #b28a3c;
 }
+
+
+.resource-tools .filter-box,
+.resource-tools .search-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.resource-tools .filter-box svg,
+.resource-tools .search-box svg {
+  flex-shrink: 0;
+}
