@@ -1,132 +1,212 @@
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Privacy Policy | Vignan Reddy Legal Journey",
-  description: "Privacy Policy for Vignan Reddy Legal Journey.",
+  description:
+    "Read how Vignan Reddy Legal Journey handles website visitor information and protects privacy.",
 };
 
-export default function PrivacyPolicy() {
+export default function PrivacyPolicyPage() {
   return (
-    <main className="min-h-screen bg-[#f8f7f2] px-5 py-12">
-      <article className="mx-auto max-w-4xl rounded-2xl bg-white p-6 shadow-sm sm:p-10">
-        <h1 className="mb-3 text-3xl font-bold text-[#142b4a]">
+    <main className="mx-auto max-w-4xl px-5 py-12 text-gray-800">
+      <div className="mb-10">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-amber-600">
+          Legal Information
+        </p>
+        <h1 className="mb-3 text-3xl font-bold text-slate-900">
           Privacy Policy
         </h1>
-        <p className="mb-8 text-sm text-gray-500">
-          Last Updated: 25 November 2026
+        <p className="text-sm text-gray-500">
+          Last updated: 25 November 2026
         </p>
+      </div>
 
-        <div className="space-y-7 leading-7 text-gray-700">
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">1. Introduction</h2>
-            <p>
-              Vignan Reddy Legal Journey is an independent, student-led
-              educational initiative run by Vignan Reddy, a 3-Year LL.B
-              student at a college affiliated with Osmania University.
-              This website is not officially associated with or endorsed
-              by Osmania University or any affiliated college.
-            </p>
-          </section>
+      <p className="mb-8 leading-8">
+        Vignan Reddy Legal Journey respects your privacy. This policy explains
+        what information may be collected when you visit this website, how it
+        may be used and the choices available to you.
+      </p>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">2. Information We Collect</h2>
-            <p>
-              You can browse this website without creating an account.
-              If you contact us by email, we may receive your email
-              address and the information you choose to provide.
-              Our hosting provider or other website services may
-              process technical information such as browser details,
-              device information and access logs.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          1. About This Website
+        </h2>
+        <p className="leading-8">
+          Vignan Reddy Legal Journey is an independent, student-led educational
+          initiative. This website provides study resources and information for
+          law students. No account or registration is required to browse the
+          publicly available content.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">3. How Information Is Used</h2>
-            <p>
-              Information may be used to respond to enquiries,
-              maintain website security, troubleshoot technical
-              issues and improve the educational resources available
-              on the website.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          2. Information We May Collect
+        </h2>
+        <p className="mb-3 leading-8">
+          Depending on how you use the website, the following information may
+          be collected:
+        </p>
+        <ul className="list-disc space-y-2 pl-6 leading-7">
+          <li>
+            Information you voluntarily provide when emailing us, such as your
+            email address and the contents of your message.
+          </li>
+          <li>
+            Technical information such as browser type, device information,
+            pages visited and approximate usage details.
+          </li>
+          <li>
+            Information collected through analytics tools to understand how
+            visitors use the website.
+          </li>
+        </ul>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">4. Cookies and Third-Party Services</h2>
-            <p>
-              The website or its hosting and third-party services
-              may use cookies or similar technologies for essential
-              functionality, security or performance. Their use
-              depends on the services integrated into the website.
-              Third-party websites have their own privacy policies.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          3. Google Analytics
+        </h2>
+        <p className="leading-8">
+          This website uses Google Analytics to understand website traffic and
+          how visitors interact with its pages. Google Analytics may collect
+          information such as pages viewed, approximate location, device and
+          browser details, referral sources and interaction data. Depending
+          on the configuration, it may use cookies or similar technologies.
+        </p>
+        <p className="mt-3 leading-8">
+          This information helps us understand which resources are useful and
+          improve the website. Google's processing of information is subject
+          to Google's own privacy policies and terms.
+        </p>
+        <p className="mt-3 leading-8">
+          You can learn more about Google's practices in the{" "}
+          <a
+            href="https://policies.google.com/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-amber-700 underline"
+          >
+            Google Privacy Policy
+          </a>.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">5. Sharing of Information</h2>
-            <p>
-              We do not sell personal information. Information may
-              be processed by service providers supporting website
-              hosting, security or functionality, or disclosed when
-              required by applicable law.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          4. Cookies and Similar Technologies
+        </h2>
+        <p className="leading-8">
+          Cookies are small files that websites may store on your device.
+          Google Analytics may use cookies or similar technologies as part of
+          its analytics services. You can manage or block cookies through your
+          browser settings. Some website features may not work as intended if
+          certain cookies are disabled.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">6. External Links</h2>
-            <p>
-              This website may link to external websites and
-              educational resources. We are not responsible for
-              their privacy practices or content. Please review
-              their privacy policies before sharing information.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          5. How Information Is Used
+        </h2>
+        <p className="mb-3 leading-7">
+          Information may be used to:
+        </p>
+        <ul className="list-disc space-y-2 pl-6 leading-7">
+          <li>Operate and maintain the website.</li>
+          <li>Understand website usage and improve its content.</li>
+          <li>Respond to emails, feedback and correction requests.</li>
+          <li>Identify technical issues and help protect the website.</li>
+        </ul>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">7. Data Security</h2>
-            <p>
-              Reasonable steps are taken to protect information.
-              However, no method of online transmission or storage
-              can be guaranteed to be completely secure.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          6. Third-Party Services
+        </h2>
+        <p className="leading-8">
+          The website may rely on third-party services for hosting, analytics
+          and other technical functions. These providers may process certain
+          information as necessary to provide their services, subject to their
+          own policies. This website does not control the privacy practices of
+          external services.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">8. Children's Privacy</h2>
-            <p>
-              This website is intended for general educational use.
-              We do not knowingly seek to collect personal
-              information from children. Parents or guardians
-              who have concerns may contact us.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          7. External Links
+        </h2>
+        <p className="leading-8">
+          This website may contain links to external websites and resources.
+          Once you visit another website, its own privacy policy and terms
+          apply. We are not responsible for the privacy practices of external
+          websites.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">9. Changes to This Policy</h2>
-            <p>
-              This Privacy Policy may be updated when necessary.
-              Changes will be published on this page with a
-              revised update date.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          8. Data Security and Retention
+        </h2>
+        <p className="leading-8">
+          Reasonable measures are taken to protect information handled through
+          this website. However, no method of internet transmission or
+          electronic storage can be guaranteed to be completely secure.
+          Information is retained only as necessary for the relevant purpose
+          or as required by applicable obligations.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">10. Contact Us</h2>
-            <p>
-              For questions or privacy-related concerns, contact:
-            </p>
-            <p className="mt-3 font-semibold text-[#142b4a]">Vignan Reddy</p>
-            <p>Vignan Reddy Legal Journey</p>
-            <p>
-              Email:{" "}
-              <a
-                href="mailto:vignanreddy.legal@gmail.com"
-                className="font-medium text-[#b28a3c] hover:underline"
-              >
-                vignanreddy.legal@gmail.com
-              </a>
-            </p>
-          </section>
-        </div>
-      </article>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          9. Children's Privacy
+        </h2>
+        <p className="leading-8">
+          This website is intended for educational use by law students. It does
+          not knowingly seek to collect personal information from children.
+          If you believe a child has provided personal information through
+          this website, please contact us.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          10. Your Choices
+        </h2>
+        <p className="leading-8">
+          You can choose not to send us personal information by email. You can
+          also manage cookies through your browser settings and use Google's
+          available privacy controls for its services.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          11. Changes to This Policy
+        </h2>
+        <p className="leading-8">
+          This Privacy Policy may be updated when website features, services
+          or applicable requirements change. Any updated version will be
+          published on this page with a revised date.
+        </p>
+      </section>
+
+      <section className="rounded-xl border border-gray-200 p-6">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          12. Contact Us
+        </h2>
+        <p className="mb-3 leading-7">
+          If you have questions or concerns about this Privacy Policy, contact:
+        </p>
+        <a
+          href="mailto:vignanreddy.legal@gmail.com"
+          className="break-all font-semibold text-amber-700 underline"
+        >
+          vignanreddy.legal@gmail.com
+        </a>
+      </section>
     </main>
   );
 }
