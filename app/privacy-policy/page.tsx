@@ -1,67 +1,61 @@
+# Privacy Policy
 
-import Link from "next/link";
+**Last Updated: 25 November 2026**
 
-export default function PrivacyPolicy() {
-  return (
-    <main style={{ maxWidth: "900px", margin: "60px auto", padding: "24px", color: "#142541", lineHeight: 1.8 }}>
-      <Link href="/" style={{ color: "#c7a36b" }}>← Back to Home</Link>
-      <h1>Privacy Policy</h1>
-      <p>Last updated: November 2026</p>
+## 1. Introduction
 
-      <h2>1. Introduction</h2>
-      <p>
-        Welcome to Vignan Reddy Legal Journey. We respect your privacy
-        and aim to handle visitor information responsibly.
-      </p>
+Welcome to Vignan Reddy Legal Journey.
 
-      <h2>2. Information We Collect</h2>
-      <p>
-        This website does not currently require visitors to create
-        accounts or provide personal information to access its
-        educational resources. Our hosting provider may process
-        technical information such as IP addresses and browser data
-        for security and website operation.
-      </p>
+This website is an independent, student-led educational initiative run by **Vignan Reddy**, a student pursuing the 3-Year LL.B programme at a college affiliated with Osmania University.
 
-      <h2>3. Cookies and Third-Party Services</h2>
-      <p>
-        Our hosting provider and any third-party services used on
-        this website may use technical storage or cookies. Their
-        privacy practices are governed by their respective policies.
-      </p>
+The website aims to support law students through educational resources, study materials, quizzes and legal information.
 
-      <h2>4. Use of Information</h2>
-      <p>
-        Information processed through the website may be used for
-        security, maintenance, troubleshooting, and improving
-        website performance.
-      </p>
+We respect your privacy and are committed to handling visitor information responsibly.
 
-      <h2>5. External Links</h2>
-      <p>
-        Our website may contain links to external websites and
-        resources. We are not responsible for their privacy
-        practices or content.
-      </p>
+## 2. Information We Collect
 
-      <h2>6. Children's Privacy</h2>
-      <p>
-        Our educational resources are intended for students and
-        general learners. We do not knowingly request personal
-        information from children.
-      </p>
+Visitors are not currently required to create an account or provide personal information to access educational resources.
 
-      <h2>7. Policy Updates</h2>
-      <p>
-        This policy may be updated when website features or
-        applicable requirements change.
-      </p>
+However, our hosting provider may automatically process certain technical information, such as IP addresses, browser details and device information, for website security and operation.
 
-      <h2>8. Contact</h2>
-      <p>
-        For privacy-related questions, please use the contact
-        details provided on our website, if available.
-      </p>
-    </main>
-  );
-}
+## 3. Cookies and Technical Storage
+
+Our hosting provider or third-party services used by this website may use cookies or similar technologies for technical purposes.
+
+Their use of such technologies is governed by their respective privacy policies.
+
+## 4. How Information Is Used
+
+Technical information may be processed for:
+- Maintaining website security.
+- Identifying and resolving technical problems.
+- Ensuring website availability and performance.
+- Improving the overall user experience.
+
+We do not intentionally request sensitive personal information from visitors.
+
+## 5. Third-Party Websites
+
+Our website may contain links to external websites, legal resources and educational platforms.
+
+We are not responsible for the privacy practices, policies or content of external websites. Visitors should review their respective privacy policies.
+
+## 6. Children's Privacy
+
+Our educational resources are intended for students and general learners. We do not knowingly request personal information from children.
+
+## 7. Data Security
+
+We take reasonable steps to maintain the security of our website. However, no method of internet transmission or electronic storage can be guaranteed to be completely secure.
+
+## 8. Changes to This Privacy Policy
+
+This Privacy Policy may be updated whenever necessary to reflect changes in website features, practices or applicable requirements. Updates will be published on this page.
+
+## 9. Contact
+
+For privacy-related questions, suggestions or concerns, please use the contact information made available on this website.
+
+**Vignan Reddy**  
+Founder – Vignan Reddy Legal Journey  
+An independent student-led educational initiative.
