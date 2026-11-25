@@ -987,3 +987,151 @@ h2 em {
   }
 }
 
+
+/* LL.B Practice Test */
+.practice-test {
+  padding: 60px 24px;
+  background: #fff;
+}
+
+.practice-heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.practice-heading span {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.practice-heading h2 {
+  color: var(--navy);
+  margin: 10px 0;
+}
+
+.practice-heading p {
+  color: var(--muted);
+}
+
+.practice-card {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.practice-progress {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.practice-progress-bar {
+  height: 7px;
+  margin: 12px 0 24px;
+  background: var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.practice-progress-bar div {
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.3s;
+}
+
+.practice-subject {
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.practice-card h3 {
+  color: var(--navy);
+  line-height: 1.5;
+}
+
+.practice-options {
+  display: grid;
+  gap: 12px;
+  margin: 22px 0;
+}
+
+.practice-option {
+  padding: 14px 16px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.practice-option:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.practice-option.correct {
+  border-color: #218838;
+  background: #eaf7ed;
+}
+
+.practice-option.incorrect {
+  border-color: #dc3545;
+  background: #fff0f0;
+}
+
+.practice-explanation {
+  padding: 16px;
+  margin: 18px 0;
+  background: var(--cream);
+  border-radius: 10px;
+  color: var(--navy);
+}
+
+.practice-explanation p {
+  margin-bottom: 0;
+}
+
+.practice-next,
+.practice-result button {
+  padding: 12px 22px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--navy);
+  color: #fff;
+  cursor: pointer;
+}
+
+.practice-next:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.practice-result {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.practice-result strong {
+  display: block;
+  font-size: 40px;
+  color: var(--gold);
+  margin: 12px 0;
+}
+
+@media (max-width: 600px) {
+  .practice-test {
+    padding: 40px 16px;
+  }
+
+  .practice-card {
+    padding: 20px;
+  }
+}
+
