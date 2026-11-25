@@ -30,9 +30,7 @@ export default function PrivacyPolicyPage() {
       </p>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          1. About This Website
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">1. About This Website</h2>
         <p className="leading-8">
           Vignan Reddy Legal Journey is an independent, student-led educational
           initiative. This website provides study resources and information for
@@ -42,9 +40,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          2. Information We May Collect
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">2. Information We May Collect</h2>
         <p className="mb-3 leading-8">
           Depending on how you use the website, the following information may
           be collected:
@@ -66,9 +62,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          3. Google Analytics
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">3. Google Analytics</h2>
         <p className="leading-8">
           This website uses Google Analytics to understand website traffic and
           how visitors interact with its pages. Google Analytics may collect
@@ -95,9 +89,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          4. Cookies and Similar Technologies
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">4. Cookies and Similar Technologies</h2>
         <p className="leading-8">
           Cookies are small files that websites may store on your device.
           Google Analytics may use cookies or similar technologies as part of
@@ -108,12 +100,8 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          5. How Information Is Used
-        </h2>
-        <p className="mb-3 leading-7">
-          Information may be used to:
-        </p>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">5. How Information Is Used</h2>
+        <p className="mb-3 leading-7">Information may be used to:</p>
         <ul className="list-disc space-y-2 pl-6 leading-7">
           <li>Operate and maintain the website.</li>
           <li>Understand website usage and improve its content.</li>
@@ -123,9 +111,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          6. Third-Party Services
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">6. Third-Party Services</h2>
         <p className="leading-8">
           The website may rely on third-party services for hosting, analytics
           and other technical functions. These providers may process certain
@@ -136,9 +122,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          7. External Links
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">7. External Links</h2>
         <p className="leading-8">
           This website may contain links to external websites and resources.
           Once you visit another website, its own privacy policy and terms
@@ -148,9 +132,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          8. Data Security and Retention
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">8. Data Security and Retention</h2>
         <p className="leading-8">
           Reasonable measures are taken to protect information handled through
           this website. However, no method of internet transmission or
@@ -161,9 +143,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          9. Children's Privacy
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">9. Children's Privacy</h2>
         <p className="leading-8">
           This website is intended for educational use by law students. It does
           not knowingly seek to collect personal information from children.
@@ -173,9 +153,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          10. Your Choices
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">10. Your Choices</h2>
         <p className="leading-8">
           You can choose not to send us personal information by email. You can
           also manage cookies through your browser settings and use Google's
@@ -184,9 +162,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          11. Changes to This Policy
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">11. Changes to This Policy</h2>
         <p className="leading-8">
           This Privacy Policy may be updated when website features, services
           or applicable requirements change. Any updated version will be
@@ -195,9 +171,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section className="rounded-xl border border-gray-200 p-6">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">
-          12. Contact Us
-        </h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">12. Contact Us</h2>
         <p className="mb-3 leading-7">
           If you have questions or concerns about this Privacy Policy, contact:
         </p>
@@ -207,14 +181,16 @@ export default function PrivacyPolicyPage() {
         >
           vignanreddy.legal@gmail.com
         </a>
-        <br />
+      </section>
+
+      <div className="mt-8">
         <Link
           href="/"
-          className="mt-4 inline-block font-semibold text-amber-700 underline underline-offset-4"
+          className="font-semibold text-amber-700 underline underline-offset-4"
         >
-          Return to Home
+          ← Return to Home
         </Link>
-      </section>
+      </div>
     </main>
   );
 }
