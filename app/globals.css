@@ -1074,3 +1074,18 @@ h2 em {
   text-align: center;
 }
 
+
+.year-selector,
+.semester-selector {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.year-selector button,
+.semester-selector button {
+  width: auto;
+  min-width: 100px;
+}
