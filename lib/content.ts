@@ -9,42 +9,12 @@ export const subjects = [
 ];
 
 export const categories = [
-  {
-    title: "Internal 1",
-    detail: "Subject-wise Internal 1 questions and answers",
-    icon: "ClipboardList",
-    count: "6 Subjects"
-  },
-  {
-    title: "Internal 2",
-    detail: "Subject-wise Internal 2 questions and answers",
-    icon: "ClipboardList",
-    count: "6 Subjects"
-  },
-  {
-    title: "Study Material",
-    detail: "Simple notes organised by subject",
-    icon: "BookOpen",
-    count: "Study material"
-  },
-  {
-    title: "Final Exam Q&A",
-    detail: "Important final examination questions and answers",
-    icon: "FileText",
-    count: "6 Subjects"
-  },
-  {
-    title: "Case Laws",
-    detail: "Facts, issues, arguments, principles and judgments",
-    icon: "Scale",
-    count: "6 PDFs"
-  },
-  {
-    title: "Internship Record",
-    detail: "Internship formats, reports and practical learning",
-    icon: "BriefcaseBusiness",
-    count: "Internship resources"
-  }
+  { title: "Internal 1", detail: "Internal 1 questions and answers", icon: "ClipboardList", count: "6 Subjects" },
+  { title: "Internal 2", detail: "Internal 2 questions and answers", icon: "ClipboardList", count: "6 Subjects" },
+  { title: "Study Material", detail: "Subject-wise study notes", icon: "BookOpen", count: "Study material" },
+  { title: "Final Exam Q&A", detail: "Final examination preparation", icon: "FileText", count: "6 Subjects" },
+  { title: "Case Laws", detail: "Important case law analyses", icon: "Scale", count: "6 PDFs" },
+  { title: "Internship Record", detail: "Internship resources", icon: "BriefcaseBusiness", count: "Resources" }
 ];
 
 export const resources = [
