@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { categories, resources } from "@/lib/content";
+import { createClient } from "@/lib/supabase/client";
 
 const iconMap = {
   FileText,
@@ -23,6 +24,15 @@ const iconMap = {
   Scale,
   BriefcaseBusiness
 };
+
+interface ResourceItem {
+  title: string;
+  subject: string;
+  type: string;
+  semester: string;
+  description: string;
+  downloadUrl?: string;
+}
 
 interface ResourceHubProps {
   selectedSemester: string;
@@ -37,6 +47,39 @@ export default function ResourceHub({
   const [filter, setFilter] = useState("All resources");
   const [subject, setSubject] = useState("All subjects");
   const [showAll, setShowAll] = useState(false);
+  const [uploadedResources, setUploadedResources] = useState<ResourceItem[]>([]);
+
+  useEffect(() => {
+    async function loadUploadedResources() {
+      const supabase = createClient();
+
+      const { data, error } = await supabase
+        .from("legal_resources")
+        .select(
+          "title, description, semester, subject, category, file_url"
+        )
+        .eq("is_published", true)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Unable to load uploaded resources:", error.message);
+        return;
+      }
+
+      const formattedResources: ResourceItem[] = (data ?? []).map((item) => ({
+        title: item.title,
+        subject: item.subject,
+        type: item.category,
+        semester: item.semester,
+        description: item.description || "",
+        downloadUrl: item.file_url
+      }));
+
+      setUploadedResources(formattedResources);
+    }
+
+    loadUploadedResources();
+  }, []);
 
   useEffect(() => {
     setSubject("All subjects");
@@ -47,9 +90,14 @@ export default function ResourceHub({
     setShowAll(false);
   }, [query, filter, subject]);
 
+  const allResources = useMemo(
+    () => [...resources, ...uploadedResources],
+    [uploadedResources]
+  );
+
   const filtered = useMemo(
     () =>
-      resources.filter((item) => {
+      allResources.filter((item) => {
         const matchesSearch =
           `${item.title} ${item.subject} ${item.type} ${item.description}`
             .toLowerCase()
@@ -72,7 +120,7 @@ export default function ResourceHub({
           matchesSubject
         );
       }),
-    [query, filter, selectedSemester, subject]
+    [allResources, query, filter, selectedSemester, subject]
   );
 
   const shouldLimit =
@@ -175,19 +223,21 @@ export default function ResourceHub({
                 aria-label="Filter by resource type"
               >
                 <option>All resources</option>
-                <option>Internal 1</option>
-                <option>Internal 2</option>
-                <option>Study Material</option>
-                <option>Final Exam Q&A</option>
-                <option>Case Laws</option>
-                <option>Internship Record</option>
+                {categories.map((item) => (
+                  <option key={item.title} value={item.title}>
+                    {item.title}
+                  </option>
+                ))}
               </select>
             </label>
           </div>
 
           <div className="resource-list">
             {visibleResources.map((item, index) => (
-              <article className="resource-row" key={item.title}>
+              <article
+                className="resource-row"
+                key={`${item.title}-${item.downloadUrl || index}`}
+              >
                 <div className="resource-number">
                   {String(index + 1).padStart(2, "0")}
                 </div>
@@ -199,15 +249,15 @@ export default function ResourceHub({
                   </div>
 
                   <h3>{item.title}</h3>
-
                   <small>{item.subject}</small>
                 </div>
 
-                {"downloadUrl" in item && item.downloadUrl ? (
+                {item.downloadUrl ? (
                   <a
                     className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
                     href={item.downloadUrl}
-                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label={`Download ${item.title}`}
                     title="Download PDF"
                   >
@@ -237,7 +287,9 @@ export default function ResourceHub({
                 onClick={() => setShowAll((previous) => !previous)}
                 className="rounded-xl border border-[#C49A45] bg-[#FFF8E8] px-6 py-3 font-semibold text-[#172554] shadow-sm transition hover:bg-[#FCEFCB]"
               >
-                {showAll ? "Show Less" : `Show More (${filtered.length - 6} more)`}
+                {showAll
+                  ? "Show Less"
+                  : `Show More (${filtered.length - 6} more)`}
               </button>
             </div>
           )}
