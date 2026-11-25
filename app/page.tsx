@@ -70,8 +70,12 @@ export default function Home() {
         <div className="hero-grid">
           <div className="hero-content">
             <div className="hero-kicker">
-              <span></span> FOR 3-YEAR LL.B STUDENTS
+              <span></span> OSMANIA UNIVERSITY · 3-YEAR LL.B
             </div>
+
+            <p className="eyebrow">
+              3YDC · 1ST YEAR · 1ST SEMESTER
+            </p>
 
             <h1>
               Your legal journey.<br />
@@ -80,6 +84,7 @@ export default function Home() {
 
             <p className="hero-description">
               A free learning space built by a law student, for law students.
+              Specially focused on Osmania University 3-Year LL.B students.
               Find notes, assignments, important questions, case laws and
               practical resources — all in one place.
             </p>
@@ -131,7 +136,7 @@ export default function Home() {
 
         <div className="hero-bottom">
           <span>STUDY · UNDERSTAND · APPLY</span>
-          <span>AN OPEN RESOURCE FOR EVERY LAW STUDENT</span>
+          <span>AN OPEN RESOURCE FOR LAW STUDENTS</span>
         </div>
       </section>
 
@@ -214,10 +219,12 @@ export default function Home() {
         </h2>
 
         <p className="about-copy">
-          Vignan Reddy Legal Journey is a non-commercial educational
-          initiative created to share useful learning materials with
-          3-Year LL.B students. The goal is simple: make legal learning
-          more accessible, organised and understandable for everyone.
+          Vignan Reddy Legal Journey is an independent, non-commercial
+          educational initiative created to share useful learning
+          materials with Osmania University 3-Year LL.B (3YDC),
+          1st Year, 1st Semester students. The goal is simple:
+          make legal learning more accessible, organised and
+          understandable for everyone.
         </p>
 
         <div className="motto">
