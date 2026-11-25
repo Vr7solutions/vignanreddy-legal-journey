@@ -3,7 +3,7 @@
 
 import { useMemo, useState } from "react";
 import {
-  Search, ArrowUpRight, FileText, ClipboardList, BookOpen,
+  Search, ArrowUpRight, ArrowDownToLine, FileText, ClipboardList, BookOpen,
   Scale, BriefcaseBusiness, Languages, SlidersHorizontal
 } from "lucide-react";
 import { categories, resources, subjects } from "@/lib/content";
@@ -99,6 +99,8 @@ export default function ResourceHub() {
                       ? "Assignment Guide"
                       : item.title === "Study Notes"
                       ? "Study Notes"
+                      : item.title === "Case Laws"
+                      ? "Case Laws"
                       : "All resources"
                   )
                 }
@@ -206,6 +208,7 @@ export default function ResourceHub() {
                 <option>Assignment Guide</option>
                 <option>Study Notes</option>
                 <option>Practical Guide</option>
+                <option>Case Laws</option>
               </select>
             </label>
           </div>
@@ -227,9 +230,21 @@ export default function ResourceHub() {
                   <small>{item.subject}</small>
                 </div>
 
-                <span className="resource-arrow">
-                  <ArrowUpRight size={20} />
-                </span>
+                {"downloadUrl" in item && item.downloadUrl ? (
+                  <a
+                    className="resource-arrow"
+                    href={item.downloadUrl}
+                    download
+                    aria-label={`Download ${item.title}`}
+                    title="Download PDF"
+                  >
+                    <ArrowDownToLine size={20} />
+                  </a>
+                ) : (
+                  <span className="resource-arrow">
+                    <ArrowUpRight size={20} />
+                  </span>
+                )}
               </article>
             ))}
 
