@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo, useState } from "react";
@@ -36,12 +37,17 @@ const resourceTypeMap: Record<string, string> = {
 type ResourceHubProps = {
   selectedSemester?: string;
   selectedYear?: string;
+  selectedSubjects?: string[];
 };
 
 export default function ResourceHub(props: ResourceHubProps) {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("All resources");
-  const [selectedSubject, setSelectedSubject] = useState("All Subjects");
+
+  const [selectedSubject, setSelectedSubject] = useState(
+    props.selectedSubjects?.[0] || "All Subjects"
+  );
+
   const [selectedSemester, setSelectedSemester] = useState(
     props.selectedSemester || "All Semesters"
   );
