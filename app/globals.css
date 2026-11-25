@@ -1030,3 +1030,29 @@ h2 em {
   margin-bottom: 24px;
 }
 
+
+/* Improve resource search on mobile */
+@media (max-width: 600px) {
+  .resource-tools {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .search-box {
+    width: 100%;
+    min-height: 54px;
+    padding: 0 16px;
+  }
+
+  .search-box input {
+    width: 100%;
+    min-width: 0;
+    font-size: 16px;
+  }
+
+  .filter-box {
+    width: 100%;
+    min-height: 50px;
+  }
+}
+
