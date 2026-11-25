@@ -1345,5 +1345,5 @@ export const legalWord = [
   { word: "Cyber Defamation", pronunciation: "SY-ber def-uh-MAY-shun", meaning: "Defamation carried out through digital communication.", example: "The person filed a complaint alleging cyber defamation." },
   { word: "Digital Harassment", pronunciation: "DIJ-ih-tul huh-RASS-ment", meaning: "Harassing conduct carried out through electronic communication.", example: "The victim reported digital harassment." },
   { word: "Online Threat", pronunciation: "ON-lyne THRET", meaning: "A threat communicated through the internet or digital platform.", example: "The police investigated the online threat." },
-  { word: "Electronic Communication", pronunciation: "ee-lek-TRON-ik kuh-myoo-nih-KAY-shun", meaning: "Communication made through electronic means.", example: "The agreement was confirmed by electronic communication." },
+  { word: "Electronic Communication", pronunciation: "ee-lek-TRON-ik kuh-myoo-nih-KAY-shun", meaning: "Communication made through electronic means.", example: "The agreement was confirmed by electronic communication." }
 ];
