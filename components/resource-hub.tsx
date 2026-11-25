@@ -119,10 +119,7 @@ export default function ResourceHub() {
         </div>
       </section>
 
-      <section
-        id="resources"
-        className="resource-section scroll-mt-24"
-      >
+      <section id="resources" className="resource-section scroll-mt-24">
         <div className="section-wrap">
           <div className="section-heading">
             <div>
@@ -232,13 +229,14 @@ export default function ResourceHub() {
 
                 {"downloadUrl" in item && item.downloadUrl ? (
                   <a
-                    className="resource-arrow"
+                    className="resource-arrow download-button"
                     href={item.downloadUrl}
                     download
                     aria-label={`Download ${item.title}`}
                     title="Download PDF"
                   >
-                    <ArrowDownToLine size={20} />
+                    <ArrowDownToLine size={17} />
+                    <span>Download PDF</span>
                   </a>
                 ) : (
                   <span className="resource-arrow">
