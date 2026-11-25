@@ -1135,3 +1135,11 @@ h2 em {
   }
 }
 
+
+.practice-subject-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
