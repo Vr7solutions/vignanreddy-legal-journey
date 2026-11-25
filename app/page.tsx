@@ -10,7 +10,7 @@ import {
   Sparkles
 } from "lucide-react";
 
-import ResourceHub from "@/components/resource-hub";
+import AcademicDashboard from "@/components/academic-dashboard";
 import DailyQuiz from "@/components/daily-quiz";
 import PracticeTest from "@/components/practice-test";
 import { legalWord } from "@/lib/content";
@@ -163,7 +163,7 @@ export default function Home() {
         </div>
       </div>
 
-      <ResourceHub />
+      <AcademicDashboard />
 
       <section id="daily-word" className="word-section scroll-mt-24">
         <div className="word-card">
@@ -221,10 +221,9 @@ export default function Home() {
         <p className="about-copy">
           Vignan Reddy Legal Journey is an independent, non-commercial
           educational initiative created to share useful learning
-          materials with Osmania University 3-Year LL.B (3YDC),
-          1st Year, 1st Semester students. The goal is simple:
-          make legal learning more accessible, organised and
-          understandable for everyone.
+          materials with Osmania University 3-Year LL.B (3YDC) students.
+          The goal is simple: make legal learning more accessible,
+          organised and understandable for everyone.
         </p>
 
         <div className="motto">
