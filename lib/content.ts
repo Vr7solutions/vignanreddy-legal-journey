@@ -9,21 +9,67 @@ export const subjects = [
 ];
 
 export const categories = [
-  { title: "Assignments", detail: "Ready-to-study formats and subject-wise assignments", icon: "FileText", count: "Assignments" },
-  { title: "Internal Questions", detail: "Important questions for internal examinations", icon: "ClipboardList", count: "Question banks" },
-  { title: "Study Notes", detail: "Simple notes organised by semester and subject", icon: "BookOpen", count: "Study material" },
+  { title: "Internal 1", detail: "Subject-wise Internal 1 questions and answers", icon: "ClipboardList", count: "6 Subjects" },
+  { title: "Internal 2", detail: "Subject-wise Internal 2 questions and answers", icon: "ClipboardList", count: "6 Subjects" },
+  { title: "Study Material", detail: "Simple notes organised by subject", icon: "BookOpen", count: "Study material" },
+  { title: "Final Exam Q&A", detail: "Important final examination questions and answers", icon: "FileText", count: "6 Subjects" },
   { title: "Case Laws", detail: "Facts, issues, arguments, principles and judgments", icon: "Scale", count: "Case briefs" },
-  { title: "Internship Resources", detail: "Guidance, formats, reports and practical learning", icon: "BriefcaseBusiness", count: "Career resources" },
-  { title: "Legal Dictionary", detail: "Everyday legal words explained in plain language", icon: "Languages", count: "Legal terms" }
+  { title: "Internship Record", detail: "Internship formats, reports and practical learning", icon: "BriefcaseBusiness", count: "Internship resources" }
 ];
 
 export const resources = [
-  {
-    title: "Law of Torts – Important Internal Questions",
-    subject: "Law of Torts",
-    type: "Question Bank",
+  // INTERNAL 1
+  ...subjects.map((subject) => ({
+    title: `Internal 1 – ${subject}`,
+    subject,
+    type: "Internal 1",
     semester: "Semester 1",
-    description: "Key topics for internal examination revision."
+    description: `Internal 1 questions and answers for ${subject}.`
+  })),
+
+  // INTERNAL 2
+  ...subjects.map((subject) => ({
+    title: `Internal 2 – ${subject}`,
+    subject,
+    type: "Internal 2",
+    semester: "Semester 1",
+    description: `Internal 2 questions and answers for ${subject}.`
+  })),
+
+  // STUDY MATERIAL
+  ...subjects.map((subject) => ({
+    title: `${subject} – Study Material`,
+    subject,
+    type: "Study Material",
+    semester: "Semester 1",
+    description: `Subject-wise study material and important concepts for ${subject}.`
+  })),
+
+  // FINAL EXAM QUESTIONS AND ANSWERS
+  ...subjects.map((subject) => ({
+    title: `${subject} – Final Exam Important Questions and Answers`,
+    subject,
+    type: "Final Exam Q&A",
+    semester: "Semester 1",
+    description: `Important long-answer and short-answer questions for ${subject} final examination preparation.`
+  })),
+
+  // INTERNSHIP RECORD
+  {
+    title: "LL.B Internship Record",
+    subject: "Internship",
+    type: "Internship Record",
+    semester: "All Semesters",
+    description: "Internship record format, activities, observations and report guidance."
+  },
+
+  // PRACTICAL GUIDE
+  {
+    title: "How to Read and Brief a Case",
+    subject: "Legal Skills",
+    type: "Practical Guide",
+    semester: "All Semesters",
+    description: "A step-by-step guide to understanding judgments."
   },
   {
     title: "Legal and Constitutional History – Case Law Analysis Format",
@@ -32,20 +78,8 @@ export const resources = [
     semester: "Semester 1",
     description: "A structure for presenting case analyses."
   },
-  {
-    title: "Environmental Law – Short Notes",
-    subject: "Environmental Law",
-    type: "Study Notes",
-    semester: "Semester 1",
-    description: "Student-friendly environmental law concepts."
-  },
-  {
-    title: "How to Read and Brief a Case",
-    subject: "Legal Skills",
-    type: "Practical Guide",
-    semester: "All Semesters",
-    description: "A step-by-step guide to understanding judgments."
-  },
+
+  // EXISTING CASE LAW PDFS
   {
     title: "Constitutional Law – 10 Important Case Laws",
     subject: "Constitutional Law – I",
