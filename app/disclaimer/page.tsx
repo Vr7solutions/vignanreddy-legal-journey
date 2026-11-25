@@ -1,204 +1,177 @@
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Disclaimer | Vignan Reddy Legal Journey",
   description:
-    "Educational and legal disclaimer for Vignan Reddy Legal Journey, an independent student-led educational initiative.",
+    "Read the educational, legal and informational disclaimer for Vignan Reddy Legal Journey.",
 };
 
-export default function Disclaimer() {
+export default function DisclaimerPage() {
   return (
-    <main className="min-h-screen bg-[#f8f7f2] px-5 py-12">
-      <article className="mx-auto max-w-4xl rounded-2xl bg-white p-6 shadow-sm sm:p-10">
-        <h1 className="mb-3 text-3xl font-bold text-[#142b4a]">
+    <main className="mx-auto max-w-4xl px-5 py-12 text-gray-800">
+      <div className="mb-10">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-amber-600">
+          Legal Information
+        </p>
+        <h1 className="mb-3 text-3xl font-bold text-slate-900">
           Disclaimer
         </h1>
-
-        <p className="mb-8 text-sm text-gray-500">
-          Last Updated: 25 November 2026
+        <p className="text-sm text-gray-500">
+          Last updated: 25 November 2026
         </p>
+      </div>
 
-        <div className="space-y-7 leading-7 text-gray-700">
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              1. About This Website
-            </h2>
-            <p>
-              Vignan Reddy Legal Journey is an independent, student-led
-              educational initiative run by <strong>Vignan Reddy</strong>,
-              a student pursuing the 3-Year LL.B programme at a college
-              affiliated with Osmania University.
-            </p>
-            <p className="mt-2">
-              The website aims to help fellow law students learn,
-              prepare for examinations and access educational resources.
-            </p>
-            <p className="mt-2">
-              This website is not officially associated with, endorsed
-              by or operated by Osmania University, any affiliated
-              college or any government authority.
-            </p>
-          </section>
+      <p className="mb-8 leading-8">
+        The information provided on Vignan Reddy Legal Journey is intended
+        solely for general educational and informational purposes. By using
+        this website, you acknowledge and understand the following terms.
+      </p>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              2. Educational Purpose Only
-            </h2>
-            <p>
-              All materials available on this website, including
-              assignments, internal questions, study notes, case laws,
-              quizzes, internship resources and legal dictionary
-              entries, are provided for general educational and
-              informational purposes only.
-            </p>
-            <p className="mt-2">
-              These resources are intended to support learning and
-              examination preparation. They should not be treated as
-              a replacement for prescribed textbooks, classroom
-              instruction or official university materials.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          1. Educational Purpose Only
+        </h2>
+        <p className="leading-8">
+          This website provides study notes, assignments, internal questions,
+          case law summaries, internship resources, legal terminology,
+          quizzes and other learning materials. These resources are intended
+          to support students in their academic preparation and understanding
+          of legal subjects.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              3. No Professional Legal Advice
-            </h2>
-            <p>
-              The information on this website does not constitute
-              professional legal advice, legal representation or
-              legal services.
-            </p>
-            <p className="mt-2">
-              Laws and legal interpretations may depend on the facts
-              of each situation. For advice concerning an actual legal
-              matter, consult a qualified legal professional.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          2. Not Legal Advice
+        </h2>
+        <p className="leading-8">
+          Nothing on this website should be treated as professional legal
+          advice, a legal opinion or a substitute for consultation with a
+          qualified advocate. For advice relating to a specific legal matter,
+          please consult a qualified legal professional.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              4. Accuracy and Updates
-            </h2>
-            <p>
-              Reasonable efforts are made to provide useful and accurate
-              educational information. However, errors, omissions or
-              outdated information may occur.
-            </p>
-            <p className="mt-2">
-              Laws, amendments, judicial decisions and university
-              requirements may change. Users should independently
-              verify important information using official and
-              authoritative sources.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          3. Accuracy and Updates
+        </h2>
+        <p className="leading-8">
+          We make reasonable efforts to present information clearly and
+          accurately. However, laws, rules, regulations and judicial decisions
+          may change, and errors or omissions may occur. We do not guarantee
+          that all information is complete, current or error-free.
+        </p>
+        <p className="mt-3 leading-8">
+          Always verify important legal information using current bare acts,
+          official government publications, court judgments and other
+          authoritative sources.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              5. Case Laws and Legal References
-            </h2>
-            <p>
-              Case summaries and legal explanations are provided to
-              assist students in understanding legal principles.
-              They may be simplified for educational purposes and
-              should not be treated as substitutes for the complete
-              original judgments or statutory provisions.
-            </p>
-            <p className="mt-2">
-              Users are encouraged to refer to original judgments,
-              applicable legislation and official legal publications
-              whenever necessary.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          4. Case Laws and Legal References
+        </h2>
+        <p className="leading-8">
+          Case law summaries and explanations are provided to help students
+          understand important judicial decisions. They are not substitutes
+          for reading the original judgments. Please refer to the full
+          judgment and relevant statutory provisions when accuracy and
+          completeness are important.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              6. External Links and Resources
-            </h2>
-            <p>
-              This website may contain links to third-party websites,
-              documents and educational resources for convenience.
-            </p>
-            <p className="mt-2">
-              We do not control or guarantee the accuracy, availability,
-              security or content of external websites. Accessing them
-              is at the user's discretion.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          5. Academic Resources
+        </h2>
+        <p className="leading-8">
+          Study notes, assignments, internal questions, quizzes and practice
+          tests are learning aids. They are not official university material,
+          guaranteed examination questions or a substitute for prescribed
+          textbooks, classroom teaching or independent study. Students should
+          follow their university's current syllabus and examination
+          instructions.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              7. Limitation of Responsibility
-            </h2>
-            <p>
-              To the extent permitted by applicable law, Vignan Reddy
-              Legal Journey shall not be responsible for any loss or
-              consequences arising from reliance on the information
-              provided on this website, or from errors, omissions,
-              interruptions or third-party resources.
-            </p>
-            <p className="mt-2">
-              Users are responsible for independently checking
-              information before relying on it for academic,
-              professional or other purposes.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          6. Independent Educational Initiative
+        </h2>
+        <p className="leading-8">
+          Vignan Reddy Legal Journey is independently managed by a law student.
+          It is not an official website of Osmania University, any affiliated
+          college, court, government department or statutory authority.
+          References to universities, institutions or laws are for
+          identification and educational purposes only.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              8. Copyright and Ownership
-            </h2>
-            <p>
-              Original materials created for this website remain
-              subject to the rights of their respective owners.
-              Third-party materials, legislation and judicial
-              decisions remain subject to applicable laws and
-              their respective rights.
-            </p>
-            <p className="mt-2">
-              If you believe any material has been used improperly,
-              please contact us so that the concern can be reviewed.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          7. External Links and Resources
+        </h2>
+        <p className="leading-8">
+          This website may contain links to external websites, documents and
+          educational resources. These links are provided for convenience.
+          We do not control or guarantee the accuracy, availability or content
+          of external websites. Visiting them is at your own discretion.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              9. Changes to This Disclaimer
-            </h2>
-            <p>
-              This Disclaimer may be updated whenever necessary.
-              Any changes will be published on this page.
-            </p>
-          </section>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          8. Limitation of Responsibility
+        </h2>
+        <p className="leading-8">
+          To the extent permitted by applicable law, the website and its
+          operator are not responsible for losses or consequences arising
+          from reliance on information published here, interruptions in
+          website availability or the use of external resources. Users are
+          responsible for independently verifying information before relying
+          on it.
+        </p>
+      </section>
 
-          <section>
-            <h2 className="mb-2 text-xl font-semibold text-[#142b4a]">
-              10. Contact
-            </h2>
-            <p>
-              For questions, suggestions, corrections or concerns
-              regarding this Disclaimer, please contact:
-            </p>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          9. Copyright and Content Concerns
+        </h2>
+        <p className="leading-8">
+          If you believe any material on this website infringes your copyright
+          or other rights, please contact us with the relevant page link and
+          details so the concern can be reviewed.
+        </p>
+      </section>
 
-            <div className="mt-3">
-              <p className="font-semibold text-[#142b4a]">
-                Vignan Reddy
-              </p>
-              <p>Founder – Vignan Reddy Legal Journey</p>
-              <p>
-                Email:{" "}
-                <a
-                  href="mailto:vignanreddy.legal@gmail.com"
-                  className="font-medium text-[#b28a3c] hover:underline"
-                >
-                  vignanreddy.legal@gmail.com
-                </a>
-              </p>
-              <p className="mt-2 text-sm text-gray-500">
-                An independent student-led educational initiative.
-              </p>
-            </div>
-          </section>
-        </div>
-      </article>
+      <section className="mb-8">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          10. Changes to This Disclaimer
+        </h2>
+        <p className="leading-8">
+          This Disclaimer may be updated when necessary. Changes will be
+          published on this page along with the revised date.
+        </p>
+      </section>
+
+      <section className="rounded-xl border border-gray-200 p-6">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">
+          11. Contact Us
+        </h2>
+        <p className="mb-3 leading-7">
+          For questions, corrections or concerns about this Disclaimer, write
+          to:
+        </p>
+        <a
+          href="mailto:vignanreddy.legal@gmail.com"
+          className="break-all font-semibold text-amber-700 underline"
+        >
+          vignanreddy.legal@gmail.com
+        </a>
+      </section>
     </main>
   );
 }
