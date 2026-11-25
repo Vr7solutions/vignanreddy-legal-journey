@@ -6,21 +6,24 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://vignanreddylegaljourney.vercel.app"),
 
   title: {
-    default: "Vignan Reddy Legal Journey | Learn Law. Share Knowledge.",
+    default:
+      "Osmania University 3-Year LL.B Study Materials | Vignan Reddy Legal Journey",
     template: "%s | Vignan Reddy Legal Journey",
   },
 
   description:
-    "A free learning platform for 3-Year LL.B students. Explore law notes, assignments, internal questions, landmark case laws, legal quizzes and practice tests.",
+    "Free study materials for Osmania University 3-Year LL.B (3YDC), 1st Year 1st Semester students. Access subject-wise notes, assignments, landmark case laws, quizzes and practice tests.",
 
   keywords: [
-    "LLB Study Materials",
-    "3 Year LLB",
-    "Law Notes",
-    "Indian Law",
-    "Legal Case Laws",
+    "Osmania University 3 Year LLB",
+    "OU 3YDC LLB 1st Year 1st Semester",
+    "Osmania University LLB Study Materials",
+    "LLB 1st Semester Notes",
+    "3 Year LLB Notes",
     "Law Assignments",
-    "Osmania University LLB",
+    "Landmark Case Laws",
+    "LLB Practice Tests",
+    "Indian Law",
     "Legal Education India",
   ],
 
@@ -35,9 +38,9 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Vignan Reddy Legal Journey",
+    title: "Osmania University 3-Year LL.B | Vignan Reddy Legal Journey",
     description:
-      "Learn Law. Share Knowledge. Grow Together. A free learning platform for law students.",
+      "Free learning resources for Osmania University 3YDC, 1st Year 1st Semester LL.B students.",
     url: "https://vignanreddylegaljourney.vercel.app",
     siteName: "Vignan Reddy Legal Journey",
     locale: "en_IN",
@@ -54,8 +57,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Vignan Reddy Legal Journey",
-    description: "Free learning resources for LL.B students.",
+    title: "Osmania University 3-Year LL.B | Vignan Reddy Legal Journey",
+    description:
+      "Free study resources for Osmania University 3YDC LL.B students.",
     images: ["/og-image.png"],
   },
 
