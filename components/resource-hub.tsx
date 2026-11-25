@@ -55,9 +55,7 @@ export default function ResourceHub({
 
       const { data, error } = await supabase
         .from("legal_resources")
-        .select(
-          "title, description, semester, subject, category, file_url"
-        )
+        .select("title, description, semester, subject, category, file_url")
         .eq("is_published", true)
         .order("created_at", { ascending: false });
 
@@ -66,16 +64,16 @@ export default function ResourceHub({
         return;
       }
 
-      const formattedResources: ResourceItem[] = (data ?? []).map((item) => ({
-        title: item.title,
-        subject: item.subject,
-        type: item.category,
-        semester: item.semester,
-        description: item.description || "",
-        downloadUrl: item.file_url
-      }));
-
-      setUploadedResources(formattedResources);
+      setUploadedResources(
+        (data ?? []).map((item) => ({
+          title: item.title,
+          subject: item.subject,
+          type: item.category,
+          semester: item.semester,
+          description: item.description || "",
+          downloadUrl: item.file_url
+        }))
+      );
     }
 
     loadUploadedResources();
