@@ -2,48 +2,18 @@ export const subjects = [
   "Law of Contract – I",
   "Family Law – I (Hindu Law)",
   "Constitutional Law – I",
-  "Law of Torts",
+  "Law of Torts Including Motor Vehicle Accidents",
   "Environmental Law",
-  "Legal and Constitutional History of India"
+  "Legal and Constitutional History of India",
 ];
 
 export const categories = [
-  {
-    title: "Assignments",
-    detail: "Subject-wise assignments and academic work",
-    icon: "FileText",
-    count: "6 Subjects"
-  },
-  {
-    title: "Internal Questions",
-    detail: "Important questions for internal examinations",
-    icon: "ClipboardList",
-    count: "6 Subjects"
-  },
-  {
-    title: "Study Notes",
-    detail: "Study materials and easy-to-understand notes",
-    icon: "BookOpen",
-    count: "Study Material"
-  },
-  {
-    title: "Case Laws",
-    detail: "Important landmark judgments and case analyses",
-    icon: "Scale",
-    count: "6 PDFs"
-  },
-  {
-    title: "Internship Resources",
-    detail: "Resources to support your legal internship journey",
-    icon: "BriefcaseBusiness",
-    count: "Resources"
-  },
-  {
-    title: "Legal Dictionary",
-    detail: "Learn important legal terms and meanings",
-    icon: "BookOpen",
-    count: "Legal Terms"
-  }
+  "Assignments",
+  "Internal Questions",
+  "Study Notes",
+  "Case Laws",
+  "Internship Resources",
+  "Legal Dictionary",
 ];
 
 export const resources = [
@@ -52,51 +22,56 @@ export const resources = [
     subject: "Constitutional Law – I",
     type: "Case Laws",
     semester: "Semester 1",
-    description: "Ten important constitutional law case analyses.",
-    downloadUrl: "/pdfs/Constitutional_10_Case_Laws.pdf"
+    description:
+      "Ten important constitutional law cases with facts, legal issues, principles and judgments.",
+    downloadUrl: "/pdfs/Constitutional_10_Case_Laws.pdf",
   },
   {
     title: "Law of Contract – 10 Landmark Case Analyses",
     subject: "Law of Contract – I",
     type: "Case Laws",
     semester: "Semester 1",
-    description: "Ten landmark contract law case analyses.",
-    downloadUrl: "/pdfs/Contract_Law_10_Landmark_Case_Analyses.pdf"
+    description:
+      "Ten landmark contract law cases explained with facts, issues, principles and judgments.",
+    downloadUrl: "/pdfs/Contract_Law_10_Landmark_Case_Analyses.pdf",
   },
   {
     title: "Environmental Law – 10 Landmark Case Analyses",
     subject: "Environmental Law",
     type: "Case Laws",
     semester: "Semester 1",
-    description: "Ten important environmental law case analyses.",
-    downloadUrl: "/pdfs/Environmental_Law_10_Landmark_Case_Analyses.pdf"
+    description:
+      "Important environmental law judgments with facts, legal principles and case analysis.",
+    downloadUrl: "/pdfs/Environmental_Law_10_Landmark_Case_Analyses.pdf",
   },
   {
     title: "History of Courts – 10 Case Analyses",
     subject: "Legal and Constitutional History of India",
     type: "Case Laws",
     semester: "Semester 1",
-    description: "Ten important cases relating to the history of Indian courts.",
-    downloadUrl: "/pdfs/HOC_10_Case_Analyses.pdf"
+    description:
+      "Ten important cases relating to the development of the Indian judicial system.",
+    downloadUrl: "/pdfs/HOC_10_Case_Analyses.pdf",
   },
   {
     title: "Family Law – 10 Hindu Law Case Analyses",
     subject: "Family Law – I (Hindu Law)",
     type: "Case Laws",
     semester: "Semester 1",
-    description: "Ten important Hindu law case analyses.",
-    downloadUrl: "/pdfs/Hindu_Law_10_Case_Analyses.pdf"
+    description:
+      "Important Hindu law cases explained through facts, issues, principles and judgments.",
+    downloadUrl: "/pdfs/Hindu_Law_10_Case_Analyses.pdf",
   },
   {
     title: "Law of Torts – 10 Landmark Case Analyses",
-    subject: "Law of Torts",
+    subject: "Law of Torts Including Motor Vehicle Accidents",
     type: "Case Laws",
     semester: "Semester 1",
-    description: "Ten important tort law case analyses.",
-    downloadUrl: "/pdfs/Tort_Law_10_Landmark_Case_Analyses.pdf"
-  }
+    description:
+      "Ten important tort law cases with facts, legal principles and judgments.",
+    downloadUrl: "/pdfs/Tort_Law_10_Landmark_Case_Analyses.pdf",
+  },
 ];
-
 
 export const legalWords = [
   { word: "Precedent", pronunciation: "PRES-ih-dent", meaning: "An earlier court decision used as a guide in similar cases.", example: "The court followed a precedent while deciding the case." },
