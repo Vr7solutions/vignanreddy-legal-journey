@@ -1,3 +1,4 @@
+
 export const subjects = [
   "Law of Contract – I",
   "Family Law – I (Hindu Law)",
@@ -8,7 +9,7 @@ export const subjects = [
 ];
 
 export const categories = [
-  "Assignments",
+  "Faculty Given Notes",
   "Internal 1",
   "Internal 2",
   "Study Notes",
@@ -73,6 +74,7 @@ export const resources = [
     downloadUrl: "/pdfs/Tort_Law_10_Landmark_Case_Analyses.pdf",
   },
 ];
+
 
 export const legalWords = [
   { word: "Precedent", pronunciation: "PRES-ih-dent", meaning: "An earlier court decision used as a guide in similar cases.", example: "The court followed a precedent while deciding the case." },
