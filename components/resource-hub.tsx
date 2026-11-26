@@ -19,7 +19,8 @@ import { createClient } from "@/lib/supabase/client";
 
 const iconMap: Record<string, React.ElementType> = {
   Assignments: FileText,
-  "Internal Questions": ClipboardList,
+  "Internal 1": ClipboardList,
+  "Internal 2": ClipboardList,
   "Study Notes": BookOpen,
   "Case Laws": Scale,
   "Internship Resources": BriefcaseBusiness,
@@ -137,7 +138,9 @@ export default function ResourceHub({
         <div className="section-heading">
           <div>
             <p className="eyebrow">THE STUDENT RESOURCE CENTRE</p>
-            <h2>Everything you need, <em>in one place.</em></h2>
+            <h2>
+              Everything you need, <em>in one place.</em>
+            </h2>
             <p className="section-copy">
               Explore learning resources created to make your LL.B journey
               clearer and more manageable.
@@ -181,7 +184,9 @@ export default function ResourceHub({
           <div className="section-heading">
             <div>
               <p className="eyebrow">THE LL.B RESOURCE LIBRARY</p>
-              <h2>Find materials by <em>semester.</em></h2>
+              <h2>
+                Find materials by <em>semester.</em>
+              </h2>
               <p className="section-copy">
                 Browse materials for {selectedSemester}. Choose a subject
                 or resource type to narrow your search.
