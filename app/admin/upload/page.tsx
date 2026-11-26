@@ -10,7 +10,7 @@ const subjects = [
   "Law of Contract – I",
   "Family Law – I (Hindu Law)",
   "Constitutional Law – I",
-  "Law of Torts",
+  "Law of Torts Including Motor Vehicle Accidents",
   "Environmental Law",
   "Legal and Constitutional History of India",
 ];
@@ -86,9 +86,7 @@ export default function AdminUploadPage() {
 
       const safePath = relativePath
         .split("/")
-        .map((part) =>
-          part.replace(/[^a-zA-Z0-9._-]/g, "_")
-        )
+        .map((part) => part.replace(/[^a-zA-Z0-9._-]/g, "_"))
         .join("/");
 
       const filePath = `${crypto.randomUUID()}/${safePath}`;
@@ -148,9 +146,7 @@ export default function AdminUploadPage() {
     }
 
     if (failed.length > 0) {
-      setError(
-        `${failed.length} file(s) failed:\n${failed.join("\n")}`
-      );
+      setError(`${failed.length} file(s) failed:\n${failed.join("\n")}`);
     }
   }
 
@@ -205,7 +201,14 @@ export default function AdminUploadPage() {
                 onChange={(e) => setSemester(e.target.value)}
                 className="w-full rounded-lg border border-gray-300 px-3 py-3"
               >
-                {["Semester 1", "Semester 2", "Semester 3", "Semester 4", "Semester 5", "Semester 6"].map((item) => (
+                {[
+                  "Semester 1",
+                  "Semester 2",
+                  "Semester 3",
+                  "Semester 4",
+                  "Semester 5",
+                  "Semester 6",
+                ].map((item) => (
                   <option key={item}>{item}</option>
                 ))}
               </select>
