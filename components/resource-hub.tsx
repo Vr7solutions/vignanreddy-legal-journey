@@ -160,20 +160,25 @@ export default function ResourceHub({
         <div className="category-grid">
           {categories.map((item) => {
             const Icon = iconMap[item] || FileText;
+            const isLegalDictionary = item === "Legal Dictionary";
 
             return (
               <a
                 className="category-card"
-                href="#resources"
+                href={isLegalDictionary ? "/legal-dictionary" : "#resources"}
                 key={item}
-                onClick={() => setFilter(item)}
+                onClick={
+                  isLegalDictionary ? undefined : () => setFilter(item)
+                }
               >
                 <span className="category-icon">
                   <Icon size={21} />
                 </span>
                 <span className="category-title">{item}</span>
                 <span className="category-detail">
-                  Explore {item.toLowerCase()} resources
+                  {isLegalDictionary
+                    ? "Explore legal terms and meanings"
+                    : `Explore ${item.toLowerCase()} resources`}
                 </span>
                 <span className="category-bottom">
                   Explore <ArrowUpRight size={15} />
