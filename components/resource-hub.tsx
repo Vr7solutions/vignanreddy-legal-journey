@@ -261,8 +261,9 @@ export default function ResourceHub({
                 </div>
 
                 <div className="resource-main">
-                  <div className="resource-meta">
+                  <div className="resource-meta flex flex-wrap items-center gap-2">
                     <span>{item.type}</span>
+                    <span>·</span>
                     <span>{item.semester}</span>
                   </div>
 
