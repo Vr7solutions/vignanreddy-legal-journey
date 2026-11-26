@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -29,7 +30,6 @@ const categories = [
   "Study Notes",
   "Case Laws",
   "Internship Resources",
-  "Legal Dictionary",
 ];
 
 type Resource = {
