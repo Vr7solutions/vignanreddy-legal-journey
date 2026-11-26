@@ -1,3 +1,4 @@
+
 export const dynamic = "force-dynamic";
 
 import {
@@ -8,7 +9,8 @@ import {
   HeartHandshake,
   Scale,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  Bell,
 } from "lucide-react";
 
 import AcademicDashboard from "@/components/academic-dashboard";
@@ -151,6 +153,40 @@ export default function Home() {
 
       <AcademicDashboard />
 
+      {/* OU and College Updates Card */}
+      <section className="scroll-mt-24 px-5 py-10">
+        <div className="mx-auto max-w-5xl">
+          <a
+            href="/ou-updates"
+            className="group flex flex-col gap-5 rounded-2xl border border-[#E7D9B8] bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md sm:flex-row sm:items-center sm:justify-between sm:p-8"
+          >
+            <div className="flex items-start gap-4">
+              <div className="rounded-xl bg-[#172554] p-4 text-white">
+                <Bell size={28} />
+              </div>
+
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-[#A77D2D]">
+                  Stay informed
+                </p>
+                <h2 className="mt-1 text-xl font-bold text-[#172554] sm:text-2xl">
+                  OU & College Updates
+                </h2>
+                <p className="mt-2 max-w-xl text-sm leading-6 text-gray-600">
+                  Find Osmania University notifications, syllabus,
+                  examination timetables, results and ISL College
+                  announcements in one place.
+                </p>
+              </div>
+            </div>
+
+            <span className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-[#172554] px-5 py-3 text-sm font-semibold text-white transition group-hover:bg-[#243b78]">
+              View Updates <ArrowRight size={16} />
+            </span>
+          </a>
+        </div>
+      </section>
+
       <section id="daily-word" className="word-section scroll-mt-24">
         <div className="word-card">
           <div className="word-left">
@@ -163,7 +199,7 @@ export default function Home() {
               Build your legal vocabulary with simple meanings and
               practical examples.
             </p>
-            <a href="#about" className="word-link">
+            <a href="/legal-dictionary" className="word-link">
               Explore the legal dictionary <ArrowUpRight size={16} />
             </a>
           </div>
