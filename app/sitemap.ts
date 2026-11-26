@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/terms-and-conditions",
     "/disclaimer",
     "/legal-dictionary",
+    "/ou-updates",
   ];
 
   return pages.map((page) => ({
@@ -21,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority:
       page === ""
         ? 1
-        : page === "/legal-dictionary"
+        : page === "/legal-dictionary" || page === "/ou-updates"
           ? 0.8
           : 0.7,
   }));
