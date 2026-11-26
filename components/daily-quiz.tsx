@@ -148,9 +148,14 @@ export default function DailyQuiz({
   if (selectedSemester !== "Semester 1") {
     return (
       <section className="daily-quiz">
-        <div className="quiz-heading rounded-2xl border border-amber-200 bg-[#FFF8E8] px-6 py-7 shadow-sm">    
-          <span>TEST YOUR LEGAL KNOWLEDGE</span>
-              <h2 className="text-[#172554]">Legal Quiz of the Day</h2>          <p>
+        <div className="quiz-heading rounded-2xl border border-amber-200 bg-[#FFF8E8] px-6 py-7 shadow-sm">
+          <span className="font-semibold text-[#B8860B]">
+            TEST YOUR LEGAL KNOWLEDGE
+          </span>
+          <h2 className="text-[#172554]">
+            Legal Quiz of the Day
+          </h2>
+          <p>
             Questions for {selectedSemester} are being prepared.
             Please check back soon!
           </p>
@@ -169,8 +174,12 @@ export default function DailyQuiz({
   return (
     <section className="daily-quiz">
       <div className="quiz-heading">
-        <span>TEST YOUR LEGAL KNOWLEDGE</span>
-        <h2>Legal Quiz of the Day</h2>
+        <span className="font-semibold text-[#B8860B]">
+          TEST YOUR LEGAL KNOWLEDGE
+        </span>
+        <h2 className="text-[#172554]">
+          Legal Quiz of the Day
+        </h2>
         <p>A new question every day. Learn something new!</p>
       </div>
 
