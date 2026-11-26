@@ -239,11 +239,13 @@ export default function ResourceHub({
                 aria-label="Filter by resource type"
               >
                 <option>All resources</option>
-                {categories.map((item) => (
-                  <option key={item} value={item}>
-                    {item}
-                  </option>
-                ))}
+                {categories
+                  .filter((item) => item !== "Legal Dictionary")
+                  .map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
               </select>
             </label>
           </div>
