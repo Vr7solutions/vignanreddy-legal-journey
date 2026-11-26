@@ -13,6 +13,7 @@ const subjects = [
   "Law of Torts Including Motor Vehicle Accidents",
   "Environmental Law",
   "Legal and Constitutional History of India",
+  "Other",
 ];
 
 const categories = [
