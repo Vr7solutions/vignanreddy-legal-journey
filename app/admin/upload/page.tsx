@@ -13,24 +13,58 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-const subjects = [
-  "Law of Contract – I",
-  "Family Law – I (Hindu Law)",
-  "Constitutional Law – I",
-  "Law of Torts Including Motor Vehicle Accidents",
-  "Environmental Law",
-  "Legal and Constitutional History of India",
-  "Other",
-];
+const semesterSubjects: Record<string, string[]> = {
+  "Semester 1": [
+    "Law of Contract – I",
+    "Family Law – I (Hindu Law)",
+    "Constitutional Law – I",
+    "Law of Torts Including Motor Vehicle Accidents",
+    "Environmental Law",
+    "Legal and Constitutional History of India",
+  ],
 
-const categories = [
-  "Assignments",
-  "Internal 1",
-  "Internal 2",
-  "Study Notes",
-  "Case Laws",
-  "Internship Resources",
-];
+  "Semester 2": [
+    "Law of Contract – II",
+    "Family Law – II (Muslim Law and Other Personal Laws)",
+    "Constitutional Law – II",
+    "Law of Crimes",
+    "Law of Evidence",
+  ],
+
+  "Semester 3": [
+    "Jurisprudence",
+    "Law of Property",
+    "Administrative Law",
+    "Company Law",
+    "Labour Law – I",
+  ],
+
+  "Semester 4": [
+    "Labour Law – II",
+    "Public International Law",
+    "Interpretation of Statutes",
+    "Land Laws",
+    "Intellectual Property Law",
+  ],
+
+  "Semester 5": [
+    "Civil Procedure Code and Law of Limitation",
+    "Criminal Procedure Code, Law of Juvenile Justice and Probation of Offenders",
+    "Law of Banking and Negotiable Instruments",
+    "Alternative Dispute Resolution",
+    "Professional Ethics and Professional Accounting System",
+  ],
+
+  "Semester 6": [
+    "Law of Taxation",
+    "Information Technology Law",
+    "Law Relating to Women",
+    "Human Rights Law",
+    "Law of Investments and Securities",
+    "Drafting, Pleadings and Conveyancing",
+    "Moot Courts, Observation of Trial, Pre-Trial Preparations and Internship",
+  ],
+};
 
 type Resource = {
   id: string;
@@ -49,8 +83,10 @@ export default function AdminUploadPage() {
 
   const [files, setFiles] = useState<File[]>([]);
   const [semester, setSemester] = useState("Semester 1");
-  const [subject, setSubject] = useState(subjects[0]);
-  const [category, setCategory] = useState(categories[0]);
+  const [subject, setSubject] = useState(
+    semesterSubjects["Semester 1"][0]
+  );
+  const [category, setCategory] = useState("Assignments");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -60,6 +96,24 @@ export default function AdminUploadPage() {
   const [fetchingResources, setFetchingResources] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [resourceError, setResourceError] = useState("");
+
+  const subjects = [
+    ...(semesterSubjects[semester] || []),
+    "Other",
+  ];
+
+  const categories = [
+    "Assignments",
+    "Internal 1",
+    "Internal 2",
+    "Study Notes",
+    "Case Laws",
+    "Internship Resources",
+  ];
+
+  useEffect(() => {
+    setSubject(semesterSubjects[semester]?.[0] || "Other");
+  }, [semester]);
 
   async function loadResources() {
     setFetchingResources(true);
