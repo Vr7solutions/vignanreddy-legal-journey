@@ -61,6 +61,17 @@ const semesterSubjects: Record<string, string[]> = {
   ],
 };
 
+const allowedTypes: Record<string, string> = {
+  pdf: "application/pdf",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp",
+};
+
+const acceptedFiles =
+  ".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp";
+
 type Resource = {
   id: string;
   title: string;
@@ -229,18 +240,24 @@ export default function AdminUploadPage() {
     setError("");
 
     if (files.length === 0) {
-      setError("Please select PDF files or a folder.");
+      setError("Please select PDF files or images.");
       return;
     }
 
-    const invalidFiles = files.filter(
-      (file) =>
-        file.type !== "application/pdf" &&
-        !file.name.toLowerCase().endsWith(".pdf")
-    );
+    const invalidFiles = files.filter((file) => {
+      const extension = file.name.split(".").pop()?.toLowerCase();
+      const expectedType = extension ? allowedTypes[extension] : undefined;
+
+      return (
+        !expectedType ||
+        (file.type !== "" && file.type !== expectedType)
+      );
+    });
 
     if (invalidFiles.length > 0) {
-      setError("Only PDF files are allowed.");
+      setError(
+        "Only PDF, JPG, JPEG, PNG and WEBP files are allowed."
+      );
       return;
     }
 
@@ -249,7 +266,7 @@ export default function AdminUploadPage() {
     );
 
     if (oversizedFiles.length > 0) {
-      setError("Each PDF must be 50 MB or smaller.");
+      setError("Each file must be 50 MB or smaller.");
       return;
     }
 
@@ -270,11 +287,21 @@ export default function AdminUploadPage() {
 
       const filePath = `${crypto.randomUUID()}/${safePath}`;
 
+      const extension = file.name.split(".").pop()?.toLowerCase();
+      const contentType = extension
+        ? allowedTypes[extension]
+        : undefined;
+
+      if (!contentType) {
+        failed.push(`${file.name}: Unsupported file type`);
+        continue;
+      }
+
       try {
         const { error: storageError } = await supabase.storage
           .from("legal-resources")
           .upload(filePath, file, {
-            contentType: "application/pdf",
+            contentType,
             upsert: false,
           });
 
@@ -290,7 +317,7 @@ export default function AdminUploadPage() {
         const { error: databaseError } = await supabase
           .from("legal_resources")
           .insert({
-            title: file.name.replace(/\.pdf$/i, ""),
+            title: file.name.replace(/\.[^.]+$/, ""),
             description: description.trim() || null,
             semester,
             subject,
@@ -320,8 +347,9 @@ export default function AdminUploadPage() {
     setLoading(false);
 
     if (uploaded > 0) {
-      setMessage(`${uploaded} PDF file(s) uploaded successfully.`);
+      setMessage(`${uploaded} file(s) uploaded successfully.`);
       setFiles([]);
+      setDescription("");
       await loadResources();
     }
 
@@ -346,27 +374,19 @@ export default function AdminUploadPage() {
     }
 
     const extension = updateFile.name.split(".").pop()?.toLowerCase();
-
-    const allowedTypes: Record<string, string> = {
-      pdf: "application/pdf",
-      jpg: "image/jpeg",
-      jpeg: "image/jpeg",
-      png: "image/png",
-      webp: "image/webp",
-    };
-
     const contentType = extension ? allowedTypes[extension] : undefined;
 
     if (!contentType) {
-      setUpdateError("Only PDF, JPG, JPEG, PNG and WEBP files are allowed.");
+      setUpdateError(
+        "Only PDF, JPG, JPEG, PNG and WEBP files are allowed."
+      );
       return;
     }
 
-    if (
-      updateFile.type &&
-      updateFile.type !== contentType
-    ) {
-      setUpdateError("The selected file type does not match its extension.");
+    if (updateFile.type && updateFile.type !== contentType) {
+      setUpdateError(
+        "The selected file type does not match its extension."
+      );
       return;
     }
 
@@ -559,7 +579,7 @@ export default function AdminUploadPage() {
               Upload Study Resources
             </h2>
             <p className="mt-1 text-sm text-gray-600">
-              Upload multiple PDFs or select an entire folder.
+              Upload multiple PDFs and images or select an entire folder.
             </p>
           </div>
 
@@ -627,14 +647,14 @@ export default function AdminUploadPage() {
             <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#C49A45] bg-[#FFF8E8] p-6 text-center hover:bg-[#FCEFCB]">
               <Upload className="mb-3 text-[#A77D2D]" size={30} />
               <span className="font-semibold text-[#172554]">
-                Select PDF Files
+                Select Files
               </span>
               <span className="mt-1 text-xs text-gray-600">
-                Choose multiple PDFs
+                Choose multiple PDFs and images
               </span>
               <input
                 type="file"
-                accept=".pdf,application/pdf"
+                accept={acceptedFiles}
                 multiple
                 className="hidden"
                 onChange={(e) => selectFiles(e.target.files)}
@@ -647,11 +667,11 @@ export default function AdminUploadPage() {
                 Select Entire Folder
               </span>
               <span className="mt-1 text-xs text-gray-600">
-                Choose a folder containing PDFs
+                Choose a folder containing PDFs and images
               </span>
               <input
                 type="file"
-                accept=".pdf,application/pdf"
+                accept={acceptedFiles}
                 multiple
                 {...({ webkitdirectory: "", directory: "" } as any)}
                 className="hidden"
@@ -659,6 +679,10 @@ export default function AdminUploadPage() {
               />
             </label>
           </div>
+
+          <p className="text-xs text-gray-500">
+            Accepted: PDF, JPG, JPEG, PNG and WEBP. Maximum size: 50 MB per file.
+          </p>
 
           {files.length > 0 && (
             <div className="rounded-xl bg-gray-50 p-4">
@@ -696,7 +720,7 @@ export default function AdminUploadPage() {
             disabled={loading}
             className="w-full rounded-xl bg-[#172554] px-5 py-3 font-semibold text-white transition hover:bg-[#243b78] disabled:opacity-60"
           >
-            {loading ? "Uploading PDFs..." : "Upload Resources"}
+            {loading ? "Uploading Files..." : "Upload Resources"}
           </button>
         </form>
 
@@ -789,7 +813,7 @@ export default function AdminUploadPage() {
             <input
               type="file"
               required
-              accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"
+              accept={acceptedFiles}
               onChange={(e) => {
                 setUpdateFile(e.target.files?.[0] || null);
                 setUpdateError("");
@@ -836,7 +860,7 @@ export default function AdminUploadPage() {
                 Uploaded Resources
               </h2>
               <p className="mt-1 text-sm text-gray-600">
-                Manage or permanently delete uploaded PDFs.
+                Manage or permanently delete uploaded resources.
               </p>
             </div>
 
