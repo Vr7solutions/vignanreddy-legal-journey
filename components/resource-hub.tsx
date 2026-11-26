@@ -11,18 +11,19 @@ import {
   BookOpen,
   Scale,
   BriefcaseBusiness,
-  SlidersHorizontal
+  SlidersHorizontal,
 } from "lucide-react";
 
 import { categories, resources } from "@/lib/content";
 import { createClient } from "@/lib/supabase/client";
 
-const iconMap = {
-  FileText,
-  ClipboardList,
-  BookOpen,
-  Scale,
-  BriefcaseBusiness
+const iconMap: Record<string, React.ElementType> = {
+  Assignments: FileText,
+  "Internal Questions": ClipboardList,
+  "Study Notes": BookOpen,
+  "Case Laws": Scale,
+  "Internship Resources": BriefcaseBusiness,
+  "Legal Dictionary": BookOpen,
 };
 
 interface ResourceItem {
@@ -41,7 +42,7 @@ interface ResourceHubProps {
 
 export default function ResourceHub({
   selectedSemester,
-  selectedSubjects
+  selectedSubjects,
 }: ResourceHubProps) {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("All resources");
@@ -71,7 +72,7 @@ export default function ResourceHub({
           type: item.category,
           semester: item.semester,
           description: item.description || "",
-          downloadUrl: item.file_url
+          downloadUrl: item.file_url,
         }))
       );
     }
@@ -150,20 +151,22 @@ export default function ResourceHub({
 
         <div className="category-grid">
           {categories.map((item) => {
-            const Icon = iconMap[item.icon as keyof typeof iconMap];
+            const Icon = iconMap[item] || FileText;
 
             return (
               <a
                 className="category-card"
                 href="#resources"
-                key={item.title}
-                onClick={() => setFilter(item.title)}
+                key={item}
+                onClick={() => setFilter(item)}
               >
                 <span className="category-icon">
-                  {Icon && <Icon size={21} />}
+                  <Icon size={21} />
                 </span>
-                <span className="category-title">{item.title}</span>
-                <span className="category-detail">{item.detail}</span>
+                <span className="category-title">{item}</span>
+                <span className="category-detail">
+                  Explore {item.toLowerCase()} resources
+                </span>
                 <span className="category-bottom">
                   Explore <ArrowUpRight size={15} />
                 </span>
@@ -222,8 +225,8 @@ export default function ResourceHub({
               >
                 <option>All resources</option>
                 {categories.map((item) => (
-                  <option key={item.title} value={item.title}>
-                    {item.title}
+                  <option key={item} value={item}>
+                    {item}
                   </option>
                 ))}
               </select>
