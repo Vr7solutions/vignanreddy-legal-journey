@@ -22,7 +22,6 @@ const semesterSubjects: Record<string, string[]> = {
     "Environmental Law",
     "Legal and Constitutional History of India",
   ],
-
   "Semester 2": [
     "Law of Contract – II",
     "Family Law – II (Muslim Law and Other Personal Laws)",
@@ -30,7 +29,6 @@ const semesterSubjects: Record<string, string[]> = {
     "Law of Crimes",
     "Law of Evidence",
   ],
-
   "Semester 3": [
     "Jurisprudence",
     "Law of Property",
@@ -38,7 +36,6 @@ const semesterSubjects: Record<string, string[]> = {
     "Company Law",
     "Labour Law – I",
   ],
-
   "Semester 4": [
     "Labour Law – II",
     "Public International Law",
@@ -46,7 +43,6 @@ const semesterSubjects: Record<string, string[]> = {
     "Land Laws",
     "Intellectual Property Law",
   ],
-
   "Semester 5": [
     "Civil Procedure Code and Law of Limitation",
     "Criminal Procedure Code, Law of Juvenile Justice and Probation of Offenders",
@@ -54,7 +50,6 @@ const semesterSubjects: Record<string, string[]> = {
     "Alternative Dispute Resolution",
     "Professional Ethics and Professional Accounting System",
   ],
-
   "Semester 6": [
     "Law of Taxation",
     "Information Technology Law",
@@ -77,16 +72,51 @@ type Resource = {
   created_at: string;
 };
 
+type InstitutionUpdate = {
+  id: string;
+  institution: string;
+  category: string;
+  title: string;
+  description: string | null;
+  update_date: string | null;
+  file_name: string;
+  file_path: string;
+  file_url: string;
+  file_type: string;
+  created_at: string;
+};
+
+const institutionCategories: Record<string, string[]> = {
+  "Osmania University": [
+    "Notifications",
+    "Syllabus",
+    "Exam Timetables",
+    "Results",
+    "Academic Calendar",
+    "Circulars",
+    "Announcements",
+  ],
+  "ISL College": [
+    "College Notices",
+    "Circulars",
+    "Internal Exams",
+    "Attendance & Academic Updates",
+    "Assignments & Deadlines",
+    "Events",
+  ],
+};
+
 export default function AdminUploadPage() {
   const router = useRouter();
   const supabase = createClient();
 
+  // Study resources
   const [files, setFiles] = useState<File[]>([]);
   const [semester, setSemester] = useState("Semester 1");
   const [subject, setSubject] = useState(
     semesterSubjects["Semester 1"][0]
   );
-  const [category, setCategory] = useState("Assignments");
+  const [category, setCategory] = useState("Faculty Given Notes");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -97,23 +127,49 @@ export default function AdminUploadPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [resourceError, setResourceError] = useState("");
 
+  // Institution updates
+  const [institution, setInstitution] = useState("Osmania University");
+  const [updateCategory, setUpdateCategory] = useState("Notifications");
+  const [updateTitle, setUpdateTitle] = useState("");
+  const [updateDescription, setUpdateDescription] = useState("");
+  const [updateDate, setUpdateDate] = useState("");
+  const [updateFile, setUpdateFile] = useState<File | null>(null);
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [updateMessage, setUpdateMessage] = useState("");
+  const [updateError, setUpdateError] = useState("");
+
+  const [updates, setUpdates] = useState<InstitutionUpdate[]>([]);
+  const [fetchingUpdates, setFetchingUpdates] = useState(true);
+  const [deletingUpdateId, setDeletingUpdateId] = useState<string | null>(
+    null
+  );
+  const [updatesError, setUpdatesError] = useState("");
+
   const subjects = [
     ...(semesterSubjects[semester] || []),
     "Other",
   ];
 
   const categories = [
-  "Faculty Given Notes",
-  "Internal 1",
-  "Internal 2",
-  "Study Notes",
-  "Case Laws",
-  "Internship Resources",
-];
+    "Faculty Given Notes",
+    "Internal 1",
+    "Internal 2",
+    "Study Notes",
+    "Case Laws",
+    "Internship Resources",
+  ];
+
+  const updateCategories = institutionCategories[institution] || [];
 
   useEffect(() => {
     setSubject(semesterSubjects[semester]?.[0] || "Other");
   }, [semester]);
+
+  useEffect(() => {
+    setUpdateCategory(
+      institutionCategories[institution]?.[0] || "Notifications"
+    );
+  }, [institution]);
 
   async function loadResources() {
     setFetchingResources(true);
@@ -136,8 +192,28 @@ export default function AdminUploadPage() {
     setFetchingResources(false);
   }
 
+  async function loadUpdates() {
+    setFetchingUpdates(true);
+    setUpdatesError("");
+
+    const { data, error } = await supabase
+      .from("institution_updates")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      setUpdatesError(error.message);
+      setUpdates([]);
+    } else {
+      setUpdates((data || []) as InstitutionUpdate[]);
+    }
+
+    setFetchingUpdates(false);
+  }
+
   useEffect(() => {
     loadResources();
+    loadUpdates();
   }, []);
 
   function selectFiles(selectedFiles: FileList | null) {
@@ -254,6 +330,113 @@ export default function AdminUploadPage() {
     }
   }
 
+  async function handleUpdateUpload(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setUpdateMessage("");
+    setUpdateError("");
+
+    if (!updateTitle.trim()) {
+      setUpdateError("Please enter an update title.");
+      return;
+    }
+
+    if (!updateFile) {
+      setUpdateError("Please select a PDF or image file.");
+      return;
+    }
+
+    const extension = updateFile.name.split(".").pop()?.toLowerCase();
+
+    const allowedTypes: Record<string, string> = {
+      pdf: "application/pdf",
+      jpg: "image/jpeg",
+      jpeg: "image/jpeg",
+      png: "image/png",
+      webp: "image/webp",
+    };
+
+    const contentType = extension ? allowedTypes[extension] : undefined;
+
+    if (!contentType) {
+      setUpdateError("Only PDF, JPG, JPEG, PNG and WEBP files are allowed.");
+      return;
+    }
+
+    if (
+      updateFile.type &&
+      updateFile.type !== contentType
+    ) {
+      setUpdateError("The selected file type does not match its extension.");
+      return;
+    }
+
+    if (updateFile.size > 50 * 1024 * 1024) {
+      setUpdateError("The file must be 50 MB or smaller.");
+      return;
+    }
+
+    setUpdateLoading(true);
+
+    const safeName = updateFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const filePath = `institution-updates/${crypto.randomUUID()}/${safeName}`;
+
+    try {
+      const { error: storageError } = await supabase.storage
+        .from("legal-resources")
+        .upload(filePath, updateFile, {
+          contentType,
+          upsert: false,
+        });
+
+      if (storageError) {
+        setUpdateError(storageError.message);
+        setUpdateLoading(false);
+        return;
+      }
+
+      const { data: publicData } = supabase.storage
+        .from("legal-resources")
+        .getPublicUrl(filePath);
+
+      const { error: databaseError } = await supabase
+        .from("institution_updates")
+        .insert({
+          institution,
+          category: updateCategory,
+          title: updateTitle.trim(),
+          description: updateDescription.trim() || null,
+          update_date: updateDate || null,
+          file_name: updateFile.name,
+          file_path: filePath,
+          file_url: publicData.publicUrl,
+          file_type: contentType,
+          is_published: true,
+        });
+
+      if (databaseError) {
+        await supabase.storage
+          .from("legal-resources")
+          .remove([filePath]);
+
+        setUpdateError(databaseError.message);
+        setUpdateLoading(false);
+        return;
+      }
+
+      setUpdateMessage("Update published successfully.");
+      setUpdateTitle("");
+      setUpdateDescription("");
+      setUpdateDate("");
+      setUpdateFile(null);
+
+      await loadUpdates();
+    } catch {
+      setUpdateError("An unexpected error occurred while uploading.");
+    }
+
+    setUpdateLoading(false);
+  }
+
   async function handleDelete(resource: Resource) {
     const confirmed = window.confirm(
       `Are you sure you want to permanently delete "${resource.file_name}"?`
@@ -297,6 +480,47 @@ export default function AdminUploadPage() {
     setDeletingId(null);
   }
 
+  async function handleDeleteUpdate(update: InstitutionUpdate) {
+    const confirmed = window.confirm(
+      `Are you sure you want to permanently delete "${update.title}"?`
+    );
+
+    if (!confirmed) return;
+
+    setDeletingUpdateId(update.id);
+    setUpdatesError("");
+    setUpdateMessage("");
+
+    const { error: databaseError } = await supabase
+      .from("institution_updates")
+      .delete()
+      .eq("id", update.id);
+
+    if (databaseError) {
+      setUpdatesError(databaseError.message);
+      setDeletingUpdateId(null);
+      return;
+    }
+
+    setUpdates((current) =>
+      current.filter((item) => item.id !== update.id)
+    );
+
+    const { error: storageError } = await supabase.storage
+      .from("legal-resources")
+      .remove([update.file_path]);
+
+    if (storageError) {
+      setUpdatesError(
+        `Update deleted, but its storage file could not be removed: ${storageError.message}`
+      );
+    } else {
+      setUpdateMessage("Update deleted successfully.");
+    }
+
+    setDeletingUpdateId(null);
+  }
+
   async function handleLogout() {
     await supabase.auth.signOut();
     router.replace("/admin/login");
@@ -325,6 +549,7 @@ export default function AdminUploadPage() {
           </button>
         </div>
 
+        {/* Study Resources */}
         <form
           onSubmit={handleUpload}
           className="space-y-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
@@ -348,14 +573,7 @@ export default function AdminUploadPage() {
                 onChange={(e) => setSemester(e.target.value)}
                 className="w-full rounded-lg border border-gray-300 px-3 py-3"
               >
-                {[
-                  "Semester 1",
-                  "Semester 2",
-                  "Semester 3",
-                  "Semester 4",
-                  "Semester 5",
-                  "Semester 6",
-                ].map((item) => (
+                {Object.keys(semesterSubjects).map((item) => (
                   <option key={item}>{item}</option>
                 ))}
               </select>
@@ -482,6 +700,135 @@ export default function AdminUploadPage() {
           </button>
         </form>
 
+        {/* OU and ISL Updates Upload */}
+        <form
+          onSubmit={handleUpdateUpload}
+          className="mt-8 space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
+        >
+          <div>
+            <h2 className="text-xl font-bold text-[#172554]">
+              Upload OU & ISL Updates
+            </h2>
+            <p className="mt-1 text-sm text-gray-600">
+              Publish university and affiliated college notices, PDFs and images.
+            </p>
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Institution
+            </label>
+            <select
+              value={institution}
+              onChange={(e) => setInstitution(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-3"
+            >
+              <option>Osmania University</option>
+              <option>ISL College</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Update Category
+            </label>
+            <select
+              value={updateCategory}
+              onChange={(e) => setUpdateCategory(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-3"
+            >
+              {updateCategories.map((item) => (
+                <option key={item}>{item}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Update Title
+            </label>
+            <input
+              type="text"
+              required
+              value={updateTitle}
+              onChange={(e) => setUpdateTitle(e.target.value)}
+              placeholder="Enter the notice or announcement title"
+              className="w-full rounded-lg border border-gray-300 px-3 py-3"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Description (Optional)
+            </label>
+            <textarea
+              value={updateDescription}
+              onChange={(e) => setUpdateDescription(e.target.value)}
+              rows={3}
+              placeholder="Add details about this update"
+              className="w-full rounded-lg border border-gray-300 px-3 py-3"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Notice Date (Optional)
+            </label>
+            <input
+              type="date"
+              value={updateDate}
+              onChange={(e) => setUpdateDate(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-3"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Upload PDF or Image
+            </label>
+            <input
+              type="file"
+              required
+              accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"
+              onChange={(e) => {
+                setUpdateFile(e.target.files?.[0] || null);
+                setUpdateError("");
+                setUpdateMessage("");
+              }}
+              className="w-full rounded-lg border border-gray-300 p-3 text-sm"
+            />
+            <p className="mt-2 text-xs text-gray-500">
+              Accepted: PDF, JPG, JPEG, PNG and WEBP. Maximum size: 50 MB.
+            </p>
+            {updateFile && (
+              <p className="mt-2 break-all text-sm font-medium text-[#172554]">
+                Selected: {updateFile.name}
+              </p>
+            )}
+          </div>
+
+          {updateMessage && (
+            <p className="whitespace-pre-line rounded-lg bg-green-50 p-3 text-sm text-green-700">
+              {updateMessage}
+            </p>
+          )}
+
+          {updateError && (
+            <p className="whitespace-pre-line rounded-lg bg-red-50 p-3 text-sm text-red-700">
+              {updateError}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={updateLoading}
+            className="w-full rounded-xl bg-[#172554] px-5 py-3 font-semibold text-white transition hover:bg-[#243b78] disabled:opacity-60"
+          >
+            {updateLoading ? "Publishing Update..." : "Publish Update"}
+          </button>
+        </form>
+
+        {/* Uploaded Resources */}
         <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <div className="mb-5 flex items-center justify-between gap-3">
             <div>
@@ -538,11 +885,9 @@ export default function AdminUploadPage() {
                       <p className="break-words font-semibold text-[#172554]">
                         {resource.file_name || resource.title}
                       </p>
-
                       <p className="mt-1 text-xs text-gray-500">
                         {resource.category} · {resource.semester}
                       </p>
-
                       <p className="text-xs text-gray-500">
                         {resource.subject}
                       </p>
@@ -557,6 +902,94 @@ export default function AdminUploadPage() {
                   >
                     <Trash2 size={16} />
                     {deletingId === resource.id ? "Deleting..." : "Delete"}
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* Published Institution Updates */}
+        <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="mb-5 flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-bold text-[#172554]">
+                Published OU & ISL Updates
+              </h2>
+              <p className="mt-1 text-sm text-gray-600">
+                Manage or permanently delete published notices.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={loadUpdates}
+              disabled={fetchingUpdates}
+              className="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+            >
+              <RefreshCw size={15} />
+              Refresh
+            </button>
+          </div>
+
+          {updatesError && (
+            <p className="mb-4 whitespace-pre-line rounded-lg bg-red-50 p-3 text-sm text-red-700">
+              {updatesError}
+            </p>
+          )}
+
+          {fetchingUpdates ? (
+            <p className="py-6 text-center text-sm text-gray-500">
+              Loading updates...
+            </p>
+          ) : updates.length === 0 ? (
+            <p className="py-6 text-center text-sm text-gray-500">
+              No published updates found.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              <p className="mb-3 text-sm font-semibold text-gray-600">
+                Total updates: {updates.length}
+              </p>
+
+              {updates.map((update) => (
+                <div
+                  key={update.id}
+                  className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="flex min-w-0 items-start gap-3">
+                    <FileText
+                      size={22}
+                      className="mt-1 shrink-0 text-[#A77D2D]"
+                    />
+                    <div className="min-w-0">
+                      <p className="break-words font-semibold text-[#172554]">
+                        {update.title}
+                      </p>
+                      <p className="mt-1 text-xs text-gray-500">
+                        {update.institution} · {update.category}
+                      </p>
+                      <p className="break-all text-xs text-gray-500">
+                        {update.file_name}
+                      </p>
+                      {update.update_date && (
+                        <p className="text-xs text-gray-500">
+                          Notice date: {update.update_date}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteUpdate(update)}
+                    disabled={deletingUpdateId !== null}
+                    className="flex shrink-0 items-center justify-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <Trash2 size={16} />
+                    {deletingUpdateId === update.id
+                      ? "Deleting..."
+                      : "Delete"}
                   </button>
                 </div>
               ))}
