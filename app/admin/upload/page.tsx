@@ -210,15 +210,17 @@ export default function AdminUploadPage() {
 
     setDeletingId(resource.id);
     setResourceError("");
+    setMessage("");
 
-    // Remove the database record first so the PDF disappears from the website.
     const { error: databaseError } = await supabase
       .from("legal_resources")
       .delete()
       .eq("id", resource.id);
 
     if (databaseError) {
-      setResourceError(`Could not delete ${resource.file_name}: ${databaseError.message}`);
+      setResourceError(
+        `Could not delete ${resource.file_name}: ${databaseError.message}`
+      );
       setDeletingId(null);
       return;
     }
@@ -227,7 +229,6 @@ export default function AdminUploadPage() {
       current.filter((item) => item.id !== resource.id)
     );
 
-    // Remove the actual PDF from Supabase Storage.
     const { error: storageError } = await supabase.storage
       .from("legal-resources")
       .remove([resource.file_path]);
@@ -484,11 +485,13 @@ export default function AdminUploadPage() {
                       <p className="break-words font-semibold text-[#172554]">
                         {resource.file_name || resource.title}
                       </p>
+
                       <p className="mt-1 text-xs text-gray-500">
-                        {resource.semester} · {resource.subject}
+                        {resource.category} · {resource.semester}
                       </p>
+
                       <p className="text-xs text-gray-500">
-                        {resource.category}
+                        {resource.subject}
                       </p>
                     </div>
                   </div>
