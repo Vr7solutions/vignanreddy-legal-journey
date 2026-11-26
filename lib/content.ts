@@ -9,7 +9,8 @@ export const subjects = [
 
 export const categories = [
   "Assignments",
-  "Internal Questions",
+  "Internal 1",
+  "Internal 2",
   "Study Notes",
   "Case Laws",
   "Internship Resources",
