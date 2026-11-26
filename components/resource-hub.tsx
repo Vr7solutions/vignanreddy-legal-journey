@@ -18,7 +18,7 @@ import { categories, resources } from "@/lib/content";
 import { createClient } from "@/lib/supabase/client";
 
 const iconMap: Record<string, React.ElementType> = {
-  Assignments: FileText,
+  "Faculty Given Notes": FileText,
   "Internal 1": ClipboardList,
   "Internal 2": ClipboardList,
   "Study Notes": BookOpen,
@@ -26,6 +26,7 @@ const iconMap: Record<string, React.ElementType> = {
   "Internship Resources": BriefcaseBusiness,
   "Legal Dictionary": BookOpen,
 };
+
 
 interface ResourceItem {
   title: string;
