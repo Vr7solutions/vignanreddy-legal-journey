@@ -95,6 +95,11 @@ export default function ResourceHub({
     [uploadedResources]
   );
 
+  const subjectOptions = useMemo(
+    () => Array.from(new Set([...selectedSubjects, "Other"])),
+    [selectedSubjects]
+  );
+
   const filtered = useMemo(
     () =>
       allResources.filter((item) => {
@@ -213,7 +218,7 @@ export default function ResourceHub({
                 aria-label="Filter by subject"
               >
                 <option>All subjects</option>
-                {selectedSubjects.map((item) => (
+                {subjectOptions.map((item) => (
                   <option key={item} value={item}>
                     {item}
                   </option>
