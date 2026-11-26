@@ -103,13 +103,13 @@ export default function AdminUploadPage() {
   ];
 
   const categories = [
-    "Assignments",
-    "Internal 1",
-    "Internal 2",
-    "Study Notes",
-    "Case Laws",
-    "Internship Resources",
-  ];
+  "Faculty Given Notes",
+  "Internal 1",
+  "Internal 2",
+  "Study Notes",
+  "Case Laws",
+  "Internship Resources",
+];
 
   useEffect(() => {
     setSubject(semesterSubjects[semester]?.[0] || "Other");
