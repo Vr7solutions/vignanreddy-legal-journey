@@ -1,10 +1,17 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { Upload, FolderUp, LogOut, FileText } from "lucide-react";
+import {
+  Upload,
+  FolderUp,
+  LogOut,
+  FileText,
+  Trash2,
+  RefreshCw,
+} from "lucide-react";
 
 const subjects = [
   "Law of Contract – I",
@@ -26,6 +33,17 @@ const categories = [
   "Legal Dictionary",
 ];
 
+type Resource = {
+  id: string;
+  title: string;
+  file_name: string;
+  file_path: string;
+  semester: string;
+  subject: string;
+  category: string;
+  created_at: string;
+};
+
 export default function AdminUploadPage() {
   const router = useRouter();
   const supabase = createClient();
@@ -38,6 +56,36 @@ export default function AdminUploadPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [fetchingResources, setFetchingResources] = useState(true);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [resourceError, setResourceError] = useState("");
+
+  async function loadResources() {
+    setFetchingResources(true);
+    setResourceError("");
+
+    const { data, error } = await supabase
+      .from("legal_resources")
+      .select(
+        "id, title, file_name, file_path, semester, subject, category, created_at"
+      )
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      setResourceError(error.message);
+      setResources([]);
+    } else {
+      setResources((data || []) as Resource[]);
+    }
+
+    setFetchingResources(false);
+  }
+
+  useEffect(() => {
+    loadResources();
+  }, []);
 
   function selectFiles(selectedFiles: FileList | null) {
     if (!selectedFiles) return;
@@ -145,11 +193,54 @@ export default function AdminUploadPage() {
     if (uploaded > 0) {
       setMessage(`${uploaded} PDF file(s) uploaded successfully.`);
       setFiles([]);
+      await loadResources();
     }
 
     if (failed.length > 0) {
       setError(`${failed.length} file(s) failed:\n${failed.join("\n")}`);
     }
+  }
+
+  async function handleDelete(resource: Resource) {
+    const confirmed = window.confirm(
+      `Are you sure you want to permanently delete "${resource.file_name}"?`
+    );
+
+    if (!confirmed) return;
+
+    setDeletingId(resource.id);
+    setResourceError("");
+
+    // Remove the database record first so the PDF disappears from the website.
+    const { error: databaseError } = await supabase
+      .from("legal_resources")
+      .delete()
+      .eq("id", resource.id);
+
+    if (databaseError) {
+      setResourceError(`Could not delete ${resource.file_name}: ${databaseError.message}`);
+      setDeletingId(null);
+      return;
+    }
+
+    setResources((current) =>
+      current.filter((item) => item.id !== resource.id)
+    );
+
+    // Remove the actual PDF from Supabase Storage.
+    const { error: storageError } = await supabase.storage
+      .from("legal-resources")
+      .remove([resource.file_path]);
+
+    if (storageError) {
+      setResourceError(
+        `${resource.file_name} was removed from the website, but its storage file could not be deleted: ${storageError.message}`
+      );
+    } else {
+      setMessage(`${resource.file_name} deleted successfully.`);
+    }
+
+    setDeletingId(null);
   }
 
   async function handleLogout() {
@@ -336,6 +427,86 @@ export default function AdminUploadPage() {
             {loading ? "Uploading PDFs..." : "Upload Resources"}
           </button>
         </form>
+
+        <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="mb-5 flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-bold text-[#172554]">
+                Uploaded Resources
+              </h2>
+              <p className="mt-1 text-sm text-gray-600">
+                Manage or permanently delete uploaded PDFs.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={loadResources}
+              disabled={fetchingResources}
+              className="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+            >
+              <RefreshCw size={15} />
+              Refresh
+            </button>
+          </div>
+
+          {resourceError && (
+            <p className="mb-4 whitespace-pre-line rounded-lg bg-red-50 p-3 text-sm text-red-700">
+              {resourceError}
+            </p>
+          )}
+
+          {fetchingResources ? (
+            <p className="py-6 text-center text-sm text-gray-500">
+              Loading resources...
+            </p>
+          ) : resources.length === 0 ? (
+            <p className="py-6 text-center text-sm text-gray-500">
+              No uploaded resources found.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              <p className="mb-3 text-sm font-semibold text-gray-600">
+                Total files: {resources.length}
+              </p>
+
+              {resources.map((resource) => (
+                <div
+                  key={resource.id}
+                  className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="flex min-w-0 items-start gap-3">
+                    <FileText
+                      size={22}
+                      className="mt-1 shrink-0 text-[#A77D2D]"
+                    />
+                    <div className="min-w-0">
+                      <p className="break-words font-semibold text-[#172554]">
+                        {resource.file_name || resource.title}
+                      </p>
+                      <p className="mt-1 text-xs text-gray-500">
+                        {resource.semester} · {resource.subject}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {resource.category}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(resource)}
+                    disabled={deletingId !== null}
+                    className="flex shrink-0 items-center justify-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <Trash2 size={16} />
+                    {deletingId === resource.id ? "Deleting..." : "Delete"}
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
       </div>
     </main>
   );
