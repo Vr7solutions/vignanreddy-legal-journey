@@ -19,7 +19,7 @@ export default function TermsAndConditionsPage() {
           Terms & Conditions
         </h1>
         <p className="text-sm text-gray-500">
-          Last updated: 25 November 2026
+          Last updated: 27 November 2026
         </p>
       </div>
 
@@ -33,10 +33,10 @@ export default function TermsAndConditionsPage() {
       <section className="mb-8">
         <h2 className="mb-3 text-xl font-bold text-slate-900">1. About This Website</h2>
         <p className="leading-8">
-          Vignan Reddy Legal Journey is an independent, student-led
-          educational initiative managed by Vignan Reddy, a 3-Year LL.B
-          student at a college affiliated with Osmania University. It provides
-          educational resources to support law students in their studies.
+          Vignan Reddy Legal Journey is my independent educational initiative.
+          I am Vignan Reddy, a 3-Year LL.B student at a college affiliated
+          with Osmania University. I created and manage this website to
+          provide educational resources that support law students in their studies.
         </p>
         <p className="mt-3 leading-8">
           This website is not an official website of Osmania University, any
@@ -75,10 +75,10 @@ export default function TermsAndConditionsPage() {
         <h2 className="mb-3 text-xl font-bold text-slate-900">4. Intellectual Property and Educational Materials</h2>
         <p className="leading-8">
           Unless otherwise stated, original website text, explanations,
-          design and other original materials are managed by the website
-          operator. Third-party materials, statutory texts, judgments and
-          other referenced resources may belong to their respective owners
-          or be subject to their own legal conditions.
+          design and other original materials are managed by me. Third-party
+          materials, statutory texts, judgments and other referenced resources
+          may belong to their respective owners or be subject to their own
+          legal conditions.
         </p>
         <p className="mt-3 leading-8">
           You may use the materials for personal study and learning. You must
@@ -91,9 +91,9 @@ export default function TermsAndConditionsPage() {
       <section className="mb-8">
         <h2 className="mb-3 text-xl font-bold text-slate-900">5. Accuracy and Availability</h2>
         <p className="leading-8">
-          We make reasonable efforts to keep the website useful and accurate.
+          I make reasonable efforts to keep the website useful and accurate.
           However, errors, omissions, outdated information or temporary
-          interruptions may occur. We do not guarantee uninterrupted
+          interruptions may occur. I do not guarantee uninterrupted
           availability or that every resource will always be current.
           Please verify important legal information against authoritative
           sources.
@@ -114,7 +114,7 @@ export default function TermsAndConditionsPage() {
         <p className="leading-8">
           This website may link to external websites, documents and services.
           These are provided for convenience and educational reference.
-          We do not control or take responsibility for their content,
+          I do not control or take responsibility for their content,
           availability, privacy practices or terms. Your use of those
           services is subject to their respective policies.
         </p>
@@ -123,20 +123,20 @@ export default function TermsAndConditionsPage() {
       <section className="mb-8">
         <h2 className="mb-3 text-xl font-bold text-slate-900">8. Limitation of Responsibility</h2>
         <p className="leading-8">
-          To the extent permitted by applicable law, the website operator
-          shall not be responsible for loss or damage arising from reliance
-          on website information, inability to access the website or use of
-          external resources. Nothing in these terms excludes any liability
-          that cannot legally be excluded under applicable law.
+          To the extent permitted by applicable law, I shall not be
+          responsible for loss or damage arising from reliance on website
+          information, inability to access the website or use of external
+          resources. Nothing in these terms excludes any liability that
+          cannot legally be excluded under applicable law.
         </p>
       </section>
 
       <section className="mb-8">
         <h2 className="mb-3 text-xl font-bold text-slate-900">9. Changes to the Website and Terms</h2>
         <p className="leading-8">
-          Website content, features and these Terms & Conditions may be
-          modified or updated when necessary. Updated terms will be published
-          on this page with a revised date. Continued use of the website after
+          I may modify or update website content, features and these Terms
+          & Conditions when necessary. Updated terms will be published on
+          this page with a revised date. Continued use of the website after
           changes are published indicates acceptance of the updated terms,
           to the extent permitted by law.
         </p>
@@ -152,9 +152,9 @@ export default function TermsAndConditionsPage() {
       </section>
 
       <section className="rounded-xl border border-gray-200 p-6">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">11. Contact Us</h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">11. Contact Me</h2>
         <p className="mb-3 leading-7">
-          If you have questions about these Terms & Conditions, contact us at:
+          If you have questions about these Terms & Conditions, contact me at:
         </p>
         <a
           href="mailto:vignanreddy.legal@gmail.com"
