@@ -420,7 +420,7 @@ export default function ResourceHub({
               </p>
          
               <p className="font-semibold text-[#172554]">
-                Use this as a starting point, write it in your own words, and keep going.
+                Use this as a starting point, put it in your own words, and keep going.
               </p>
 
               <p className="text-right font-semibold text-[#172554]">
