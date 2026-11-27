@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -16,24 +17,24 @@ import {
 import { categories, resources } from "@/lib/content";
 import { createClient } from "@/lib/supabase/client";
 
-const categoryIcons = [
-  FileText,
-  ClipboardList,
-  BookOpen,
-  Scale,
-  BriefcaseBusiness,
-];
+const iconMap: Record<string, React.ElementType> = {
+  "Faculty Given Notes": FileText,
+  "Internal 1": ClipboardList,
+  "Internal 2": ClipboardList,
+  "Study Notes": BookOpen,
+  "Case Laws": Scale,
+  "Internship Resources": BriefcaseBusiness,
+  "Legal Dictionary": BookOpen,
+};
+
 
 interface ResourceItem {
-  id?: string;
   title: string;
   subject: string;
   type: string;
   semester: string;
   description: string;
   downloadUrl?: string;
-  requiresAcknowledgement?: boolean;
-  downloadCount?: number;
 }
 
 interface ResourceHubProps {
@@ -50,22 +51,14 @@ export default function ResourceHub({
   const [subject, setSubject] = useState("All subjects");
   const [showAll, setShowAll] = useState(false);
   const [uploadedResources, setUploadedResources] = useState<ResourceItem[]>([]);
-  const [pendingResource, setPendingResource] = useState<ResourceItem | null>(
-    null
-  );
-  const [acknowledged, setAcknowledged] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
-
     async function loadUploadedResources() {
       const supabase = createClient();
 
       const { data, error } = await supabase
         .from("legal_resources")
-        .select(
-          "id, title, description, semester, subject, category, file_url, requires_acknowledgement, download_count"
-        )
+        .select("title, description, semester, subject, category, file_url")
         .eq("is_published", true)
         .order("created_at", { ascending: false });
 
@@ -74,28 +67,19 @@ export default function ResourceHub({
         return;
       }
 
-      if (!isMounted) return;
-
       setUploadedResources(
         (data ?? []).map((item) => ({
-          id: item.id,
-          title: item.title ?? "Untitled resource",
-          subject: item.subject ?? "",
-          type: item.category ?? "Study Material",
-          semester: item.semester ?? "All Semesters",
-          description: item.description ?? "",
-          downloadUrl: item.file_url ?? undefined,
-          requiresAcknowledgement: item.requires_acknowledgement ?? false,
-          downloadCount: item.download_count ?? 0,
+          title: item.title,
+          subject: item.subject,
+          type: item.category,
+          semester: item.semester,
+          description: item.description || "",
+          downloadUrl: item.file_url,
         }))
       );
     }
 
     loadUploadedResources();
-
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   useEffect(() => {
@@ -110,6 +94,11 @@ export default function ResourceHub({
   const allResources = useMemo(
     () => [...resources, ...uploadedResources],
     [uploadedResources]
+  );
+
+  const subjectOptions = useMemo(
+    () => Array.from(new Set([...selectedSubjects, "Other"])),
+    [selectedSubjects]
   );
 
   const filtered = useMemo(
@@ -149,47 +138,6 @@ export default function ResourceHub({
   const visibleResources =
     shouldLimit && !showAll ? filtered.slice(0, 6) : filtered;
 
-  async function incrementDownloadCount(resourceId: string) {
-    const supabase = createClient();
-
-    const { error } = await supabase.rpc("increment_resource_download", {
-      resource_id: resourceId,
-    });
-
-    if (error) {
-      console.error("Unable to record resource download:", error.message);
-    }
-  }
-
-  function downloadResource(resource: ResourceItem) {
-    if (!resource.downloadUrl) return;
-
-    // Open immediately so the browser does not block the new tab.
-    window.open(resource.downloadUrl, "_blank", "noopener,noreferrer");
-
-    // Only resources stored in legal_resources have database IDs to count.
-    if (resource.id) {
-      void incrementDownloadCount(resource.id);
-    }
-  }
-
-  function openAcknowledgement(resource: ResourceItem) {
-    setPendingResource(resource);
-    setAcknowledged(false);
-  }
-
-  function closeAcknowledgement() {
-    setPendingResource(null);
-    setAcknowledged(false);
-  }
-
-  function continueToResource() {
-    if (!pendingResource?.downloadUrl || !acknowledged) return;
-
-    downloadResource(pendingResource);
-    closeAcknowledgement();
-  }
-
   return (
     <>
       <section id="explore" className="section-wrap scroll-mt-24">
@@ -211,23 +159,27 @@ export default function ResourceHub({
         </div>
 
         <div className="category-grid">
-          {categories.map((item, index) => {
-            const Icon =
-              categoryIcons[index % categoryIcons.length] ?? FileText;
+          {categories.map((item) => {
+            const Icon = iconMap[item] || FileText;
+            const isLegalDictionary = item === "Legal Dictionary";
 
             return (
               <a
                 className="category-card"
-                href="#resources"
+                href={isLegalDictionary ? "/legal-dictionary" : "#resources"}
                 key={item}
-                onClick={() => setFilter(item)}
+                onClick={
+                  isLegalDictionary ? undefined : () => setFilter(item)
+                }
               >
                 <span className="category-icon">
                   <Icon size={21} />
                 </span>
                 <span className="category-title">{item}</span>
                 <span className="category-detail">
-                  Explore available learning materials
+                  {isLegalDictionary
+                    ? "Explore legal terms and meanings"
+                    : `Explore ${item.toLowerCase()} resources`}
                 </span>
                 <span className="category-bottom">
                   Explore <ArrowUpRight size={15} />
@@ -247,8 +199,8 @@ export default function ResourceHub({
                 Find materials by <em>semester.</em>
               </h2>
               <p className="section-copy">
-                Browse materials for {selectedSemester}. Choose a subject or
-                resource type to narrow your search.
+                Browse materials for {selectedSemester}. Choose a subject
+                or resource type to narrow your search.
               </p>
             </div>
           </div>
@@ -258,7 +210,7 @@ export default function ResourceHub({
               <Search size={18} />
               <input
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search subjects, topics or resources..."
                 aria-label="Search resources"
               />
@@ -268,11 +220,11 @@ export default function ResourceHub({
               <BookOpen size={17} />
               <select
                 value={subject}
-                onChange={(event) => setSubject(event.target.value)}
+                onChange={(e) => setSubject(e.target.value)}
                 aria-label="Filter by subject"
               >
                 <option>All subjects</option>
-                {selectedSubjects.map((item) => (
+                {subjectOptions.map((item) => (
                   <option key={item} value={item}>
                     {item}
                   </option>
@@ -284,15 +236,17 @@ export default function ResourceHub({
               <SlidersHorizontal size={17} />
               <select
                 value={filter}
-                onChange={(event) => setFilter(event.target.value)}
+                onChange={(e) => setFilter(e.target.value)}
                 aria-label="Filter by resource type"
               >
                 <option>All resources</option>
-                {categories.map((item) => (
-                  <option key={item} value={item}>
-                    {item}
-                  </option>
-                ))}
+                {categories
+                  .filter((item) => item !== "Legal Dictionary")
+                  .map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
               </select>
             </label>
           </div>
@@ -308,8 +262,9 @@ export default function ResourceHub({
                 </div>
 
                 <div className="resource-main">
-                  <div className="resource-meta">
+                  <div className="resource-meta flex flex-wrap items-center gap-2">
                     <span>{item.type}</span>
+                    <span>·</span>
                     <span>{item.semester}</span>
                   </div>
 
@@ -318,35 +273,17 @@ export default function ResourceHub({
                 </div>
 
                 {item.downloadUrl ? (
-                  "requiresAcknowledgement" in item &&
-                  item.requiresAcknowledgement ? (
-                    <button
-                      type="button"
-                      onClick={() => openAcknowledgement(item)}
-                      className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
-                      aria-label={`Read note before downloading ${item.title}`}
-                    >
-                      <ArrowDownToLine
-                        size={18}
-                        className="text-[#A77D2D]"
-                      />
-                      <span>Download PDF</span>
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => downloadResource(item)}
-                      className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
-                      aria-label={`Download ${item.title}`}
-                      title="Download PDF"
-                    >
-                      <ArrowDownToLine
-                        size={18}
-                        className="text-[#A77D2D]"
-                      />
-                      <span>Download PDF</span>
-                    </button>
-                  )
+                  <a
+                    className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
+                    href={item.downloadUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Download ${item.title}`}
+                    title="Download PDF"
+                  >
+                    <ArrowDownToLine size={18} className="text-[#A77D2D]" />
+                    <span>Download PDF</span>
+                  </a>
                 ) : (
                   <span className="resource-arrow">
                     <ArrowUpRight size={20} />
@@ -382,86 +319,6 @@ export default function ResourceHub({
           </p>
         </div>
       </section>
-
-      {pendingResource && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4"
-          role="presentation"
-          onClick={(event) => {
-            if (event.target === event.currentTarget) {
-              closeAcknowledgement();
-            }
-          }}
-        >
-          <div
-            className="w-full max-w-xl rounded-2xl bg-white p-6 shadow-2xl sm:p-8"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="download-note-title"
-          >
-            <h2
-              id="download-note-title"
-              className="mb-4 text-2xl font-bold text-[#172554]"
-            >
-              A Note Before You Download
-            </h2>
-
-            <div className="space-y-4 text-sm leading-7 text-gray-700">
-              <p>
-                <strong>Disclaimer:</strong> I am sharing these resources - notes,
-                case laws and sample formats—strictly as a reference to help you
-                move forward — please do not copy word for word.
-              </p>
-
-              <p>
-                I know how tough it gets looking for guidance when no one else lends a
-                helping hand, so I am right here in your corner. Use these materials to
-                understand the concepts and build your own work.
-              </p>
-         
-              <p className="font-semibold text-[#172554]">
-                Use this as a starting point, put it in your own words, and keep going.
-              </p>
-
-              <p className="text-right font-semibold text-[#172554]">
-                — Vignan Reddy
-              </p>
-            </div>
-
-            <label className="mt-6 flex cursor-pointer items-start gap-3 rounded-xl border border-gray-200 p-4 text-sm text-gray-700">
-              <input
-                type="checkbox"
-                checked={acknowledged}
-                onChange={(event) => setAcknowledged(event.target.checked)}
-                className="mt-1 h-4 w-4 accent-[#172554]"
-              />
-              <span>
-                I have read and understood this note. I will use these
-                materials as a reference and write answers in my own words.
-              </span>
-            </label>
-
-            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-              <button
-                type="button"
-                onClick={closeAcknowledgement}
-                className="rounded-xl border border-gray-300 px-5 py-3 font-semibold text-gray-700 transition hover:bg-gray-100"
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                onClick={continueToResource}
-                disabled={!acknowledged}
-                className="rounded-xl bg-[#172554] px-5 py-3 font-semibold text-white transition hover:bg-[#263b70] disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                I Understand — Continue
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
