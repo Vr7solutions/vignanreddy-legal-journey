@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About Us | Vignan Reddy Legal Journey",
+  title: "About Me | Vignan Reddy Legal Journey",
   description:
-    "Learn about Vignan Reddy Legal Journey, an independent student-led initiative sharing free educational resources for 3-Year LL.B students.",
+    "Learn about Vignan Reddy Legal Journey, an independent educational initiative sharing free learning resources for 3-Year LL.B students.",
 };
 
 export default function AboutPage() {
@@ -13,22 +13,22 @@ export default function AboutPage() {
     <main className="mx-auto max-w-4xl px-5 py-12 text-gray-800">
       <div className="mb-8">
         <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-amber-600">
-          About Us
+          About Me
         </p>
         <h1 className="mb-4 text-3xl font-bold text-slate-900">
           Learn Law. Share Knowledge. Grow Together.
         </h1>
         <p className="text-lg leading-8 text-gray-600">
-          Vignan Reddy Legal Journey is an independent, student-led educational
-          initiative created to make the journey of learning law easier,
-          organised and more accessible for fellow law students.
+          Vignan Reddy Legal Journey is my independent educational initiative,
+          created to make learning law easier, more organised and more
+          accessible for fellow law students.
         </p>
       </div>
 
       <section className="mb-10">
-        <h2 className="mb-3 text-xl font-bold text-slate-900">Our Mission</h2>
+        <h2 className="mb-3 text-xl font-bold text-slate-900">My Mission</h2>
         <p className="leading-8">
-          Our aim is to help law students understand legal concepts, prepare
+          My aim is to help law students understand legal concepts, prepare
           for examinations and develop a stronger foundation in legal studies
           through simple explanations and useful study resources.
         </p>
@@ -51,7 +51,7 @@ export default function AboutPage() {
 
       <section className="mb-10">
         <h2 className="mb-3 text-xl font-bold text-slate-900">
-          Our Academic Focus
+          Academic Focus
         </h2>
         <p className="mb-3 leading-8">
           The website currently focuses on the first-year, first-semester
@@ -73,22 +73,22 @@ export default function AboutPage() {
           Who Runs This Website?
         </h2>
         <p className="leading-8">
-          Vignan Reddy Legal Journey is independently managed by Vignan Reddy,
-          a 3-Year LL.B student studying at a college affiliated with Osmania
-          University. It is a personal educational initiative created to
-          support fellow students in their legal learning journey.
+          I am Vignan Reddy, a 3-Year LL.B student studying at a college
+          affiliated with Osmania University. I independently manage this
+          website as a personal educational initiative to support fellow
+          students in their legal learning journey.
         </p>
       </section>
 
       <section className="mb-10">
         <h2 className="mb-3 text-xl font-bold text-slate-900">
-          Our Commitment to Learning
+          My Commitment to Learning
         </h2>
         <p className="leading-8">
-          We aim to present information in a clear and student-friendly manner.
+          I aim to present information in a clear and student-friendly manner.
           However, legal provisions and judgments should always be checked
           against authoritative sources. If you find an error or have a
-          suggestion, please contact us so it can be reviewed.
+          suggestion, please contact me so I can review it.
         </p>
       </section>
 
@@ -109,13 +109,13 @@ export default function AboutPage() {
           Get in Touch
         </h2>
         <p className="mb-4 leading-7">
-          Have a correction, suggestion or question? We welcome your feedback.
+          Have a correction, suggestion or question? I welcome your feedback.
         </p>
         <Link
           href="/contact"
           className="font-semibold text-amber-700 underline underline-offset-4"
         >
-          Contact Us
+          Contact Me
         </Link>
         <br />
         <Link
