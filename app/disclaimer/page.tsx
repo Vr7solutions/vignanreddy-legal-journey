@@ -19,7 +19,7 @@ export default function DisclaimerPage() {
           Disclaimer
         </h1>
         <p className="text-sm text-gray-500">
-          Last updated: 25 November 2026
+          Last updated: 27 November 2026
         </p>
       </div>
 
@@ -59,9 +59,9 @@ export default function DisclaimerPage() {
           3. Accuracy and Updates
         </h2>
         <p className="leading-8">
-          We make reasonable efforts to present information clearly and
+          I make reasonable efforts to present information clearly and
           accurately. However, laws, rules, regulations and judicial decisions
-          may change, and errors or omissions may occur. We do not guarantee
+          may change, and errors or omissions may occur. I do not guarantee
           that all information is complete, current or error-free.
         </p>
         <p className="mt-3 leading-8">
@@ -103,8 +103,9 @@ export default function DisclaimerPage() {
           6. Independent Educational Initiative
         </h2>
         <p className="leading-8">
-          Vignan Reddy Legal Journey is independently managed by a law student.
-          It is not an official website of Osmania University, any affiliated
+          Vignan Reddy Legal Journey is my independent educational initiative.
+          I am a law student, and I manage this website independently. It is
+          not an official website of Osmania University, any affiliated
           college, court, government department or statutory authority.
           References to universities, institutions or laws are for
           identification and educational purposes only.
@@ -118,7 +119,7 @@ export default function DisclaimerPage() {
         <p className="leading-8">
           This website may contain links to external websites, documents and
           educational resources. These links are provided for convenience.
-          We do not control or guarantee the accuracy, availability or content
+          I do not control or guarantee the accuracy, availability or content
           of external websites. Visiting them is at your own discretion.
         </p>
       </section>
@@ -128,12 +129,11 @@ export default function DisclaimerPage() {
           8. Limitation of Responsibility
         </h2>
         <p className="leading-8">
-          To the extent permitted by applicable law, the website and its
-          operator are not responsible for losses or consequences arising
-          from reliance on information published here, interruptions in
-          website availability or the use of external resources. Users are
-          responsible for independently verifying information before relying
-          on it.
+          To the extent permitted by applicable law, I am not responsible for
+          losses or consequences arising from reliance on information
+          published here, interruptions in website availability or the use
+          of external resources. Users are responsible for independently
+          verifying information before relying on it.
         </p>
       </section>
 
@@ -143,8 +143,8 @@ export default function DisclaimerPage() {
         </h2>
         <p className="leading-8">
           If you believe any material on this website infringes your copyright
-          or other rights, please contact us with the relevant page link and
-          details so the concern can be reviewed.
+          or other rights, please contact me with the relevant page link and
+          details so I can review the concern.
         </p>
       </section>
 
@@ -153,14 +153,14 @@ export default function DisclaimerPage() {
           10. Changes to This Disclaimer
         </h2>
         <p className="leading-8">
-          This Disclaimer may be updated when necessary. Changes will be
+          I may update this Disclaimer when necessary. Changes will be
           published on this page along with the revised date.
         </p>
       </section>
 
       <section className="rounded-xl border border-gray-200 p-6">
         <h2 className="mb-3 text-xl font-bold text-slate-900">
-          11. Contact Us
+          11. Contact Me
         </h2>
         <p className="mb-3 leading-7">
           For questions, corrections or concerns about this Disclaimer, write
