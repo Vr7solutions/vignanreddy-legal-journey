@@ -18,6 +18,8 @@ export const categories = [
   "Legal Dictionary",
 ];
 
+/* This are hosted from github hence forth to remove commented
+
 export const resources = [
   {
     title: "Constitutional Law – 10 Important Case Laws",
@@ -75,6 +77,7 @@ export const resources = [
   },
 ];
 
+*/
 
 export const legalWords = [
   { word: "Precedent", pronunciation: "PRES-ih-dent", meaning: "An earlier court decision used as a guide in similar cases.", example: "The court followed a precedent while deciding the case." },
