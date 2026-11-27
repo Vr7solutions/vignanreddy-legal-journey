@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -27,14 +26,16 @@ const iconMap: Record<string, React.ElementType> = {
   "Legal Dictionary": BookOpen,
 };
 
-
 interface ResourceItem {
+  id?: string;
   title: string;
   subject: string;
   type: string;
   semester: string;
   description: string;
   downloadUrl?: string;
+  requiresAcknowledgement?: boolean;
+  downloadCount?: number;
 }
 
 interface ResourceHubProps {
@@ -51,14 +52,20 @@ export default function ResourceHub({
   const [subject, setSubject] = useState("All subjects");
   const [showAll, setShowAll] = useState(false);
   const [uploadedResources, setUploadedResources] = useState<ResourceItem[]>([]);
+  const [pendingResource, setPendingResource] = useState<ResourceItem | null>(null);
+  const [acknowledged, setAcknowledged] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+
     async function loadUploadedResources() {
       const supabase = createClient();
 
       const { data, error } = await supabase
         .from("legal_resources")
-        .select("title, description, semester, subject, category, file_url")
+        .select(
+          "id, title, description, semester, subject, category, file_url, requires_acknowledgement, download_count"
+        )
         .eq("is_published", true)
         .order("created_at", { ascending: false });
 
@@ -67,19 +74,28 @@ export default function ResourceHub({
         return;
       }
 
+      if (!isMounted) return;
+
       setUploadedResources(
         (data ?? []).map((item) => ({
-          title: item.title,
-          subject: item.subject,
-          type: item.category,
-          semester: item.semester,
-          description: item.description || "",
-          downloadUrl: item.file_url,
+          id: item.id,
+          title: item.title ?? "Untitled resource",
+          subject: item.subject ?? "",
+          type: item.category ?? "Study Material",
+          semester: item.semester ?? "All Semesters",
+          description: item.description ?? "",
+          downloadUrl: item.file_url ?? undefined,
+          requiresAcknowledgement: item.requires_acknowledgement ?? false,
+          downloadCount: item.download_count ?? 0,
         }))
       );
     }
 
     loadUploadedResources();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -91,6 +107,22 @@ export default function ResourceHub({
     setShowAll(false);
   }, [query, filter, subject]);
 
+  useEffect(() => {
+    if (!pendingResource) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        closeAcknowledgement();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [pendingResource]);
+
   const allResources = useMemo(
     () => [...resources, ...uploadedResources],
     [uploadedResources]
@@ -101,30 +133,26 @@ export default function ResourceHub({
     [selectedSubjects]
   );
 
+  const resourceCategories = useMemo(
+    () => categories.filter((item) => item !== "Legal Dictionary"),
+    []
+  );
+
   const filtered = useMemo(
     () =>
       allResources.filter((item) => {
-        const matchesSearch =
-          `${item.title} ${item.subject} ${item.type} ${item.description}`
-            .toLowerCase()
-            .includes(query.toLowerCase());
+        const matchesSearch = `${item.title} ${item.subject} ${item.type} ${item.description}`
+          .toLowerCase()
+          .includes(query.toLowerCase());
 
-        const matchesType =
-          filter === "All resources" || item.type === filter;
+        const matchesType = filter === "All resources" || item.type === filter;
 
         const matchesSemester =
-          item.semester === selectedSemester ||
-          item.semester === "All Semesters";
+          item.semester === selectedSemester || item.semester === "All Semesters";
 
-        const matchesSubject =
-          subject === "All subjects" || item.subject === subject;
+        const matchesSubject = subject === "All subjects" || item.subject === subject;
 
-        return (
-          matchesSearch &&
-          matchesType &&
-          matchesSemester &&
-          matchesSubject
-        );
+        return matchesSearch && matchesType && matchesSemester && matchesSubject;
       }),
     [allResources, query, filter, selectedSemester, subject]
   );
@@ -137,6 +165,45 @@ export default function ResourceHub({
 
   const visibleResources =
     shouldLimit && !showAll ? filtered.slice(0, 6) : filtered;
+
+  async function incrementDownloadCount(resourceId: string) {
+    const supabase = createClient();
+
+    const { error } = await supabase.rpc("increment_resource_download", {
+      resource_id: resourceId,
+    });
+
+    if (error) {
+      console.error("Unable to record resource download:", error.message);
+    }
+  }
+
+  function downloadResource(resource: ResourceItem) {
+    if (!resource.downloadUrl) return;
+
+    window.open(resource.downloadUrl, "_blank", "noopener,noreferrer");
+
+    if (resource.id) {
+      void incrementDownloadCount(resource.id);
+    }
+  }
+
+  function openAcknowledgement(resource: ResourceItem) {
+    setPendingResource(resource);
+    setAcknowledged(false);
+  }
+
+  function closeAcknowledgement() {
+    setPendingResource(null);
+    setAcknowledged(false);
+  }
+
+  function continueToResource() {
+    if (!pendingResource?.downloadUrl || !acknowledged) return;
+
+    downloadResource(pendingResource);
+    closeAcknowledgement();
+  }
 
   return (
     <>
@@ -168,19 +235,20 @@ export default function ResourceHub({
                 className="category-card"
                 href={isLegalDictionary ? "/legal-dictionary" : "#resources"}
                 key={item}
-                onClick={
-                  isLegalDictionary ? undefined : () => setFilter(item)
-                }
+                onClick={isLegalDictionary ? undefined : () => setFilter(item)}
               >
                 <span className="category-icon">
                   <Icon size={21} />
                 </span>
+
                 <span className="category-title">{item}</span>
+
                 <span className="category-detail">
                   {isLegalDictionary
                     ? "Explore legal terms and meanings"
                     : `Explore ${item.toLowerCase()} resources`}
                 </span>
+
                 <span className="category-bottom">
                   Explore <ArrowUpRight size={15} />
                 </span>
@@ -199,8 +267,8 @@ export default function ResourceHub({
                 Find materials by <em>semester.</em>
               </h2>
               <p className="section-copy">
-                Browse materials for {selectedSemester}. Choose a subject
-                or resource type to narrow your search.
+                Browse materials for {selectedSemester}. Choose a subject or
+                resource type to narrow your search.
               </p>
             </div>
           </div>
@@ -210,7 +278,7 @@ export default function ResourceHub({
               <Search size={18} />
               <input
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search subjects, topics or resources..."
                 aria-label="Search resources"
               />
@@ -220,10 +288,11 @@ export default function ResourceHub({
               <BookOpen size={17} />
               <select
                 value={subject}
-                onChange={(e) => setSubject(e.target.value)}
+                onChange={(event) => setSubject(event.target.value)}
                 aria-label="Filter by subject"
               >
                 <option>All subjects</option>
+
                 {subjectOptions.map((item) => (
                   <option key={item} value={item}>
                     {item}
@@ -236,17 +305,16 @@ export default function ResourceHub({
               <SlidersHorizontal size={17} />
               <select
                 value={filter}
-                onChange={(e) => setFilter(e.target.value)}
+                onChange={(event) => setFilter(event.target.value)}
                 aria-label="Filter by resource type"
               >
                 <option>All resources</option>
-                {categories
-                  .filter((item) => item !== "Legal Dictionary")
-                  .map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
+
+                {resourceCategories.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
               </select>
             </label>
           </div>
@@ -273,17 +341,28 @@ export default function ResourceHub({
                 </div>
 
                 {item.downloadUrl ? (
-                  <a
-                    className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
-                    href={item.downloadUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Download ${item.title}`}
-                    title="Download PDF"
-                  >
-                    <ArrowDownToLine size={18} className="text-[#A77D2D]" />
-                    <span>Download PDF</span>
-                  </a>
+                  item.requiresAcknowledgement ? (
+                    <button
+                      type="button"
+                      onClick={() => openAcknowledgement(item)}
+                      className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
+                      aria-label={`Read note before downloading ${item.title}`}
+                    >
+                      <ArrowDownToLine size={18} className="text-[#A77D2D]" />
+                      <span>Download PDF</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => downloadResource(item)}
+                      className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
+                      aria-label={`Download ${item.title}`}
+                      title="Download PDF"
+                    >
+                      <ArrowDownToLine size={18} className="text-[#A77D2D]" />
+                      <span>Download PDF</span>
+                    </button>
+                  )
                 ) : (
                   <span className="resource-arrow">
                     <ArrowUpRight size={20} />
@@ -319,6 +398,16 @@ export default function ResourceHub({
           </p>
         </div>
       </section>
-    </>
-  );
-}
+
+      {pendingResource && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4"
+          role="presentation"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              closeAcknowledgement();
+            }
+          }}
+        >
+          <div
+            className="w-full max-w-xl rounded-2xl bg-white
