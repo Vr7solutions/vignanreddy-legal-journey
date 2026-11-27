@@ -408,28 +408,19 @@ export default function ResourceHub({
 
             <div className="space-y-4 text-sm leading-7 text-gray-700">
               <p>
-                I am sharing these notes, case laws, Q&As, and sample formats
-                to help you learn, prepare, and move forward in your LL.B
-                journey.
+                <strong>Disclaimer:</strong> I am sharing these resources - notes,
+                case laws and sample formats—strictly as a reference to help you
+                move forward — please do not copy word for word.
               </p>
 
               <p>
-                Please don&apos;t copy anything word for word. Use these
-                materials as a reference, understand the concepts, and express
-                your answers in your own words.
+                I know how tough it gets looking for guidance when no one else lends a
+                helping hand, so I am right here in your corner. Use these materials to
+                understand the concepts and build your own work.
               </p>
-
-              <p>
-                I understand how difficult it can be to find proper guidance
-                when no one is there to help. That&apos;s why I created this
-                platform—to support you and remind you that you are not alone
-                in this journey.
-              </p>
-
+         
               <p className="font-semibold text-[#172554]">
-                Take these resources as a starting point. Learn, practise,
-                write in your own words, and keep moving forward. I&apos;m
-                rooting for you!
+                Use this as a starting point, write it in your own words, and keep going.
               </p>
 
               <p className="text-right font-semibold text-[#172554]">
