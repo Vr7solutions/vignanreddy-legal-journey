@@ -81,6 +81,7 @@ type Resource = {
   subject: string;
   category: string;
   created_at: string;
+  requires_acknowledgement: boolean;
 };
 
 type InstitutionUpdate = {
@@ -129,6 +130,7 @@ export default function AdminUploadPage() {
   );
   const [category, setCategory] = useState("Faculty Given Notes");
   const [description, setDescription] = useState("");
+  const [requiresAcknowledgement, setRequiresAcknowledgement] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -136,6 +138,7 @@ export default function AdminUploadPage() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [fetchingResources, setFetchingResources] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [updatingAcknowledgementId, setUpdatingAcknowledgementId] = useState<string | null>(null);
   const [resourceError, setResourceError] = useState("");
 
   // Institution updates
@@ -189,7 +192,7 @@ export default function AdminUploadPage() {
     const { data, error } = await supabase
       .from("legal_resources")
       .select(
-        "id, title, file_name, file_path, semester, subject, category, created_at"
+        "id, title, file_name, file_path, semester, subject, category, created_at, requires_acknowledgement"
       )
       .order("created_at", { ascending: false });
 
@@ -327,6 +330,7 @@ export default function AdminUploadPage() {
             file_url: publicData.publicUrl,
             file_size: file.size,
             is_published: true,
+            requires_acknowledgement: requiresAcknowledgement,
           });
 
         if (databaseError) {
@@ -350,6 +354,7 @@ export default function AdminUploadPage() {
       setMessage(`${uploaded} file(s) uploaded successfully.`);
       setFiles([]);
       setDescription("");
+      setRequiresAcknowledgement(false);
       await loadResources();
     }
 
@@ -455,6 +460,36 @@ export default function AdminUploadPage() {
     }
 
     setUpdateLoading(false);
+  }
+
+  async function handleAcknowledgementChange(resource: Resource, checked: boolean) {
+    setUpdatingAcknowledgementId(resource.id);
+    setResourceError("");
+    setMessage("");
+
+    const { error } = await supabase
+      .from("legal_resources")
+      .update({ requires_acknowledgement: checked })
+      .eq("id", resource.id);
+
+    if (error) {
+      setResourceError(`Could not update acknowledgement setting: ${error.message}`);
+    } else {
+      setResources((current) =>
+        current.map((item) =>
+          item.id === resource.id
+            ? { ...item, requires_acknowledgement: checked }
+            : item
+        )
+      );
+      setMessage(
+        checked
+          ? `Acknowledgement required for ${resource.file_name}.`
+          : `Acknowledgement disabled for ${resource.file_name}.`
+      );
+    }
+
+    setUpdatingAcknowledgementId(null);
   }
 
   async function handleDelete(resource: Resource) {
@@ -642,6 +677,23 @@ export default function AdminUploadPage() {
               className="w-full rounded-lg border border-gray-300 px-3 py-3"
             />
           </div>
+
+          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#E8D9B5] bg-[#FFFBF1] p-4">
+            <input
+              type="checkbox"
+              checked={requiresAcknowledgement}
+              onChange={(e) => setRequiresAcknowledgement(e.target.checked)}
+              className="mt-1 h-4 w-4 accent-[#172554]"
+            />
+            <span>
+              <span className="block text-sm font-semibold text-[#172554]">
+                Require student acknowledgement before download
+              </span>
+              <span className="mt-1 block text-xs text-gray-600">
+                Applies to every file in this upload. Students must read the note and tick the acknowledgement box before opening these resources.
+              </span>
+            </span>
+          </label>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#C49A45] bg-[#FFF8E8] p-6 text-center hover:bg-[#FCEFCB]">
@@ -915,6 +967,20 @@ export default function AdminUploadPage() {
                       <p className="text-xs text-gray-500">
                         {resource.subject}
                       </p>
+                      <label className="mt-3 flex cursor-pointer items-center gap-2 text-xs font-medium text-gray-700">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(resource.requires_acknowledgement)}
+                          disabled={updatingAcknowledgementId === resource.id}
+                          onChange={(e) =>
+                            handleAcknowledgementChange(resource, e.target.checked)
+                          }
+                          className="h-4 w-4 accent-[#172554]"
+                        />
+                        {updatingAcknowledgementId === resource.id
+                          ? "Updating..."
+                          : "Require acknowledgement before download"}
+                      </label>
                     </div>
                   </div>
 
