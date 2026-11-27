@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -11,19 +10,19 @@ import {
   BookOpen,
   Scale,
   BriefcaseBusiness,
-  SlidersHorizontal
+  SlidersHorizontal,
 } from "lucide-react";
 
 import { categories, resources } from "@/lib/content";
 import { createClient } from "@/lib/supabase/client";
 
-const iconMap = {
+const categoryIcons = [
   FileText,
   ClipboardList,
   BookOpen,
   Scale,
-  BriefcaseBusiness
-};
+  BriefcaseBusiness,
+];
 
 interface ResourceItem {
   title: string;
@@ -42,19 +41,24 @@ interface ResourceHubProps {
 
 export default function ResourceHub({
   selectedSemester,
-  selectedSubjects
+  selectedSubjects,
 }: ResourceHubProps) {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("All resources");
   const [subject, setSubject] = useState("All subjects");
   const [showAll, setShowAll] = useState(false);
   const [uploadedResources, setUploadedResources] = useState<ResourceItem[]>([]);
-  const [pendingResource, setPendingResource] = useState<ResourceItem | null>(null);
+  const [pendingResource, setPendingResource] = useState<ResourceItem | null>(
+    null
+  );
   const [acknowledged, setAcknowledged] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+
     async function loadUploadedResources() {
       const supabase = createClient();
+
       const { data, error } = await supabase
         .from("legal_resources")
         .select(
@@ -68,20 +72,26 @@ export default function ResourceHub({
         return;
       }
 
+      if (!isMounted) return;
+
       setUploadedResources(
         (data ?? []).map((item) => ({
-          title: item.title,
-          subject: item.subject,
-          type: item.category,
-          semester: item.semester,
-          description: item.description || "",
-          downloadUrl: item.file_url,
-          requiresAcknowledgement: item.requires_acknowledgement ?? false
+          title: item.title ?? "Untitled resource",
+          subject: item.subject ?? "",
+          type: item.category ?? "Study Material",
+          semester: item.semester ?? "All Semesters",
+          description: item.description ?? "",
+          downloadUrl: item.file_url ?? undefined,
+          requiresAcknowledgement: item.requires_acknowledgement ?? false,
         }))
       );
     }
 
     loadUploadedResources();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -140,6 +150,11 @@ export default function ResourceHub({
     setAcknowledged(false);
   }
 
+  function closeAcknowledgement() {
+    setPendingResource(null);
+    setAcknowledged(false);
+  }
+
   function continueToResource() {
     if (!pendingResource?.downloadUrl || !acknowledged) return;
 
@@ -149,8 +164,7 @@ export default function ResourceHub({
       "noopener,noreferrer"
     );
 
-    setPendingResource(null);
-    setAcknowledged(false);
+    closeAcknowledgement();
   }
 
   return (
@@ -159,33 +173,39 @@ export default function ResourceHub({
         <div className="section-heading">
           <div>
             <p className="eyebrow">THE STUDENT RESOURCE CENTRE</p>
-            <h2>Everything you need, <em>in one place.</em></h2>
+            <h2>
+              Everything you need, <em>in one place.</em>
+            </h2>
             <p className="section-copy">
               Explore learning resources created to make your LL.B journey
               clearer and more manageable.
             </p>
           </div>
+
           <a className="text-link" href="#resources">
             Browse resources <ArrowUpRight size={16} />
           </a>
         </div>
 
         <div className="category-grid">
-          {categories.map((item) => {
-            const Icon = iconMap[item as keyof typeof iconMap] || FileText;
+          {categories.map((item, index) => {
+            const Icon =
+              categoryIcons[index % categoryIcons.length] ?? FileText;
 
             return (
               <a
                 className="category-card"
                 href="#resources"
-                key={item.title}
-                onClick={() => setFilter(item.title)}
+                key={item}
+                onClick={() => setFilter(item)}
               >
                 <span className="category-icon">
-                  {Icon && <Icon size={21} />}
+                  <Icon size={21} />
                 </span>
-                <span className="category-title">{item.title}</span>
-                <span className="category-detail">{item.detail}</span>
+                <span className="category-title">{item}</span>
+                <span className="category-detail">
+                  Explore available learning materials
+                </span>
                 <span className="category-bottom">
                   Explore <ArrowUpRight size={15} />
                 </span>
@@ -200,10 +220,12 @@ export default function ResourceHub({
           <div className="section-heading">
             <div>
               <p className="eyebrow">THE LL.B RESOURCE LIBRARY</p>
-              <h2>Find materials by <em>semester.</em></h2>
+              <h2>
+                Find materials by <em>semester.</em>
+              </h2>
               <p className="section-copy">
-                Browse materials for {selectedSemester}. Choose a subject
-                or resource type to narrow your search.
+                Browse materials for {selectedSemester}. Choose a subject or
+                resource type to narrow your search.
               </p>
             </div>
           </div>
@@ -213,7 +235,7 @@ export default function ResourceHub({
               <Search size={18} />
               <input
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search subjects, topics or resources..."
                 aria-label="Search resources"
               />
@@ -223,7 +245,7 @@ export default function ResourceHub({
               <BookOpen size={17} />
               <select
                 value={subject}
-                onChange={(e) => setSubject(e.target.value)}
+                onChange={(event) => setSubject(event.target.value)}
                 aria-label="Filter by subject"
               >
                 <option>All subjects</option>
@@ -239,13 +261,13 @@ export default function ResourceHub({
               <SlidersHorizontal size={17} />
               <select
                 value={filter}
-                onChange={(e) => setFilter(e.target.value)}
+                onChange={(event) => setFilter(event.target.value)}
                 aria-label="Filter by resource type"
               >
                 <option>All resources</option>
                 {categories.map((item) => (
-                  <option key={item.title} value={item.title}>
-                    {item.title}
+                  <option key={item} value={item}>
+                    {item}
                   </option>
                 ))}
               </select>
@@ -280,7 +302,10 @@ export default function ResourceHub({
                       className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
                       aria-label={`Read note before downloading ${item.title}`}
                     >
-                      <ArrowDownToLine size={18} className="text-[#A77D2D]" />
+                      <ArrowDownToLine
+                        size={18}
+                        className="text-[#A77D2D]"
+                      />
                       <span>Download PDF</span>
                     </button>
                   ) : (
@@ -292,7 +317,10 @@ export default function ResourceHub({
                       aria-label={`Download ${item.title}`}
                       title="Download PDF"
                     >
-                      <ArrowDownToLine size={18} className="text-[#A77D2D]" />
+                      <ArrowDownToLine
+                        size={18}
+                        className="text-[#A77D2D]"
+                      />
                       <span>Download PDF</span>
                     </a>
                   )
@@ -338,8 +366,7 @@ export default function ResourceHub({
           role="presentation"
           onClick={(event) => {
             if (event.target === event.currentTarget) {
-              setPendingResource(null);
-              setAcknowledged(false);
+              closeAcknowledgement();
             }
           }}
         >
@@ -403,10 +430,7 @@ export default function ResourceHub({
             <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <button
                 type="button"
-                onClick={() => {
-                  setPendingResource(null);
-                  setAcknowledged(false);
-                }}
+                onClick={closeAcknowledgement}
                 className="rounded-xl border border-gray-300 px-5 py-3 font-semibold text-gray-700 transition hover:bg-gray-100"
               >
                 Cancel
