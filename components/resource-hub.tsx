@@ -123,8 +123,8 @@ export default function ResourceHub({
     };
   }, [pendingResource]);
 
-  const allResources = useMemo(
-    () => [...resources, ...uploadedResources],
+  const allResources = useMemo<ResourceItem[]>(
+    () => [...(resources as ResourceItem[]), ...uploadedResources],
     [uploadedResources]
   );
 
