@@ -410,4 +410,77 @@ export default function ResourceHub({
           }}
         >
           <div
-            className="w-full max-w-xl rounded-2xl bg-white
+            className="w-full max-w-xl rounded-2xl bg-white p-6 shadow-2xl sm:p-8"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="download-note-title"
+          >
+            <h2
+              id="download-note-title"
+              className="mb-4 text-2xl font-bold text-[#172554]"
+            >
+              A Note Before You Download
+            </h2>
+
+            <div className="space-y-4 text-sm leading-7 text-gray-700">
+              <p>
+                <strong>Disclaimer:</strong> I am sharing these resources —
+                notes, case laws and sample formats — strictly as a reference
+                to help you move forward. Please do not copy word for word.
+              </p>
+
+              <p>
+                I know how tough it gets looking for guidance when no one else
+                lends a helping hand, so I am right here in your corner. Use
+                these materials to understand the concepts and build your own
+                work.
+              </p>
+
+              <p className="font-semibold text-[#172554]">
+                Use this as a starting point, put it in your own words, and
+                keep going.
+              </p>
+
+              <p className="text-right font-semibold text-[#172554]">
+                — Vignan Reddy
+              </p>
+            </div>
+
+            <label className="mt-6 flex cursor-pointer items-start gap-3 rounded-xl border border-gray-200 p-4 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                checked={acknowledged}
+                onChange={(event) => setAcknowledged(event.target.checked)}
+                className="mt-1 h-4 w-4 accent-[#172554]"
+              />
+
+              <span>
+                I have read and understood this note. I will use these
+                materials as a reference and write answers in my own words.
+              </span>
+            </label>
+
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={closeAcknowledgement}
+                className="rounded-xl border border-gray-300 px-5 py-3 font-semibold text-gray-700 transition hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={continueToResource}
+                disabled={!acknowledged}
+                className="rounded-xl bg-[#172554] px-5 py-3 font-semibold text-white transition hover:bg-[#263b70] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                I Understand — Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
