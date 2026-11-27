@@ -28,9 +28,13 @@ export default function AboutPage() {
       <section className="mb-10">
         <h2 className="mb-3 text-xl font-bold text-slate-900">My Mission</h2>
         <p className="leading-8">
-          My aim is to help law students understand legal concepts, prepare
-          for examinations and develop a stronger foundation in legal studies
-          through simple explanations and useful study resources.
+          I know how challenging it can be to find the right guidance when you
+          feel like no one is there to help. I want you to know that you are
+          not alone in this journey. I am here to support you with simple
+          explanations, useful study resources and encouragement whenever
+          you need it. Think of this website as a helping hand along your
+          legal education journey. Keep learning, keep believing in yourself
+          and never give up.
         </p>
       </section>
 
