@@ -25,6 +25,7 @@ const categoryIcons = [
 ];
 
 interface ResourceItem {
+  id?: string;
   title: string;
   subject: string;
   type: string;
@@ -32,6 +33,7 @@ interface ResourceItem {
   description: string;
   downloadUrl?: string;
   requiresAcknowledgement?: boolean;
+  downloadCount?: number;
 }
 
 interface ResourceHubProps {
@@ -62,7 +64,7 @@ export default function ResourceHub({
       const { data, error } = await supabase
         .from("legal_resources")
         .select(
-          "title, description, semester, subject, category, file_url, requires_acknowledgement"
+          "id, title, description, semester, subject, category, file_url, requires_acknowledgement, download_count"
         )
         .eq("is_published", true)
         .order("created_at", { ascending: false });
@@ -76,6 +78,7 @@ export default function ResourceHub({
 
       setUploadedResources(
         (data ?? []).map((item) => ({
+          id: item.id,
           title: item.title ?? "Untitled resource",
           subject: item.subject ?? "",
           type: item.category ?? "Study Material",
@@ -83,6 +86,7 @@ export default function ResourceHub({
           description: item.description ?? "",
           downloadUrl: item.file_url ?? undefined,
           requiresAcknowledgement: item.requires_acknowledgement ?? false,
+          downloadCount: item.download_count ?? 0,
         }))
       );
     }
@@ -145,6 +149,30 @@ export default function ResourceHub({
   const visibleResources =
     shouldLimit && !showAll ? filtered.slice(0, 6) : filtered;
 
+  async function incrementDownloadCount(resourceId: string) {
+    const supabase = createClient();
+
+    const { error } = await supabase.rpc("increment_resource_download", {
+      resource_id: resourceId,
+    });
+
+    if (error) {
+      console.error("Unable to record resource download:", error.message);
+    }
+  }
+
+  function downloadResource(resource: ResourceItem) {
+    if (!resource.downloadUrl) return;
+
+    // Open immediately so the browser does not block the new tab.
+    window.open(resource.downloadUrl, "_blank", "noopener,noreferrer");
+
+    // Only resources stored in legal_resources have database IDs to count.
+    if (resource.id) {
+      void incrementDownloadCount(resource.id);
+    }
+  }
+
   function openAcknowledgement(resource: ResourceItem) {
     setPendingResource(resource);
     setAcknowledged(false);
@@ -158,12 +186,7 @@ export default function ResourceHub({
   function continueToResource() {
     if (!pendingResource?.downloadUrl || !acknowledged) return;
 
-    window.open(
-      pendingResource.downloadUrl,
-      "_blank",
-      "noopener,noreferrer"
-    );
-
+    downloadResource(pendingResource);
     closeAcknowledgement();
   }
 
@@ -295,7 +318,8 @@ export default function ResourceHub({
                 </div>
 
                 {item.downloadUrl ? (
-                  ("requiresAcknowledgement" in item && item.requiresAcknowledgement) ? (
+                  "requiresAcknowledgement" in item &&
+                  item.requiresAcknowledgement ? (
                     <button
                       type="button"
                       onClick={() => openAcknowledgement(item)}
@@ -309,11 +333,10 @@ export default function ResourceHub({
                       <span>Download PDF</span>
                     </button>
                   ) : (
-                    <a
+                    <button
+                      type="button"
+                      onClick={() => downloadResource(item)}
                       className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
-                      href={item.downloadUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       aria-label={`Download ${item.title}`}
                       title="Download PDF"
                     >
@@ -322,7 +345,7 @@ export default function ResourceHub({
                         className="text-[#A77D2D]"
                       />
                       <span>Download PDF</span>
-                    </a>
+                    </button>
                   )
                 ) : (
                   <span className="resource-arrow">
