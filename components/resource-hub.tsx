@@ -295,7 +295,7 @@ export default function ResourceHub({
                 </div>
 
                 {item.downloadUrl ? (
-                  item.requiresAcknowledgement ? (
+                  ("requiresAcknowledgement" in item && item.requiresAcknowledgement) ? (
                     <button
                       type="button"
                       onClick={() => openAcknowledgement(item)}
