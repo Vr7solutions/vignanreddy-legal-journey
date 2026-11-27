@@ -172,7 +172,7 @@ export default function ResourceHub({
 
         <div className="category-grid">
           {categories.map((item) => {
-            const Icon = iconMap[item.icon as keyof typeof iconMap];
+            const Icon = iconMap[item] || FileText;
 
             return (
               <a
