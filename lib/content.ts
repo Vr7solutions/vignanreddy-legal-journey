@@ -18,6 +18,15 @@ export const categories = [
   "Legal Dictionary",
 ];
 
+export const resources: {
+  title: string;
+  subject: string;
+  type: string;
+  semester: string;
+  description: string;
+  downloadUrl: string;
+}[] = [];
+
 /* This are hosted from github hence forth to remove commented
 
 export const resources = [
