@@ -1429,19 +1429,14 @@ footer a {
     gap: 12px;
   }
 
-  .resource-row > a {
-    grid-column: 2;
-    justify-self: start;
-    display: inline-flex;
-    flex-shrink: 0;
-    width: fit-content;
-    max-width: 100%;
-    white-space: nowrap;
-    background: #FFF8E8;
-    color: #172554;
-  }
-
-  .resource-row > a svg {
-    flex-shrink: 0;
-  }
+  .resource-row > a,
+.resource-row > button {
+  grid-column: 2;
+  justify-self: start;
+  width: fit-content;
+  max-width: 100%;
+  white-space: nowrap;
+  background-color: #FFF8E8;
+  color: #172554;
+  border-color: #E8D5A5;
 }
