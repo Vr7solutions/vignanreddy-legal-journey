@@ -1,4 +1,3 @@
-
 export const dynamic = "force-dynamic";
 
 import {
@@ -48,26 +47,6 @@ export default function Home() {
           <a href="#daily-quiz">Legal quiz</a>
           <a href="#practice-test">Practice test</a>
           <a href="#about">About</a>
-
-          <div className="relative inline-block group">
-            <a
-              href="#"
-              className="inline-flex items-center gap-1"
-              onClick={(event) => event.preventDefault()}
-              aria-haspopup="true"
-            >
-              More <span>▾</span>
-            </a>
-
-            <div className="absolute right-0 top-full z-50 hidden min-w-64 rounded-lg border border-gray-200 bg-white p-2 shadow-lg group-hover:block group-focus-within:block">
-              <a
-                href="/previous-year-question-papers"
-                className="block rounded-md px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Previous Year Question Papers
-              </a>
-            </div>
-          </div>
         </nav>
 
         <a className="header-cta" href="#explore">
