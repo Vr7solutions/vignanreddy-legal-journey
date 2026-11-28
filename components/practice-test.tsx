@@ -124,8 +124,7 @@ export default function PracticeTest({
           <label htmlFor="practice-subject">Select Subject</label>
           <select
             id="practice-subject"
-            className="practice-subject-select"
-            value={selectedSubject}
+            className="practice-subject-select w-full rounded-lg border border-gray-300 bg-white px-3 py-3 text-gray-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"            value={selectedSubject}
             onChange={(event) => setSelectedSubject(event.target.value)}
           >
             {subjects.map((subject) => (
