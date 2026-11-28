@@ -12,6 +12,10 @@ import {
   Trash2,
   RefreshCw,
   Search,
+  Users,
+  Pencil,
+  Plus,
+  X,
 } from "lucide-react";
 
 const semesterSubjects: Record<string, string[]> = {
@@ -86,6 +90,14 @@ type Resource = {
   download_count: number;
 };
 
+type FacultyMember = {
+  id: string;
+  name: string;
+  designation: string | null;
+  is_active: boolean;
+  created_at: string;
+};
+
 type InstitutionUpdate = {
   id: string;
   institution: string;
@@ -144,6 +156,22 @@ export default function AdminUploadPage() {
   const [updatingAcknowledgementId, setUpdatingAcknowledgementId] =
     useState<string | null>(null);
   const [resourceError, setResourceError] = useState("");
+
+  // Faculty management
+  const [faculty, setFaculty] = useState<FacultyMember[]>([]);
+  const [fetchingFaculty, setFetchingFaculty] = useState(true);
+  const [facultyName, setFacultyName] = useState("");
+  const [facultyDesignation, setFacultyDesignation] = useState("");
+  const [editingFacultyId, setEditingFacultyId] = useState<string | null>(
+    null
+  );
+  const [facultySearch, setFacultySearch] = useState("");
+  const [facultyLoading, setFacultyLoading] = useState(false);
+  const [facultyMessage, setFacultyMessage] = useState("");
+  const [facultyError, setFacultyError] = useState("");
+  const [updatingFacultyId, setUpdatingFacultyId] = useState<string | null>(
+    null
+  );
 
   // Independent search fields
   const [uploadedResourceSearch, setUploadedResourceSearch] = useState("");
@@ -218,6 +246,25 @@ export default function AdminUploadPage() {
     setFetchingResources(false);
   }
 
+  async function loadFaculty() {
+    setFetchingFaculty(true);
+    setFacultyError("");
+
+    const { data, error } = await supabase
+      .from("faculty_members")
+      .select("id, name, designation, is_active, created_at")
+      .order("name", { ascending: true });
+
+    if (error) {
+      setFacultyError(error.message);
+      setFaculty([]);
+    } else {
+      setFaculty((data || []) as FacultyMember[]);
+    }
+
+    setFetchingFaculty(false);
+  }
+
   async function loadUpdates() {
     setFetchingUpdates(true);
     setUpdatesError("");
@@ -240,6 +287,7 @@ export default function AdminUploadPage() {
   useEffect(() => {
     loadResources();
     loadUpdates();
+    loadFaculty();
   }, []);
 
   function selectFiles(selectedFiles: FileList | null) {
@@ -247,6 +295,100 @@ export default function AdminUploadPage() {
     setFiles(Array.from(selectedFiles));
     setMessage("");
     setError("");
+  }
+
+  async function handleFacultySubmit(
+    e: React.FormEvent<HTMLFormElement>
+  ) {
+    e.preventDefault();
+    setFacultyMessage("");
+    setFacultyError("");
+
+    if (!facultyName.trim()) {
+      setFacultyError("Please enter the faculty member's name.");
+      return;
+    }
+
+    setFacultyLoading(true);
+
+    const facultyData = {
+      name: facultyName.trim(),
+      designation: facultyDesignation.trim() || null,
+    };
+
+    const result = editingFacultyId
+      ? await supabase
+          .from("faculty_members")
+          .update(facultyData)
+          .eq("id", editingFacultyId)
+      : await supabase
+          .from("faculty_members")
+          .insert(facultyData);
+
+    if (result.error) {
+      setFacultyError(result.error.message);
+    } else {
+      setFacultyMessage(
+        editingFacultyId
+          ? "Faculty details updated successfully."
+          : "Faculty member added successfully."
+      );
+
+      setFacultyName("");
+      setFacultyDesignation("");
+      setEditingFacultyId(null);
+      await loadFaculty();
+    }
+
+    setFacultyLoading(false);
+  }
+
+  function handleEditFaculty(member: FacultyMember) {
+    setEditingFacultyId(member.id);
+    setFacultyName(member.name);
+    setFacultyDesignation(member.designation || "");
+    setFacultyMessage("");
+    setFacultyError("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function cancelFacultyEdit() {
+    setEditingFacultyId(null);
+    setFacultyName("");
+    setFacultyDesignation("");
+    setFacultyMessage("");
+    setFacultyError("");
+  }
+
+  async function handleFacultyStatusChange(member: FacultyMember) {
+    setUpdatingFacultyId(member.id);
+    setFacultyMessage("");
+    setFacultyError("");
+
+    const { error } = await supabase
+      .from("faculty_members")
+      .update({ is_active: !member.is_active })
+      .eq("id", member.id);
+
+    if (error) {
+      setFacultyError(error.message);
+    } else {
+      setFaculty((current) =>
+        current.map((item) =>
+          item.id === member.id
+            ? { ...item, is_active: !member.is_active }
+            : item
+        )
+      );
+
+      setFacultyMessage(
+        member.is_active
+          ? `${member.name} has been deactivated.`
+          : `${member.name} has been activated.`
+      );
+    }
+
+    setUpdatingFacultyId(null);
   }
 
   async function handleUpload(e: React.FormEvent<HTMLFormElement>) {
@@ -629,6 +771,16 @@ export default function AdminUploadPage() {
     );
   });
 
+  // Faculty search
+  const filteredFaculty = faculty.filter((member) => {
+    const search = facultySearch.trim().toLowerCase();
+
+    return (
+      member.name.toLowerCase().includes(search) ||
+      (member.designation || "").toLowerCase().includes(search)
+    );
+  });
+
   return (
     <main className="min-h-screen bg-[#F8F7F3] px-5 py-10">
       <div className="mx-auto max-w-3xl">
@@ -650,6 +802,204 @@ export default function AdminUploadPage() {
             Logout
           </button>
         </div>
+
+        {/* Faculty Management */}
+        <section className="mb-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="mb-5 flex items-center gap-3">
+            <div className="rounded-xl bg-[#FFF8E8] p-3">
+              <Users size={24} className="text-[#A77D2D]" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-[#172554]">
+                Manage Faculty
+              </h2>
+              <p className="mt-1 text-sm text-gray-600">
+                Add and manage faculty members who contribute academic
+                materials.
+              </p>
+            </div>
+          </div>
+
+          <form onSubmit={handleFacultySubmit} className="space-y-4">
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Faculty Name
+              </label>
+              <input
+                type="text"
+                required
+                value={facultyName}
+                onChange={(e) => setFacultyName(e.target.value)}
+                placeholder="Enter faculty member's full name"
+                className="w-full rounded-lg border border-gray-300 px-3 py-3 outline-none focus:border-[#C49A45] focus:ring-2 focus:ring-[#C49A45]/20"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Designation (Optional)
+              </label>
+              <input
+                type="text"
+                value={facultyDesignation}
+                onChange={(e) => setFacultyDesignation(e.target.value)}
+                placeholder="e.g. Assistant Professor"
+                className="w-full rounded-lg border border-gray-300 px-3 py-3 outline-none focus:border-[#C49A45] focus:ring-2 focus:ring-[#C49A45]/20"
+              />
+            </div>
+
+            {facultyMessage && (
+              <p className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
+                {facultyMessage}
+              </p>
+            )}
+
+            {facultyError && (
+              <p className="whitespace-pre-line rounded-lg bg-red-50 p-3 text-sm text-red-700">
+                {facultyError}
+              </p>
+            )}
+
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <button
+                type="submit"
+                disabled={facultyLoading}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#172554] px-5 py-3 font-semibold text-white hover:bg-[#243b78] disabled:opacity-60"
+              >
+                {editingFacultyId ? (
+                  <Pencil size={17} />
+                ) : (
+                  <Plus size={18} />
+                )}
+                {facultyLoading
+                  ? "Saving..."
+                  : editingFacultyId
+                    ? "Update Faculty"
+                    : "Add Faculty"}
+              </button>
+
+              {editingFacultyId && (
+                <button
+                  type="button"
+                  onClick={cancelFacultyEdit}
+                  className="flex items-center justify-center gap-2 rounded-xl border border-gray-300 px-5 py-3 font-semibold text-gray-700 hover:bg-gray-100"
+                >
+                  <X size={17} />
+                  Cancel
+                </button>
+              )}
+            </div>
+          </form>
+
+          <div className="my-6 border-t border-gray-200" />
+
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <h3 className="font-bold text-[#172554]">
+                Faculty Directory
+              </h3>
+              <p className="mt-1 text-xs text-gray-500">
+                {faculty.filter((member) => member.is_active).length} active ·{" "}
+                {faculty.length} total
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={loadFaculty}
+              disabled={fetchingFaculty}
+              className="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+            >
+              <RefreshCw size={15} />
+              Refresh
+            </button>
+          </div>
+
+          <div className="relative mb-4">
+            <Search
+              size={18}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            />
+            <input
+              type="search"
+              value={facultySearch}
+              onChange={(e) => setFacultySearch(e.target.value)}
+              placeholder="Search faculty members..."
+              className="w-full rounded-lg border border-gray-300 py-3 pl-10 pr-4 text-sm outline-none focus:border-[#C49A45] focus:ring-2 focus:ring-[#C49A45]/20"
+            />
+          </div>
+
+          {fetchingFaculty ? (
+            <p className="py-6 text-center text-sm text-gray-500">
+              Loading faculty members...
+            </p>
+          ) : faculty.length === 0 ? (
+            <p className="rounded-lg bg-gray-50 p-5 text-center text-sm text-gray-500">
+              No faculty members added yet.
+            </p>
+          ) : filteredFaculty.length === 0 ? (
+            <p className="py-6 text-center text-sm text-gray-500">
+              No faculty members match your search.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {filteredFaculty.map((member) => (
+                <div
+                  key={member.id}
+                  className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="min-w-0">
+                    <p className="break-words font-semibold text-[#172554]">
+                      {member.name}
+                    </p>
+                    {member.designation && (
+                      <p className="mt-1 text-sm text-gray-500">
+                        {member.designation}
+                      </p>
+                    )}
+                    <span
+                      className={`mt-2 inline-block rounded-full px-2.5 py-1 text-xs font-semibold ${
+                        member.is_active
+                          ? "bg-green-50 text-green-700"
+                          : "bg-gray-100 text-gray-600"
+                      }`}
+                    >
+                      {member.is_active ? "Active" : "Inactive"}
+                    </span>
+                  </div>
+
+                  <div className="flex shrink-0 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleEditFaculty(member)}
+                      className="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100"
+                    >
+                      <Pencil size={15} />
+                      Edit
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleFacultyStatusChange(member)}
+                      disabled={updatingFacultyId === member.id}
+                      className={`rounded-lg px-3 py-2 text-sm font-semibold disabled:opacity-50 ${
+                        member.is_active
+                          ? "border border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
+                          : "border border-green-200 bg-green-50 text-green-700 hover:bg-green-100"
+                      }`}
+                    >
+                      {updatingFacultyId === member.id
+                        ? "Updating..."
+                        : member.is_active
+                          ? "Deactivate"
+                          : "Activate"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
 
         {/* Study Resources */}
         <form
@@ -1112,7 +1462,9 @@ export default function AdminUploadPage() {
           ) : (
             <div className="space-y-3">
               <p className="mb-3 text-sm font-semibold text-gray-600">
-                Showing {Math.min(uploadedResourcesLimit, filteredResources.length)} of {filteredResources.length} matching files
+                Showing{" "}
+                {Math.min(uploadedResourcesLimit, filteredResources.length)}{" "}
+                of {filteredResources.length} matching files
               </p>
 
               {filteredResources
