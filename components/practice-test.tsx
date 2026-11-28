@@ -42,6 +42,7 @@ export default function PracticeTest({
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
+  const [wrongScore, setWrongScore] = useState(0);
   const [finished, setFinished] = useState(false);
 
   const semesterQuestions =
@@ -54,10 +55,13 @@ export default function PracticeTest({
           (question) => question.subject === selectedSubject
         );
 
+  const attempted = score + wrongScore;
+
   useEffect(() => {
     setCurrent(0);
     setSelected(null);
     setScore(0);
+    setWrongScore(0);
     setFinished(false);
   }, [selectedSemester, selectedSubject]);
 
@@ -68,6 +72,8 @@ export default function PracticeTest({
 
     if (index === filteredQuestions[current].answer) {
       setScore((previousScore) => previousScore + 1);
+    } else {
+      setWrongScore((previousScore) => previousScore + 1);
     }
   }
 
@@ -84,6 +90,7 @@ export default function PracticeTest({
     setCurrent(0);
     setSelected(null);
     setScore(0);
+    setWrongScore(0);
     setFinished(false);
   }
 
@@ -142,6 +149,9 @@ export default function PracticeTest({
               {Math.round((score / filteredQuestions.length) * 100)}%
             </p>
             <p>
+              Correct: {score} | Wrong: {wrongScore}
+            </p>
+            <p>
               {score / filteredQuestions.length >= 0.8
                 ? "Excellent work! Keep learning."
                 : score / filteredQuestions.length >= 0.5
@@ -152,6 +162,35 @@ export default function PracticeTest({
           </div>
         ) : (
           <>
+            <div className="grid grid-cols-3 gap-3 my-5">
+              <div className="rounded-xl bg-green-50 p-3 text-center">
+                <p className="text-2xl font-bold text-green-700">
+                  {score}
+                </p>
+                <p className="text-xs font-medium text-green-700">
+                  Correct
+                </p>
+              </div>
+
+              <div className="rounded-xl bg-red-50 p-3 text-center">
+                <p className="text-2xl font-bold text-red-700">
+                  {wrongScore}
+                </p>
+                <p className="text-xs font-medium text-red-700">
+                  Wrong
+                </p>
+              </div>
+
+              <div className="rounded-xl bg-blue-50 p-3 text-center">
+                <p className="text-2xl font-bold text-blue-700">
+                  {attempted}
+                </p>
+                <p className="text-xs font-medium text-blue-700">
+                  Attempted
+                </p>
+              </div>
+            </div>
+
             <div className="practice-progress">
               <span>
                 Question {current + 1} of {filteredQuestions.length}
