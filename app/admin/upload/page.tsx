@@ -77,6 +77,9 @@ const allowedTypes: Record<string, string> = {
 const acceptedFiles =
   ".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp";
 
+const defaultContributionMessage =
+  "Academic resource shared by [Madam’s Name], for the benefit of LL.B students. Sincere thanks for her valuable contribution and support.";
+
 type Resource = {
   id: string;
   title: string;
@@ -88,6 +91,8 @@ type Resource = {
   created_at: string;
   requires_acknowledgement: boolean;
   download_count: number;
+  show_contribution_message: boolean;
+  contribution_message: string | null;
 };
 
 type FacultyMember = {
@@ -146,6 +151,18 @@ export default function AdminUploadPage() {
   const [description, setDescription] = useState("");
   const [requiresAcknowledgement, setRequiresAcknowledgement] =
     useState(false);
+
+  // Separate faculty contribution message feature
+  const [showContributionMessage, setShowContributionMessage] =
+    useState(false);
+  const [contributionMessage, setContributionMessage] = useState(
+    defaultContributionMessage
+  );
+  const [savingContributionMessageId, setSavingContributionMessageId] =
+    useState<string | null>(null);
+  const [updatingContributionToggleId, setUpdatingContributionToggleId] =
+    useState<string | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -236,7 +253,7 @@ export default function AdminUploadPage() {
     const { data, error } = await supabase
       .from("legal_resources")
       .select(
-        "id, title, file_name, file_path, semester, subject, category, created_at, requires_acknowledgement, download_count"
+        "id, title, file_name, file_path, semester, subject, category, created_at, requires_acknowledgement, download_count, show_contribution_message, contribution_message"
       )
       .order("created_at", { ascending: false });
 
@@ -419,6 +436,14 @@ export default function AdminUploadPage() {
       return;
     }
 
+    if (
+      showContributionMessage &&
+      !contributionMessage.trim()
+    ) {
+      setError("Please enter the faculty contribution message.");
+      return;
+    }
+
     const invalidFiles = files.filter((file) => {
       const extension = file.name.split(".").pop()?.toLowerCase();
       const expectedType = extension ? allowedTypes[extension] : undefined;
@@ -445,7 +470,6 @@ export default function AdminUploadPage() {
       return;
     }
 
-    // Only currently active faculty members can be assigned.
     const activeFacultyIds = new Set(
       faculty
         .filter((member) => member.is_active)
@@ -507,7 +531,6 @@ export default function AdminUploadPage() {
           .from("legal-resources")
           .getPublicUrl(filePath);
 
-        // Insert the resource and retrieve its generated ID.
         const { data: resourceData, error: databaseError } =
           await supabase
             .from("legal_resources")
@@ -523,6 +546,12 @@ export default function AdminUploadPage() {
               file_size: file.size,
               is_published: true,
               requires_acknowledgement: requiresAcknowledgement,
+
+              // Separate faculty contribution message settings
+              show_contribution_message: showContributionMessage,
+              contribution_message: showContributionMessage
+                ? contributionMessage.trim()
+                : null,
             })
             .select("id")
             .single();
@@ -538,7 +567,6 @@ export default function AdminUploadPage() {
           continue;
         }
 
-        // Save all selected faculty contributors for this resource.
         if (contributorIds.length > 0) {
           const contributorRows = contributorIds.map((facultyId) => ({
             resource_id: resourceData.id,
@@ -550,7 +578,6 @@ export default function AdminUploadPage() {
             .insert(contributorRows);
 
           if (contributorError) {
-            // Roll back this resource if contributor records cannot be saved.
             await supabase
               .from("legal_resources")
               .delete()
@@ -581,12 +608,18 @@ export default function AdminUploadPage() {
           contributorIds.length > 0
             ? ` with ${contributorIds.length} faculty contributor(s) credited`
             : ""
+        }${
+          showContributionMessage
+            ? " with faculty contribution message enabled"
+            : ""
         }.`
       );
 
       setFiles([]);
       setDescription("");
       setRequiresAcknowledgement(false);
+      setShowContributionMessage(false);
+      setContributionMessage(defaultContributionMessage);
       setSelectedFacultyIds([]);
       setUploadFacultySearch("");
       await loadResources();
@@ -730,6 +763,83 @@ export default function AdminUploadPage() {
     }
 
     setUpdatingAcknowledgementId(null);
+  }
+
+  async function handleContributionToggle(
+    resource: Resource,
+    checked: boolean
+  ) {
+    setUpdatingContributionToggleId(resource.id);
+    setResourceError("");
+    setMessage("");
+
+    const { error } = await supabase
+      .from("legal_resources")
+      .update({ show_contribution_message: checked })
+      .eq("id", resource.id);
+
+    if (error) {
+      setResourceError(
+        `Could not update contribution message setting: ${error.message}`
+      );
+    } else {
+      setResources((current) =>
+        current.map((item) =>
+          item.id === resource.id
+            ? { ...item, show_contribution_message: checked }
+            : item
+        )
+      );
+
+      setMessage(
+        checked
+          ? `Contribution message enabled for ${resource.file_name}.`
+          : `Contribution message disabled for ${resource.file_name}.`
+      );
+    }
+
+    setUpdatingContributionToggleId(null);
+  }
+
+  async function handleSaveContributionMessage(resource: Resource) {
+    if (!resource.contribution_message?.trim()) {
+      setResourceError("Please enter a contribution message before saving.");
+      return;
+    }
+
+    setSavingContributionMessageId(resource.id);
+    setResourceError("");
+    setMessage("");
+
+    const { error } = await supabase
+      .from("legal_resources")
+      .update({
+        contribution_message: resource.contribution_message.trim(),
+      })
+      .eq("id", resource.id);
+
+    if (error) {
+      setResourceError(
+        `Could not save contribution message: ${error.message}`
+      );
+    } else {
+      setResources((current) =>
+        current.map((item) =>
+          item.id === resource.id
+            ? {
+                ...item,
+                contribution_message: resource.contribution_message!.trim(),
+              }
+            : item
+        )
+      );
+
+      setMessage(
+        `Contribution message saved for ${resource.file_name}.`
+      );
+    }
+
+    setSavingContributionMessageId(null);
   }
 
   async function handleDelete(resource: Resource) {
@@ -1245,6 +1355,7 @@ export default function AdminUploadPage() {
             )}
           </div>
 
+          {/* Existing acknowledgement feature - unchanged */}
           <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#E8D9B5] bg-[#FFFBF1] p-4">
             <input
               type="checkbox"
@@ -1265,6 +1376,51 @@ export default function AdminUploadPage() {
               </span>
             </span>
           </label>
+
+          {/* New independent contribution message feature */}
+          <div className="rounded-xl border border-blue-200 bg-blue-50 p-4">
+            <label className="flex cursor-pointer items-start gap-3">
+              <input
+                type="checkbox"
+                checked={showContributionMessage}
+                onChange={(e) =>
+                  setShowContributionMessage(e.target.checked)
+                }
+                className="mt-1 h-4 w-4 accent-[#172554]"
+              />
+              <span>
+                <span className="block text-sm font-semibold text-[#172554]">
+                  Show faculty contribution message before download
+                </span>
+                <span className="mt-1 block text-xs text-gray-600">
+                  A separate appreciation message shown to students before
+                  downloading these resources.
+                </span>
+              </span>
+            </label>
+
+            {showContributionMessage && (
+              <div className="mt-4">
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
+                  Faculty Contribution Message
+                </label>
+                <textarea
+                  value={contributionMessage}
+                  onChange={(e) =>
+                    setContributionMessage(e.target.value)
+                  }
+                  rows={4}
+                  required
+                  placeholder="Enter the faculty contribution message"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-3 text-sm"
+                />
+                <p className="mt-2 text-xs text-gray-500">
+                  This message will be saved separately for every file in
+                  this upload.
+                </p>
+              </div>
+            )}
+          </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#C49A45] bg-[#FFF8E8] p-6 text-center hover:bg-[#FCEFCB]">
@@ -1600,6 +1756,12 @@ export default function AdminUploadPage() {
             </p>
           )}
 
+          {message && (
+            <p className="mb-4 whitespace-pre-line rounded-lg bg-green-50 p-3 text-sm text-green-700">
+              {message}
+            </p>
+          )}
+
           <div className="relative mb-4">
             <Search
               size={18}
@@ -1642,14 +1804,14 @@ export default function AdminUploadPage() {
                 .map((resource) => (
                   <div
                     key={resource.id}
-                    className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between"
+                    className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4"
                   >
                     <div className="flex min-w-0 items-start gap-3">
                       <FileText
                         size={22}
                         className="mt-1 shrink-0 text-[#A77D2D]"
                       />
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <p className="break-words font-semibold text-[#172554]">
                           {resource.file_name || resource.title}
                         </p>
@@ -1659,6 +1821,8 @@ export default function AdminUploadPage() {
                         <p className="text-xs text-gray-500">
                           {resource.subject}
                         </p>
+
+                        {/* Existing acknowledgement setting */}
                         <label className="mt-3 flex cursor-pointer items-center gap-2 text-xs font-medium text-gray-700">
                           <input
                             type="checkbox"
@@ -1680,6 +1844,70 @@ export default function AdminUploadPage() {
                             ? "Updating..."
                             : "Require acknowledgement before download"}
                         </label>
+
+                        {/* New independent contribution message setting */}
+                        <div className="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-3">
+                          <label className="flex cursor-pointer items-center gap-2 text-xs font-semibold text-[#172554]">
+                            <input
+                              type="checkbox"
+                              checked={Boolean(
+                                resource.show_contribution_message
+                              )}
+                              disabled={
+                                updatingContributionToggleId === resource.id
+                              }
+                              onChange={(e) =>
+                                handleContributionToggle(
+                                  resource,
+                                  e.target.checked
+                                )
+                              }
+                              className="h-4 w-4 accent-[#172554]"
+                            />
+                            {updatingContributionToggleId === resource.id
+                              ? "Updating..."
+                              : "Show faculty contribution message before download"}
+                          </label>
+
+                          {resource.show_contribution_message && (
+                            <>
+                              <textarea
+                                value={resource.contribution_message || ""}
+                                onChange={(e) =>
+                                  setResources((current) =>
+                                    current.map((item) =>
+                                      item.id === resource.id
+                                        ? {
+                                            ...item,
+                                            contribution_message:
+                                              e.target.value,
+                                          }
+                                        : item
+                                    )
+                                  )
+                                }
+                                rows={4}
+                                className="mt-3 w-full rounded-lg border border-gray-300 bg-white p-3 text-xs"
+                                placeholder="Enter the faculty contribution message"
+                              />
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleSaveContributionMessage(resource)
+                                }
+                                disabled={
+                                  savingContributionMessageId === resource.id
+                                }
+                                className="mt-2 rounded-lg bg-[#172554] px-4 py-2 text-xs font-semibold text-white hover:bg-[#243b78] disabled:opacity-50"
+                              >
+                                {savingContributionMessageId === resource.id
+                                  ? "Saving..."
+                                  : "Save Contribution Message"}
+                              </button>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
 
