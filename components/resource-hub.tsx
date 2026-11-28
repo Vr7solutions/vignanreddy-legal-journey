@@ -36,6 +36,8 @@ interface ResourceItem {
   description: string;
   downloadUrl?: string;
   requiresAcknowledgement?: boolean;
+  showContributionMessage?: boolean;
+  contributionMessage?: string | null;
   downloadCount?: number;
   contributors?: string[];
 }
@@ -45,6 +47,8 @@ interface ResourceHubProps {
   selectedSubjects: string[];
 }
 
+type DownloadStep = "contribution" | "acknowledgement" | null;
+
 export default function ResourceHub({
   selectedSemester,
   selectedSubjects,
@@ -53,8 +57,15 @@ export default function ResourceHub({
   const [filter, setFilter] = useState("All resources");
   const [subject, setSubject] = useState("All subjects");
   const [showAll, setShowAll] = useState(false);
-  const [uploadedResources, setUploadedResources] = useState<ResourceItem[]>([]);
-  const [pendingResource, setPendingResource] = useState<ResourceItem | null>(null);
+
+  const [uploadedResources, setUploadedResources] = useState<ResourceItem[]>(
+    []
+  );
+
+  const [pendingResource, setPendingResource] =
+    useState<ResourceItem | null>(null);
+
+  const [downloadStep, setDownloadStep] = useState<DownloadStep>(null);
   const [acknowledged, setAcknowledged] = useState(false);
 
   useEffect(() => {
@@ -66,7 +77,7 @@ export default function ResourceHub({
       const { data, error } = await supabase
         .from("legal_resources")
         .select(
-          "id, title, description, semester, subject, category, file_url, requires_acknowledgement, download_count"
+          "id, title, description, semester, subject, category, file_url, requires_acknowledgement, download_count, show_contribution_message, contribution_message"
         )
         .eq("is_published", true)
         .order("created_at", { ascending: false });
@@ -85,7 +96,6 @@ export default function ResourceHub({
         return;
       }
 
-      // Load faculty credits linked to published resources.
       const { data: contributorData, error: contributorError } =
         await supabase
           .from("resource_faculty_contributors")
@@ -99,6 +109,7 @@ export default function ResourceHub({
       }
 
       const contributorRows = contributorData ?? [];
+
       const facultyIds = Array.from(
         new Set(contributorRows.map((item) => item.faculty_id))
       );
@@ -153,7 +164,11 @@ export default function ResourceHub({
           semester: item.semester ?? "All Semesters",
           description: item.description ?? "",
           downloadUrl: item.file_url ?? undefined,
-          requiresAcknowledgement: item.requires_acknowledgement ?? false,
+          requiresAcknowledgement:
+            item.requires_acknowledgement ?? false,
+          showContributionMessage:
+            item.show_contribution_message ?? false,
+          contributionMessage: item.contribution_message ?? null,
           downloadCount: item.download_count ?? 0,
           contributors: contributorsByResource.get(item.id) ?? [],
         }))
@@ -181,7 +196,7 @@ export default function ResourceHub({
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        closeAcknowledgement();
+        closeDownloadFlow();
       }
     }
 
@@ -190,7 +205,7 @@ export default function ResourceHub({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [pendingResource]);
+  }, [pendingResource, downloadStep]);
 
   const allResources = useMemo<ResourceItem[]>(
     () => [...(resources as ResourceItem[]), ...uploadedResources],
@@ -210,18 +225,28 @@ export default function ResourceHub({
   const filtered = useMemo(
     () =>
       allResources.filter((item) => {
-        const matchesSearch = `${item.title} ${item.subject} ${item.type} ${item.description} ${(item.contributors || []).join(" ")}`
+        const matchesSearch = `${item.title} ${item.subject} ${item.type} ${
+          item.description
+        } ${(item.contributors || []).join(" ")}`
           .toLowerCase()
           .includes(query.toLowerCase());
 
-        const matchesType = filter === "All resources" || item.type === filter;
+        const matchesType =
+          filter === "All resources" || item.type === filter;
 
         const matchesSemester =
-          item.semester === selectedSemester || item.semester === "All Semesters";
+          item.semester === selectedSemester ||
+          item.semester === "All Semesters";
 
-        const matchesSubject = subject === "All subjects" || item.subject === subject;
+        const matchesSubject =
+          subject === "All subjects" || item.subject === subject;
 
-        return matchesSearch && matchesType && matchesSemester && matchesSubject;
+        return (
+          matchesSearch &&
+          matchesType &&
+          matchesSemester &&
+          matchesSubject
+        );
       }),
     [allResources, query, filter, selectedSemester, subject]
   );
@@ -243,7 +268,10 @@ export default function ResourceHub({
     });
 
     if (error) {
-      console.error("Unable to record resource download:", error.message);
+      console.error(
+        "Unable to record resource download:",
+        error.message
+      );
     }
   }
 
@@ -257,21 +285,56 @@ export default function ResourceHub({
     }
   }
 
-  function openAcknowledgement(resource: ResourceItem) {
+  // Starts the download flow and displays the required message first.
+  function openDownloadFlow(resource: ResourceItem) {
+    if (!resource.downloadUrl) return;
+
     setPendingResource(resource);
     setAcknowledged(false);
-  }
 
-  function closeAcknowledgement() {
+    if (
+      resource.showContributionMessage &&
+      resource.contributionMessage?.trim()
+    ) {
+      setDownloadStep("contribution");
+      return;
+    }
+
+    if (resource.requiresAcknowledgement) {
+      setDownloadStep("acknowledgement");
+      return;
+    }
+
     setPendingResource(null);
-    setAcknowledged(false);
+    setDownloadStep(null);
+    downloadResource(resource);
   }
 
-  function continueToResource() {
+  // After the contribution message, show acknowledgement if required.
+  function continueAfterContribution() {
+    if (!pendingResource) return;
+
+    if (pendingResource.requiresAcknowledgement) {
+      setAcknowledged(false);
+      setDownloadStep("acknowledgement");
+      return;
+    }
+
+    downloadResource(pendingResource);
+    closeDownloadFlow();
+  }
+
+  function continueAfterAcknowledgement() {
     if (!pendingResource?.downloadUrl || !acknowledged) return;
 
     downloadResource(pendingResource);
-    closeAcknowledgement();
+    closeDownloadFlow();
+  }
+
+  function closeDownloadFlow() {
+    setPendingResource(null);
+    setDownloadStep(null);
+    setAcknowledged(false);
   }
 
   return (
@@ -304,7 +367,9 @@ export default function ResourceHub({
                 className="category-card"
                 href={isLegalDictionary ? "/legal-dictionary" : "#resources"}
                 key={item}
-                onClick={isLegalDictionary ? undefined : () => setFilter(item)}
+                onClick={
+                  isLegalDictionary ? undefined : () => setFilter(item)
+                }
               >
                 <span className="category-icon">
                   <Icon size={21} />
@@ -419,28 +484,19 @@ export default function ResourceHub({
                 </div>
 
                 {item.downloadUrl ? (
-                  item.requiresAcknowledgement ? (
-                    <button
-                      type="button"
-                      onClick={() => openAcknowledgement(item)}
-                      className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
-                      aria-label={`Read note before downloading ${item.title}`}
-                    >
-                      <ArrowDownToLine size={18} className="text-[#A77D2D]" />
-                      <span>Download PDF</span>
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => downloadResource(item)}
-                      className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
-                      aria-label={`Download ${item.title}`}
-                      title="Download PDF"
-                    >
-                      <ArrowDownToLine size={18} className="text-[#A77D2D]" />
-                      <span>Download PDF</span>
-                    </button>
-                  )
+                  <button
+                    type="button"
+                    onClick={() => openDownloadFlow(item)}
+                    className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
+                    aria-label={`Download ${item.title}`}
+                    title="Download PDF"
+                  >
+                    <ArrowDownToLine
+                      size={18}
+                      className="text-[#A77D2D]"
+                    />
+                    <span>Download PDF</span>
+                  </button>
                 ) : (
                   <span className="resource-arrow">
                     <ArrowUpRight size={20} />
@@ -477,13 +533,81 @@ export default function ResourceHub({
         </div>
       </section>
 
-      {pendingResource && (
+      {/* Faculty contribution message modal */}
+      {pendingResource && downloadStep === "contribution" && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4"
           role="presentation"
           onClick={(event) => {
             if (event.target === event.currentTarget) {
-              closeAcknowledgement();
+              closeDownloadFlow();
+            }
+          }}
+        >
+          <div
+            className="w-full max-w-xl rounded-2xl bg-white p-6 shadow-2xl sm:p-8"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="contribution-message-title"
+          >
+            <div className="mb-4 flex items-center gap-3">
+              <div className="rounded-xl bg-[#FFF8E8] p-3">
+                <BookOpen size={23} className="text-[#A77D2D]" />
+              </div>
+
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#A77D2D]">
+                  Faculty Contribution
+                </p>
+                <h2
+                  id="contribution-message-title"
+                  className="text-xl font-bold text-[#172554]"
+                >
+                  A Message of Appreciation
+                </h2>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-[#E8D5A5] bg-[#FFFBF1] p-5">
+              <p className="whitespace-pre-wrap text-sm leading-7 text-gray-700">
+                {pendingResource.contributionMessage}
+              </p>
+            </div>
+
+            <p className="mt-4 text-xs leading-5 text-gray-500">
+              Please take a moment to acknowledge the faculty contribution
+              before proceeding to the resource.
+            </p>
+
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={closeDownloadFlow}
+                className="rounded-xl border border-gray-300 px-5 py-3 font-semibold text-gray-700 transition hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={continueAfterContribution}
+                className="rounded-xl bg-[#172554] px-5 py-3 font-semibold text-white transition hover:bg-[#263b70]"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Existing student acknowledgement modal */}
+      {pendingResource && downloadStep === "acknowledgement" && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4"
+          role="presentation"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              closeDownloadFlow();
             }
           }}
         >
@@ -541,7 +665,7 @@ export default function ResourceHub({
             <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <button
                 type="button"
-                onClick={closeAcknowledgement}
+                onClick={closeDownloadFlow}
                 className="rounded-xl border border-gray-300 px-5 py-3 font-semibold text-gray-700 transition hover:bg-gray-100"
               >
                 Cancel
@@ -549,7 +673,7 @@ export default function ResourceHub({
 
               <button
                 type="button"
-                onClick={continueToResource}
+                onClick={continueAfterAcknowledgement}
                 disabled={!acknowledged}
                 className="rounded-xl bg-[#172554] px-5 py-3 font-semibold text-white transition hover:bg-[#263b70] disabled:cursor-not-allowed disabled:opacity-40"
               >
