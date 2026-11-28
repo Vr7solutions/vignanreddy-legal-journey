@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -10,6 +11,7 @@ import {
   FileText,
   Trash2,
   RefreshCw,
+  Search,
 } from "lucide-react";
 
 const semesterSubjects: Record<string, string[]> = {
@@ -142,6 +144,10 @@ export default function AdminUploadPage() {
   const [updatingAcknowledgementId, setUpdatingAcknowledgementId] =
     useState<string | null>(null);
   const [resourceError, setResourceError] = useState("");
+
+  // Independent search fields
+  const [uploadedResourceSearch, setUploadedResourceSearch] = useState("");
+  const [downloadStatsSearch, setDownloadStatsSearch] = useState("");
 
   // Institution updates
   const [institution, setInstitution] = useState("Osmania University");
@@ -596,9 +602,28 @@ export default function AdminUploadPage() {
     0
   );
 
-  const mostDownloaded = [...resources].sort(
-    (a, b) => (b.download_count || 0) - (a.download_count || 0)
-  );
+  const mostDownloaded = [...resources]
+    .sort(
+      (a, b) => (b.download_count || 0) - (a.download_count || 0)
+    )
+    .filter((resource) => {
+      const search = downloadStatsSearch.trim().toLowerCase();
+
+      return (
+        resource.title.toLowerCase().includes(search) ||
+        resource.file_name.toLowerCase().includes(search)
+      );
+    });
+
+  // Uploaded resources search
+  const filteredResources = resources.filter((resource) => {
+    const search = uploadedResourceSearch.trim().toLowerCase();
+
+    return (
+      resource.title.toLowerCase().includes(search) ||
+      resource.file_name.toLowerCase().includes(search)
+    );
+  });
 
   return (
     <main className="min-h-screen bg-[#F8F7F3] px-5 py-10">
@@ -953,6 +978,20 @@ export default function AdminUploadPage() {
             Most Downloaded Resources
           </h3>
 
+          <div className="relative mb-4">
+            <Search
+              size={18}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            />
+            <input
+              type="search"
+              value={downloadStatsSearch}
+              onChange={(e) => setDownloadStatsSearch(e.target.value)}
+              placeholder="Search download statistics..."
+              className="w-full rounded-lg border border-gray-300 py-3 pl-10 pr-4 text-sm outline-none focus:border-[#C49A45] focus:ring-2 focus:ring-[#C49A45]/20"
+            />
+          </div>
+
           {fetchingResources ? (
             <p className="text-sm text-gray-500">
               Loading download statistics...
@@ -960,6 +999,10 @@ export default function AdminUploadPage() {
           ) : resources.length === 0 ? (
             <p className="text-sm text-gray-500">
               No resource download data available yet.
+            </p>
+          ) : mostDownloaded.length === 0 ? (
+            <p className="text-sm text-gray-500">
+              No resources match your search.
             </p>
           ) : (
             <div className="space-y-3">
@@ -1010,6 +1053,20 @@ export default function AdminUploadPage() {
             </p>
           )}
 
+          <div className="relative mb-4">
+            <Search
+              size={18}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            />
+            <input
+              type="search"
+              value={uploadedResourceSearch}
+              onChange={(e) => setUploadedResourceSearch(e.target.value)}
+              placeholder="Search uploaded resources..."
+              className="w-full rounded-lg border border-gray-300 py-3 pl-10 pr-4 text-sm outline-none focus:border-[#C49A45] focus:ring-2 focus:ring-[#C49A45]/20"
+            />
+          </div>
+
           {fetchingResources ? (
             <p className="py-6 text-center text-sm text-gray-500">
               Loading resources...
@@ -1018,13 +1075,17 @@ export default function AdminUploadPage() {
             <p className="py-6 text-center text-sm text-gray-500">
               No uploaded resources found.
             </p>
+          ) : filteredResources.length === 0 ? (
+            <p className="py-6 text-center text-sm text-gray-500">
+              No resources match your search.
+            </p>
           ) : (
             <div className="space-y-3">
               <p className="mb-3 text-sm font-semibold text-gray-600">
-                Total files: {resources.length}
+                Showing {filteredResources.length} of {resources.length} files
               </p>
 
-              {resources.map((resource) => (
+              {filteredResources.map((resource) => (
                 <div
                   key={resource.id}
                   className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between"
