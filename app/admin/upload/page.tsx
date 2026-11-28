@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -82,6 +81,7 @@ type Resource = {
   category: string;
   created_at: string;
   requires_acknowledgement: boolean;
+  download_count: number;
 };
 
 type InstitutionUpdate = {
@@ -130,7 +130,8 @@ export default function AdminUploadPage() {
   );
   const [category, setCategory] = useState("Faculty Given Notes");
   const [description, setDescription] = useState("");
-  const [requiresAcknowledgement, setRequiresAcknowledgement] = useState(false);
+  const [requiresAcknowledgement, setRequiresAcknowledgement] =
+    useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -138,7 +139,8 @@ export default function AdminUploadPage() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [fetchingResources, setFetchingResources] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [updatingAcknowledgementId, setUpdatingAcknowledgementId] = useState<string | null>(null);
+  const [updatingAcknowledgementId, setUpdatingAcknowledgementId] =
+    useState<string | null>(null);
   const [resourceError, setResourceError] = useState("");
 
   // Institution updates
@@ -192,7 +194,7 @@ export default function AdminUploadPage() {
     const { data, error } = await supabase
       .from("legal_resources")
       .select(
-        "id, title, file_name, file_path, semester, subject, category, created_at, requires_acknowledgement"
+        "id, title, file_name, file_path, semester, subject, category, created_at, requires_acknowledgement, download_count"
       )
       .order("created_at", { ascending: false });
 
@@ -462,7 +464,10 @@ export default function AdminUploadPage() {
     setUpdateLoading(false);
   }
 
-  async function handleAcknowledgementChange(resource: Resource, checked: boolean) {
+  async function handleAcknowledgementChange(
+    resource: Resource,
+    checked: boolean
+  ) {
     setUpdatingAcknowledgementId(resource.id);
     setResourceError("");
     setMessage("");
@@ -473,7 +478,9 @@ export default function AdminUploadPage() {
       .eq("id", resource.id);
 
     if (error) {
-      setResourceError(`Could not update acknowledgement setting: ${error.message}`);
+      setResourceError(
+        `Could not update acknowledgement setting: ${error.message}`
+      );
     } else {
       setResources((current) =>
         current.map((item) =>
@@ -482,6 +489,7 @@ export default function AdminUploadPage() {
             : item
         )
       );
+
       setMessage(
         checked
           ? `Acknowledgement required for ${resource.file_name}.`
@@ -581,6 +589,16 @@ export default function AdminUploadPage() {
     router.replace("/admin/login");
     router.refresh();
   }
+
+  // Download statistics
+  const totalDownloads = resources.reduce(
+    (total, resource) => total + (resource.download_count || 0),
+    0
+  );
+
+  const mostDownloaded = [...resources].sort(
+    (a, b) => (b.download_count || 0) - (a.download_count || 0)
+  );
 
   return (
     <main className="min-h-screen bg-[#F8F7F3] px-5 py-10">
@@ -682,7 +700,9 @@ export default function AdminUploadPage() {
             <input
               type="checkbox"
               checked={requiresAcknowledgement}
-              onChange={(e) => setRequiresAcknowledgement(e.target.checked)}
+              onChange={(e) =>
+                setRequiresAcknowledgement(e.target.checked)
+              }
               className="mt-1 h-4 w-4 accent-[#172554]"
             />
             <span>
@@ -690,7 +710,9 @@ export default function AdminUploadPage() {
                 Require student acknowledgement before download
               </span>
               <span className="mt-1 block text-xs text-gray-600">
-                Applies to every file in this upload. Students must read the note and tick the acknowledgement box before opening these resources.
+                Applies to every file in this upload. Students must read the
+                note and tick the acknowledgement box before opening these
+                resources.
               </span>
             </span>
           </label>
@@ -733,7 +755,8 @@ export default function AdminUploadPage() {
           </div>
 
           <p className="text-xs text-gray-500">
-            Accepted: PDF, JPG, JPEG, PNG and WEBP. Maximum size: 50 MB per file.
+            Accepted: PDF, JPG, JPEG, PNG and WEBP. Maximum size: 50 MB per
+            file.
           </p>
 
           {files.length > 0 && (
@@ -747,7 +770,10 @@ export default function AdminUploadPage() {
                     key={`${file.name}-${index}`}
                     className="flex items-center gap-2 text-sm text-gray-700"
                   >
-                    <FileText size={16} className="shrink-0 text-[#A77D2D]" />
+                    <FileText
+                      size={16}
+                      className="shrink-0 text-[#A77D2D]"
+                    />
                     <span className="break-all">{file.name}</span>
                   </div>
                 ))}
@@ -786,7 +812,8 @@ export default function AdminUploadPage() {
               Upload OU & ISL Updates
             </h2>
             <p className="mt-1 text-sm text-gray-600">
-              Publish university and affiliated college notices, PDFs and images.
+              Publish university and affiliated college notices, PDFs and
+              images.
             </p>
           </div>
 
@@ -904,6 +931,56 @@ export default function AdminUploadPage() {
           </button>
         </form>
 
+        {/* Download Statistics */}
+        <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <h2 className="text-xl font-bold text-[#172554]">
+            Download Statistics
+          </h2>
+          <p className="mt-1 text-sm text-gray-600">
+            Track how many times students download your resources.
+          </p>
+
+          <div className="mt-5 rounded-xl bg-[#FFF8E8] p-5">
+            <p className="text-sm font-medium text-gray-600">
+              Total Downloads
+            </p>
+            <p className="mt-2 text-3xl font-bold text-[#172554]">
+              {totalDownloads.toLocaleString("en-IN")}
+            </p>
+          </div>
+
+          <h3 className="mb-3 mt-6 font-bold text-[#172554]">
+            Most Downloaded Resources
+          </h3>
+
+          {fetchingResources ? (
+            <p className="text-sm text-gray-500">
+              Loading download statistics...
+            </p>
+          ) : resources.length === 0 ? (
+            <p className="text-sm text-gray-500">
+              No resource download data available yet.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {mostDownloaded.map((resource) => (
+                <div
+                  key={resource.id}
+                  className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 p-3"
+                >
+                  <span className="min-w-0 break-words text-sm font-medium text-gray-700">
+                    {resource.title}
+                  </span>
+                  <span className="shrink-0 rounded-lg bg-gray-100 px-3 py-2 text-sm font-bold text-[#172554]">
+                    {(resource.download_count || 0).toLocaleString("en-IN")}{" "}
+                    downloads
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
         {/* Uploaded Resources */}
         <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <div className="mb-5 flex items-center justify-between gap-3">
@@ -970,10 +1047,17 @@ export default function AdminUploadPage() {
                       <label className="mt-3 flex cursor-pointer items-center gap-2 text-xs font-medium text-gray-700">
                         <input
                           type="checkbox"
-                          checked={Boolean(resource.requires_acknowledgement)}
-                          disabled={updatingAcknowledgementId === resource.id}
+                          checked={Boolean(
+                            resource.requires_acknowledgement
+                          )}
+                          disabled={
+                            updatingAcknowledgementId === resource.id
+                          }
                           onChange={(e) =>
-                            handleAcknowledgementChange(resource, e.target.checked)
+                            handleAcknowledgementChange(
+                              resource,
+                              e.target.checked
+                            )
                           }
                           className="h-4 w-4 accent-[#172554]"
                         />
