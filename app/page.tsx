@@ -15,6 +15,7 @@ import {
 
 import AcademicDashboard from "@/components/academic-dashboard";
 import VisitorCounter from "@/components/visitor-counter";
+import WelcomeMessage from "@/components/welcome-message";
 import { getLegalWord } from "@/lib/content";
 
 export default function Home() {
@@ -22,6 +23,8 @@ export default function Home() {
 
   return (
     <main>
+      <WelcomeMessage />
+
       <div className="announcement">
         <Sparkles size={14} />
         A student-led initiative
