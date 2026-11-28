@@ -149,6 +149,10 @@ export default function AdminUploadPage() {
   const [uploadedResourceSearch, setUploadedResourceSearch] = useState("");
   const [downloadStatsSearch, setDownloadStatsSearch] = useState("");
 
+  // Independent pagination limits
+  const [downloadStatsLimit, setDownloadStatsLimit] = useState(10);
+  const [uploadedResourcesLimit, setUploadedResourcesLimit] = useState(10);
+
   // Institution updates
   const [institution, setInstitution] = useState("Osmania University");
   const [updateCategory, setUpdateCategory] = useState("Notifications");
@@ -986,7 +990,10 @@ export default function AdminUploadPage() {
             <input
               type="search"
               value={downloadStatsSearch}
-              onChange={(e) => setDownloadStatsSearch(e.target.value)}
+              onChange={(e) => {
+                setDownloadStatsSearch(e.target.value);
+                setDownloadStatsLimit(10);
+              }}
               placeholder="Search download statistics..."
               className="w-full rounded-lg border border-gray-300 py-3 pl-10 pr-4 text-sm outline-none focus:border-[#C49A45] focus:ring-2 focus:ring-[#C49A45]/20"
             />
@@ -1006,20 +1013,40 @@ export default function AdminUploadPage() {
             </p>
           ) : (
             <div className="space-y-3">
-              {mostDownloaded.map((resource) => (
-                <div
-                  key={resource.id}
-                  className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 p-3"
+              {mostDownloaded
+                .slice(0, downloadStatsLimit)
+                .map((resource) => (
+                  <div
+                    key={resource.id}
+                    className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 p-3"
+                  >
+                    <span className="min-w-0 break-words text-sm font-medium text-gray-700">
+                      {resource.title}
+                    </span>
+                    <span className="shrink-0 rounded-lg bg-gray-100 px-3 py-2 text-sm font-bold text-[#172554]">
+                      {(resource.download_count || 0).toLocaleString("en-IN")}{" "}
+                      downloads
+                    </span>
+                  </div>
+                ))}
+
+              {mostDownloaded.length > 10 && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setDownloadStatsLimit((current) =>
+                      current >= mostDownloaded.length
+                        ? 10
+                        : Math.min(current + 10, mostDownloaded.length)
+                    )
+                  }
+                  className="w-full rounded-lg border border-[#C49A45] bg-[#FFF8E8] px-4 py-3 text-sm font-semibold text-[#172554] hover:bg-[#FCEFCB]"
                 >
-                  <span className="min-w-0 break-words text-sm font-medium text-gray-700">
-                    {resource.title}
-                  </span>
-                  <span className="shrink-0 rounded-lg bg-gray-100 px-3 py-2 text-sm font-bold text-[#172554]">
-                    {(resource.download_count || 0).toLocaleString("en-IN")}{" "}
-                    downloads
-                  </span>
-                </div>
-              ))}
+                  {downloadStatsLimit >= mostDownloaded.length
+                    ? "Show Less"
+                    : `Show More (${mostDownloaded.length - downloadStatsLimit} remaining)`}
+                </button>
+              )}
             </div>
           )}
         </section>
@@ -1061,7 +1088,10 @@ export default function AdminUploadPage() {
             <input
               type="search"
               value={uploadedResourceSearch}
-              onChange={(e) => setUploadedResourceSearch(e.target.value)}
+              onChange={(e) => {
+                setUploadedResourceSearch(e.target.value);
+                setUploadedResourcesLimit(10);
+              }}
               placeholder="Search uploaded resources..."
               className="w-full rounded-lg border border-gray-300 py-3 pl-10 pr-4 text-sm outline-none focus:border-[#C49A45] focus:ring-2 focus:ring-[#C49A45]/20"
             />
@@ -1082,64 +1112,84 @@ export default function AdminUploadPage() {
           ) : (
             <div className="space-y-3">
               <p className="mb-3 text-sm font-semibold text-gray-600">
-                Showing {filteredResources.length} of {resources.length} files
+                Showing {Math.min(uploadedResourcesLimit, filteredResources.length)} of {filteredResources.length} matching files
               </p>
 
-              {filteredResources.map((resource) => (
-                <div
-                  key={resource.id}
-                  className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <div className="flex min-w-0 items-start gap-3">
-                    <FileText
-                      size={22}
-                      className="mt-1 shrink-0 text-[#A77D2D]"
-                    />
-                    <div className="min-w-0">
-                      <p className="break-words font-semibold text-[#172554]">
-                        {resource.file_name || resource.title}
-                      </p>
-                      <p className="mt-1 text-xs text-gray-500">
-                        {resource.category} · {resource.semester}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {resource.subject}
-                      </p>
-                      <label className="mt-3 flex cursor-pointer items-center gap-2 text-xs font-medium text-gray-700">
-                        <input
-                          type="checkbox"
-                          checked={Boolean(
-                            resource.requires_acknowledgement
-                          )}
-                          disabled={
-                            updatingAcknowledgementId === resource.id
-                          }
-                          onChange={(e) =>
-                            handleAcknowledgementChange(
-                              resource,
-                              e.target.checked
-                            )
-                          }
-                          className="h-4 w-4 accent-[#172554]"
-                        />
-                        {updatingAcknowledgementId === resource.id
-                          ? "Updating..."
-                          : "Require acknowledgement before download"}
-                      </label>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(resource)}
-                    disabled={deletingId !== null}
-                    className="flex shrink-0 items-center justify-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+              {filteredResources
+                .slice(0, uploadedResourcesLimit)
+                .map((resource) => (
+                  <div
+                    key={resource.id}
+                    className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between"
                   >
-                    <Trash2 size={16} />
-                    {deletingId === resource.id ? "Deleting..." : "Delete"}
-                  </button>
-                </div>
-              ))}
+                    <div className="flex min-w-0 items-start gap-3">
+                      <FileText
+                        size={22}
+                        className="mt-1 shrink-0 text-[#A77D2D]"
+                      />
+                      <div className="min-w-0">
+                        <p className="break-words font-semibold text-[#172554]">
+                          {resource.file_name || resource.title}
+                        </p>
+                        <p className="mt-1 text-xs text-gray-500">
+                          {resource.category} · {resource.semester}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {resource.subject}
+                        </p>
+                        <label className="mt-3 flex cursor-pointer items-center gap-2 text-xs font-medium text-gray-700">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(
+                              resource.requires_acknowledgement
+                            )}
+                            disabled={
+                              updatingAcknowledgementId === resource.id
+                            }
+                            onChange={(e) =>
+                              handleAcknowledgementChange(
+                                resource,
+                                e.target.checked
+                              )
+                            }
+                            className="h-4 w-4 accent-[#172554]"
+                          />
+                          {updatingAcknowledgementId === resource.id
+                            ? "Updating..."
+                            : "Require acknowledgement before download"}
+                        </label>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(resource)}
+                      disabled={deletingId !== null}
+                      className="flex shrink-0 items-center justify-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <Trash2 size={16} />
+                      {deletingId === resource.id ? "Deleting..." : "Delete"}
+                    </button>
+                  </div>
+                ))}
+
+              {filteredResources.length > 10 && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setUploadedResourcesLimit((current) =>
+                      current >= filteredResources.length
+                        ? 10
+                        : Math.min(current + 10, filteredResources.length)
+                    )
+                  }
+                  className="w-full rounded-lg border border-[#C49A45] bg-[#FFF8E8] px-4 py-3 text-sm font-semibold text-[#172554] hover:bg-[#FCEFCB]"
+                >
+                  {uploadedResourcesLimit >= filteredResources.length
+                    ? "Show Less"
+                    : `Show More (${filteredResources.length - uploadedResourcesLimit} remaining)`}
+                </button>
+              )}
             </div>
           )}
         </section>
