@@ -26,9 +26,6 @@ const iconMap: Record<string, React.ElementType> = {
   "Legal Dictionary": BookOpen,
 };
 
-const downloadButtonClass =
-  "download-button inline-flex min-h-[56px] w-full items-center justify-center gap-3 rounded-[22px] border border-[#E8D5A5] bg-[#FFF8E8] px-5 py-3 font-bold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB] sm:w-auto";
-
 interface ResourceItem {
   id?: string;
   title: string;
@@ -348,21 +345,21 @@ export default function ResourceHub({
                     <button
                       type="button"
                       onClick={() => openAcknowledgement(item)}
-                      className={downloadButtonClass}
+                      className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
                       aria-label={`Read note before downloading ${item.title}`}
                     >
-                      <ArrowDownToLine size={21} className="shrink-0 text-[#A77D2D]" />
+                      <ArrowDownToLine size={18} className="text-[#A77D2D]" />
                       <span>Download PDF</span>
                     </button>
                   ) : (
                     <button
                       type="button"
                       onClick={() => downloadResource(item)}
-                      className={downloadButtonClass}
+                      className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
                       aria-label={`Download ${item.title}`}
                       title="Download PDF"
                     >
-                      <ArrowDownToLine size={21} className="shrink-0 text-[#A77D2D]" />
+                      <ArrowDownToLine size={18} className="text-[#A77D2D]" />
                       <span>Download PDF</span>
                     </button>
                   )
