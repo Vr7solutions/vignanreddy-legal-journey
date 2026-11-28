@@ -1423,3 +1423,25 @@ footer a {
   }
 }
 
+@media (max-width: 600px) {
+  .resource-row {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .resource-row > a {
+    grid-column: 2;
+    justify-self: start;
+    display: inline-flex;
+    flex-shrink: 0;
+    width: fit-content;
+    max-width: 100%;
+    white-space: nowrap;
+    background: #FFF8E8;
+    color: #172554;
+  }
+
+  .resource-row > a svg {
+    flex-shrink: 0;
+  }
+}
