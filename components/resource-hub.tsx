@@ -319,67 +319,60 @@ export default function ResourceHub({
             </label>
           </div>
 
-          <div className="resource-list mt-6 space-y-4">
+          <div className="resource-list">
             {visibleResources.map((item, index) => (
               <article
-                className="resource-row flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:gap-5 sm:p-5"
+                className="resource-row"
                 key={`${item.title}-${item.downloadUrl || index}`}
               >
-                <div className="hidden text-lg font-bold text-[#A77D2D] sm:block">
+                <div className="resource-number">
                   {String(index + 1).padStart(2, "0")}
                 </div>
 
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[#A77D2D]">
+                <div className="resource-main">
+                  <div className="resource-meta flex flex-wrap items-center gap-2">
                     <span>{item.type}</span>
                     <span>·</span>
                     <span>{item.semester}</span>
                   </div>
 
-                  <h3 className="mt-2 break-words text-lg font-bold text-[#172554] sm:text-xl">
-                    {item.title}
-                  </h3>
-
-                  <small className="mt-1 block break-words text-sm text-gray-600">
-                    {item.subject}
-                  </small>
+                  <h3>{item.title}</h3>
+                  <small>{item.subject}</small>
                 </div>
 
-                <div className="w-full sm:w-auto sm:shrink-0">
-                  {item.downloadUrl ? (
-                    item.requiresAcknowledgement ? (
-                      <button
-                        type="button"
-                        onClick={() => openAcknowledgement(item)}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 text-sm font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB] sm:w-auto"
-                        aria-label={`Read note before downloading ${item.title}`}
-                      >
-                        <ArrowDownToLine size={18} className="text-[#A77D2D]" />
-                        <span>Download PDF</span>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => downloadResource(item)}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 text-sm font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB] sm:w-auto"
-                        aria-label={`Download ${item.title}`}
-                        title="Download PDF"
-                      >
-                        <ArrowDownToLine size={18} className="text-[#A77D2D]" />
-                        <span>Download PDF</span>
-                      </button>
-                    )
+                {item.downloadUrl ? (
+                  item.requiresAcknowledgement ? (
+                    <button
+                      type="button"
+                      onClick={() => openAcknowledgement(item)}
+                      className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
+                      aria-label={`Read note before downloading ${item.title}`}
+                    >
+                      <ArrowDownToLine size={18} className="text-[#A77D2D]" />
+                      <span>Download PDF</span>
+                    </button>
                   ) : (
-                    <span className="flex w-full items-center justify-center rounded-xl border border-gray-200 px-4 py-3 text-gray-400 sm:w-auto">
-                      <ArrowUpRight size={20} />
-                    </span>
-                  )}
-                </div>
+                    <button
+                      type="button"
+                      onClick={() => downloadResource(item)}
+                      className="flex items-center gap-2 rounded-xl border border-[#E8D5A5] bg-[#FFF8E8] px-4 py-3 font-semibold text-[#172554] shadow-sm transition hover:border-[#C49A45] hover:bg-[#FCEFCB]"
+                      aria-label={`Download ${item.title}`}
+                      title="Download PDF"
+                    >
+                      <ArrowDownToLine size={18} className="text-[#A77D2D]" />
+                      <span>Download PDF</span>
+                    </button>
+                  )
+                ) : (
+                  <span className="resource-arrow">
+                    <ArrowUpRight size={20} />
+                  </span>
+                )}
               </article>
             ))}
 
             {filtered.length === 0 && (
-              <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center text-gray-600">
+              <div className="empty-state">
                 No matching resources available for {selectedSemester} yet.
                 More materials will be added.
               </div>
@@ -400,7 +393,7 @@ export default function ResourceHub({
             </div>
           )}
 
-          <p className="demo-note mt-6">
+          <p className="demo-note">
             More verified study materials will be added semester by semester.
           </p>
         </div>
