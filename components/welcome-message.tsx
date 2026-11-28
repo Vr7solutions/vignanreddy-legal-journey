@@ -8,15 +8,16 @@ export default function WelcomeMessage() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const hasVisited = localStorage.getItem("vr-welcome-seen");
+    const lastSeen = localStorage.getItem("vr-welcome-seen");
+    const today = new Date().toDateString();
 
-    if (!hasVisited) {
+    if (lastSeen !== today) {
       setIsVisible(true);
     }
   }, []);
 
   const closeWelcome = () => {
-    localStorage.setItem("vr-welcome-seen", "true");
+    localStorage.setItem("vr-welcome-seen", new Date().toDateString());
     setIsVisible(false);
   };
 
@@ -25,7 +26,6 @@ export default function WelcomeMessage() {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
       <div className="relative w-full max-w-xl rounded-3xl border border-[#E7D9B8] bg-white p-7 text-center shadow-2xl sm:p-10">
-
         <button
           onClick={closeWelcome}
           aria-label="Close welcome message"
