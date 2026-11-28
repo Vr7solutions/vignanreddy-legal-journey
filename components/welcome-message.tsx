@@ -37,7 +37,7 @@ export default function WelcomeMessage() {
         <div className="mb-5 text-4xl">🦋</div>
 
         <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#A77D2D]">
-          A Thought That Inspires Us
+          A Thought That Inspires Me
         </p>
 
         <h2 className="mb-5 text-2xl font-bold leading-snug text-[#172554] sm:text-3xl">
