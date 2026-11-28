@@ -173,6 +173,10 @@ export default function AdminUploadPage() {
     null
   );
 
+  // Faculty selection for resource uploads
+  const [selectedFacultyIds, setSelectedFacultyIds] = useState<string[]>([]);
+  const [uploadFacultySearch, setUploadFacultySearch] = useState("");
+
   // Independent search fields
   const [uploadedResourceSearch, setUploadedResourceSearch] = useState("");
   const [downloadStatsSearch, setDownloadStatsSearch] = useState("");
@@ -297,6 +301,14 @@ export default function AdminUploadPage() {
     setError("");
   }
 
+  function toggleFacultySelection(id: string) {
+    setSelectedFacultyIds((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id]
+    );
+  }
+
   async function handleFacultySubmit(
     e: React.FormEvent<HTMLFormElement>
   ) {
@@ -381,6 +393,12 @@ export default function AdminUploadPage() {
         )
       );
 
+      if (member.is_active) {
+        setSelectedFacultyIds((current) =>
+          current.filter((id) => id !== member.id)
+        );
+      }
+
       setFacultyMessage(
         member.is_active
           ? `${member.name} has been deactivated.`
@@ -424,6 +442,24 @@ export default function AdminUploadPage() {
 
     if (oversizedFiles.length > 0) {
       setError("Each file must be 50 MB or smaller.");
+      return;
+    }
+
+    // Only currently active faculty members can be assigned.
+    const activeFacultyIds = new Set(
+      faculty
+        .filter((member) => member.is_active)
+        .map((member) => member.id)
+    );
+
+    const contributorIds = selectedFacultyIds.filter((id) =>
+      activeFacultyIds.has(id)
+    );
+
+    if (contributorIds.length !== selectedFacultyIds.length) {
+      setError(
+        "One or more selected faculty members are no longer active. Please review your selection."
+      );
       return;
     }
 
@@ -471,29 +507,64 @@ export default function AdminUploadPage() {
           .from("legal-resources")
           .getPublicUrl(filePath);
 
-        const { error: databaseError } = await supabase
-          .from("legal_resources")
-          .insert({
-            title: file.name.replace(/\.[^.]+$/, ""),
-            description: description.trim() || null,
-            semester,
-            subject,
-            category,
-            file_name: file.name,
-            file_path: filePath,
-            file_url: publicData.publicUrl,
-            file_size: file.size,
-            is_published: true,
-            requires_acknowledgement: requiresAcknowledgement,
-          });
+        // Insert the resource and retrieve its generated ID.
+        const { data: resourceData, error: databaseError } =
+          await supabase
+            .from("legal_resources")
+            .insert({
+              title: file.name.replace(/\.[^.]+$/, ""),
+              description: description.trim() || null,
+              semester,
+              subject,
+              category,
+              file_name: file.name,
+              file_path: filePath,
+              file_url: publicData.publicUrl,
+              file_size: file.size,
+              is_published: true,
+              requires_acknowledgement: requiresAcknowledgement,
+            })
+            .select("id")
+            .single();
 
-        if (databaseError) {
+        if (databaseError || !resourceData) {
           await supabase.storage
             .from("legal-resources")
             .remove([filePath]);
 
-          failed.push(`${file.name}: ${databaseError.message}`);
+          failed.push(
+            `${file.name}: ${databaseError?.message || "Could not retrieve resource ID"}`
+          );
           continue;
+        }
+
+        // Save all selected faculty contributors for this resource.
+        if (contributorIds.length > 0) {
+          const contributorRows = contributorIds.map((facultyId) => ({
+            resource_id: resourceData.id,
+            faculty_id: facultyId,
+          }));
+
+          const { error: contributorError } = await supabase
+            .from("resource_faculty_contributors")
+            .insert(contributorRows);
+
+          if (contributorError) {
+            // Roll back this resource if contributor records cannot be saved.
+            await supabase
+              .from("legal_resources")
+              .delete()
+              .eq("id", resourceData.id);
+
+            await supabase.storage
+              .from("legal-resources")
+              .remove([filePath]);
+
+            failed.push(
+              `${file.name}: Faculty credits could not be saved: ${contributorError.message}`
+            );
+            continue;
+          }
         }
 
         uploaded++;
@@ -505,10 +576,19 @@ export default function AdminUploadPage() {
     setLoading(false);
 
     if (uploaded > 0) {
-      setMessage(`${uploaded} file(s) uploaded successfully.`);
+      setMessage(
+        `${uploaded} file(s) uploaded successfully${
+          contributorIds.length > 0
+            ? ` with ${contributorIds.length} faculty contributor(s) credited`
+            : ""
+        }.`
+      );
+
       setFiles([]);
       setDescription("");
       setRequiresAcknowledgement(false);
+      setSelectedFacultyIds([]);
+      setUploadFacultySearch("");
       await loadResources();
     }
 
@@ -780,6 +860,18 @@ export default function AdminUploadPage() {
       (member.designation || "").toLowerCase().includes(search)
     );
   });
+
+  // Active faculty shown in the resource upload selector
+  const activeFaculty = faculty
+    .filter((member) => member.is_active)
+    .filter((member) => {
+      const search = uploadFacultySearch.trim().toLowerCase();
+
+      return (
+        member.name.toLowerCase().includes(search) ||
+        (member.designation || "").toLowerCase().includes(search)
+      );
+    });
 
   return (
     <main className="min-h-screen bg-[#F8F7F3] px-5 py-10">
@@ -1073,6 +1165,84 @@ export default function AdminUploadPage() {
               placeholder="Enter a short description for these resources"
               className="w-full rounded-lg border border-gray-300 px-3 py-3"
             />
+          </div>
+
+          {/* Faculty Contributors */}
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Faculty Contributors (Optional)
+            </label>
+
+            <input
+              type="search"
+              value={uploadFacultySearch}
+              onChange={(e) => setUploadFacultySearch(e.target.value)}
+              placeholder="Search faculty..."
+              className="mb-3 w-full rounded-lg border border-gray-300 px-3 py-3 outline-none focus:border-[#C49A45] focus:ring-2 focus:ring-[#C49A45]/20"
+            />
+
+            <div className="max-h-52 space-y-1 overflow-y-auto rounded-lg border border-gray-300 p-3">
+              {fetchingFaculty ? (
+                <p className="py-3 text-center text-sm text-gray-500">
+                  Loading faculty members...
+                </p>
+              ) : activeFaculty.length === 0 ? (
+                <p className="py-3 text-center text-sm text-gray-500">
+                  {faculty.some((member) => member.is_active)
+                    ? "No faculty members match your search."
+                    : "Add active faculty members in Manage Faculty first."}
+                </p>
+              ) : (
+                activeFaculty.map((member) => (
+                  <label
+                    key={member.id}
+                    className="flex cursor-pointer items-center gap-3 rounded-md p-2 hover:bg-gray-50"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedFacultyIds.includes(member.id)}
+                      onChange={() => toggleFacultySelection(member.id)}
+                      className="h-4 w-4 shrink-0 accent-[#172554]"
+                    />
+                    <span className="text-sm text-gray-700">
+                      {member.name}
+                      {member.designation
+                        ? ` — ${member.designation}`
+                        : ""}
+                    </span>
+                  </label>
+                ))
+              )}
+            </div>
+
+            <p className="mt-2 text-xs text-gray-500">
+              Selected faculty: {selectedFacultyIds.length}
+            </p>
+
+            {selectedFacultyIds.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {faculty
+                  .filter((member) =>
+                    selectedFacultyIds.includes(member.id)
+                  )
+                  .map((member) => (
+                    <span
+                      key={member.id}
+                      className="inline-flex items-center gap-2 rounded-full bg-[#FFF8E8] px-3 py-1.5 text-xs font-medium text-[#172554]"
+                    >
+                      {member.name}
+                      <button
+                        type="button"
+                        onClick={() => toggleFacultySelection(member.id)}
+                        aria-label={`Remove ${member.name}`}
+                        className="rounded-full hover:text-red-600"
+                      >
+                        <X size={13} />
+                      </button>
+                    </span>
+                  ))}
+              </div>
+            )}
           </div>
 
           <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#E8D9B5] bg-[#FFFBF1] p-4">
