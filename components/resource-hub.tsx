@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -36,6 +37,7 @@ interface ResourceItem {
   downloadUrl?: string;
   requiresAcknowledgement?: boolean;
   downloadCount?: number;
+  contributors?: string[];
 }
 
 interface ResourceHubProps {
@@ -76,8 +78,74 @@ export default function ResourceHub({
 
       if (!isMounted) return;
 
+      const resourceData = data ?? [];
+
+      if (resourceData.length === 0) {
+        setUploadedResources([]);
+        return;
+      }
+
+      // Load faculty credits linked to published resources.
+      const { data: contributorData, error: contributorError } =
+        await supabase
+          .from("resource_faculty_contributors")
+          .select("resource_id, faculty_id");
+
+      if (contributorError) {
+        console.error(
+          "Unable to load faculty contributors:",
+          contributorError.message
+        );
+      }
+
+      const contributorRows = contributorData ?? [];
+      const facultyIds = Array.from(
+        new Set(contributorRows.map((item) => item.faculty_id))
+      );
+
+      let facultyNames = new Map<string, string>();
+
+      if (facultyIds.length > 0) {
+        const { data: facultyData, error: facultyError } = await supabase
+          .from("faculty_members")
+          .select("id, name, designation")
+          .in("id", facultyIds);
+
+        if (facultyError) {
+          console.error(
+            "Unable to load faculty names:",
+            facultyError.message
+          );
+        } else {
+          facultyNames = new Map(
+            (facultyData ?? []).map((member) => [
+              member.id,
+              member.designation
+                ? `${member.name}, ${member.designation}`
+                : member.name,
+            ])
+          );
+        }
+      }
+
+      if (!isMounted) return;
+
+      const contributorsByResource = new Map<string, string[]>();
+
+      contributorRows.forEach((item) => {
+        const name = facultyNames.get(item.faculty_id);
+
+        if (!name) return;
+
+        const current =
+          contributorsByResource.get(item.resource_id) || [];
+
+        current.push(name);
+        contributorsByResource.set(item.resource_id, current);
+      });
+
       setUploadedResources(
-        (data ?? []).map((item) => ({
+        resourceData.map((item) => ({
           id: item.id,
           title: item.title ?? "Untitled resource",
           subject: item.subject ?? "",
@@ -87,6 +155,7 @@ export default function ResourceHub({
           downloadUrl: item.file_url ?? undefined,
           requiresAcknowledgement: item.requires_acknowledgement ?? false,
           downloadCount: item.download_count ?? 0,
+          contributors: contributorsByResource.get(item.id) ?? [],
         }))
       );
     }
@@ -141,7 +210,7 @@ export default function ResourceHub({
   const filtered = useMemo(
     () =>
       allResources.filter((item) => {
-        const matchesSearch = `${item.title} ${item.subject} ${item.type} ${item.description}`
+        const matchesSearch = `${item.title} ${item.subject} ${item.type} ${item.description} ${(item.contributors || []).join(" ")}`
           .toLowerCase()
           .includes(query.toLowerCase());
 
@@ -323,7 +392,7 @@ export default function ResourceHub({
             {visibleResources.map((item, index) => (
               <article
                 className="resource-row"
-                key={`${item.title}-${item.downloadUrl || index}`}
+                key={`${item.id || item.title}-${item.downloadUrl || index}`}
               >
                 <div className="resource-number">
                   {String(index + 1).padStart(2, "0")}
@@ -338,6 +407,15 @@ export default function ResourceHub({
 
                   <h3>{item.title}</h3>
                   <small>{item.subject}</small>
+
+                  {item.contributors && item.contributors.length > 0 && (
+                    <p className="mt-2 text-xs leading-relaxed text-gray-600">
+                      <span className="font-semibold text-[#172554]">
+                        Contributed by:
+                      </span>{" "}
+                      {item.contributors.join(" · ")}
+                    </p>
+                  )}
                 </div>
 
                 {item.downloadUrl ? (
