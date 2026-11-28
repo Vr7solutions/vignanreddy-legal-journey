@@ -48,6 +48,24 @@ export default function Home() {
           <a href="#daily-quiz">Legal quiz</a>
           <a href="#practice-test">Practice test</a>
           <a href="#about">About</a>
+
+          <div className="relative group">
+            <button
+              type="button"
+              className="flex items-center gap-1"
+            >
+              More <span>▾</span>
+            </button>
+
+            <div className="absolute right-0 top-full z-50 hidden min-w-64 rounded-lg border border-gray-200 bg-white p-2 shadow-lg group-hover:block group-focus-within:block">
+              <a
+                href="/previous-year-question-papers"
+                className="block rounded-md px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Previous Year Question Papers
+              </a>
+            </div>
+          </div>
         </nav>
 
         <a className="header-cta" href="#explore">
@@ -156,7 +174,6 @@ export default function Home() {
 
       <AcademicDashboard />
 
-      {/* OU and College Updates Card */}
       <section className="scroll-mt-24 px-5 py-10">
         <div className="mx-auto max-w-5xl">
           <a
