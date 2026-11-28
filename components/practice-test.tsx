@@ -124,7 +124,8 @@ export default function PracticeTest({
           <label htmlFor="practice-subject">Select Subject</label>
           <select
             id="practice-subject"
-            className="practice-subject-select w-full rounded-lg border border-gray-300 bg-white px-3 py-3 text-gray-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"            value={selectedSubject}
+            className="practice-subject-select w-full rounded-lg border border-gray-300 bg-white px-3 py-3 text-gray-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+            value={selectedSubject}
             onChange={(event) => setSelectedSubject(event.target.value)}
           >
             {subjects.map((subject) => (
@@ -161,7 +162,21 @@ export default function PracticeTest({
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-3 gap-3 my-5">
+            {/* Compact score for mobile */}
+            <div className="my-3 flex items-center justify-center gap-3 rounded-lg border border-gray-200 bg-gray-50 px-2 py-2 text-xs sm:hidden">
+              <span className="font-semibold text-green-700">
+                Correct: {score}
+              </span>
+              <span className="font-semibold text-red-700">
+                Wrong: {wrongScore}
+              </span>
+              <span className="font-semibold text-blue-700">
+                Attempted: {attempted}
+              </span>
+            </div>
+
+            {/* Separate score boxes for desktop */}
+            <div className="hidden sm:grid grid-cols-3 gap-3 my-5">
               <div className="rounded-xl bg-green-50 p-3 text-center">
                 <p className="text-2xl font-bold text-green-700">
                   {score}
